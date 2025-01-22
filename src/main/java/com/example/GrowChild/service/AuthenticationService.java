@@ -16,4 +16,5 @@ public class AuthenticationService {
     public List<User> getUser(){
         return authenticationRepository.findAll();
     }
+
 }
