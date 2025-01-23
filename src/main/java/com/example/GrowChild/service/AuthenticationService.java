@@ -63,5 +63,26 @@ public class AuthenticationService {
     public void deleteUser(String userId) {
         authenticationRepository.deleteById(userId);
     }
+
+    //change password
+    public boolean changePassword(String userId, String oldPassword, String newPassword,String confirmPassword ){
+        if(userId == null || oldPassword == null || newPassword == null || confirmPassword == null ){
+            throw new IllegalArgumentException("Input not null !");
+        }
+        User user = getUserById(userId);
+        if(user == null){
+             throw new IllegalArgumentException("User not found !");
+        }
+
+        if(!new BCryptPasswordEncoder().matches(oldPassword,user.password)){
+            throw  new IllegalArgumentException("Old password incorrect");
+        };
+        if(!newPassword.equals(confirmPassword)){
+            throw new IllegalArgumentException("New password and confirm password must same!");
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        authenticationRepository.save(user);
+        return true;
+    }
 }
 

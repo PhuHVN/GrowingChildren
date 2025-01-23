@@ -18,7 +18,7 @@ public class AuthenticationAPI {
     @PostMapping("register")
     public ResponseEntity register(@RequestBody User user){
         User newUser = authenticationService.register(user);
-        return ResponseEntity.ok(newUser); //insert table
+        return ResponseEntity.ok(newUser); //.ok tra ve status 200-ok khi call api
     }
 
     @PostMapping("login")
@@ -53,4 +53,16 @@ public class AuthenticationAPI {
         authenticationService.deleteUser(userId);
         return "Delete successful";
     }
+
+    //change password
+    @PutMapping("/changePass/{userId}")
+    public ResponseEntity changePassword(@PathVariable("userId") String userId, @RequestParam String oldPassword, @RequestParam String newPas,@RequestParam String confirmPass){
+        if(!authenticationService.changePassword(userId,oldPassword,newPas,confirmPass)){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Change Password false");
+
+        }
+        return ResponseEntity.ok("Successful!");
+
+    }
+
 }
