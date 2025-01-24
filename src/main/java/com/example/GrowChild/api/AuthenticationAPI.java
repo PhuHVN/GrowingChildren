@@ -2,7 +2,10 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.service.AuthenticationService;
+import com.example.GrowChild.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,7 @@ import java.util.List;
 public class AuthenticationAPI {
     @Autowired
     AuthenticationService authenticationService;
+
 
     @PostMapping("register")
     public ResponseEntity register(@RequestBody User user){
@@ -64,5 +68,9 @@ public class AuthenticationAPI {
         return ResponseEntity.ok("Successful!");
 
     }
+
+
+
+
 
 }
