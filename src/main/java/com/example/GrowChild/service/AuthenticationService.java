@@ -27,7 +27,7 @@ public class AuthenticationService {
         }
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.password));
-        return authenticationRepository.save(user); //create row in sql
+        return authenticationRepository.save(user); //create row in db
     }
 
     //Login
@@ -66,22 +66,23 @@ public class AuthenticationService {
 
     //change password
     public boolean changePassword(String userId, String oldPassword, String newPassword,String confirmPassword ){
-        if(userId == null || oldPassword == null || newPassword == null || confirmPassword == null ){
+        if(userId == null || oldPassword == null || newPassword == null || confirmPassword == null ){ //check value not null
             throw new IllegalArgumentException("Input not null !");
         }
-        User user = getUserById(userId);
+        User user = getUserById(userId); // find user by id
         if(user == null){
              throw new IllegalArgumentException("User not found !");
         }
 
-        if(!new BCryptPasswordEncoder().matches(oldPassword,user.password)){
+        if(!new BCryptPasswordEncoder().matches(oldPassword,user.password)){ // check pass user to match with pass input when encode
             throw  new IllegalArgumentException("Old password incorrect");
         };
-        if(!newPassword.equals(confirmPassword)){
+
+        if(!newPassword.equals(confirmPassword)){ //check new pass = confirm pass
             throw new IllegalArgumentException("New password and confirm password must same!");
         }
-        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
-        authenticationRepository.save(user);
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));  // update new pass
+        authenticationRepository.save(user); // update row
         return true;
     }
 }
