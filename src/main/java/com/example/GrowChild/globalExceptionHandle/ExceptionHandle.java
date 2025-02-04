@@ -1,4 +1,4 @@
-package com.example.GrowChild.GlobalExceptionHandle;
+package com.example.GrowChild.globalExceptionHandle;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

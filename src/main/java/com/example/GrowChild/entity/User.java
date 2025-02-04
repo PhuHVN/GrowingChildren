@@ -1,12 +1,15 @@
 package com.example.GrowChild.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import lombok.Setter;
 
+@Setter
 @Entity
 @Data
 
@@ -31,7 +34,10 @@ public class User {
     @Pattern(regexp = "([A-Z a-z])\\w+",message ="Input must be range a - z")
     public String fullName;
 
-    public int role_id;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    @JsonIgnoreProperties({"users"})
+    public Role role;
 
     @Column(nullable = true)
     public String gender;
@@ -43,44 +49,5 @@ public class User {
     @Max(5)
     public int rate;
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setGoogleId(String googleId) {
-        this.googleId = googleId;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public void setRole_id(int role_id) {
-        this.role_id = role_id;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setRate(int rate) {
-        this.rate = rate;
-    }
 }
 

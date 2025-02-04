@@ -2,8 +2,6 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,8 +22,5 @@ public class EmailSenderAPI {
         }catch (Exception e){
             System.err.println("Error while sent mail: " + e.getMessage());
         }
-
-
-
     }
 }

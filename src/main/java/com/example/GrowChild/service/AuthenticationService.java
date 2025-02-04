@@ -1,11 +1,14 @@
 package com.example.GrowChild.service;
 
+import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.repository.AuthenticationRepository;
+import com.example.GrowChild.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -14,6 +17,9 @@ public class AuthenticationService {
     @Autowired
     AuthenticationRepository authenticationRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
+
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public AuthenticationService() {
@@ -21,12 +27,18 @@ public class AuthenticationService {
     }
 
     //Register
-    public User register(User user) {
+    public User register(User user, long role_id) {
         if (authenticationRepository.findByUsername(user.username) != null) {
             throw new IllegalArgumentException("Username is taken!");
         }
+
+        Role role = roleRepository.findById(role_id)
+                .orElseThrow(() -> new RuntimeException("Role not found"));
+        user.setRole(role);
+
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.password));
+
         return authenticationRepository.save(user); //create row in db
     }
 
@@ -84,6 +96,12 @@ public class AuthenticationService {
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));  // update new pass
         authenticationRepository.save(user); // update row
         return true;
+    }
+
+    //Check role user by userId
+    public String checkRole(String user_id){
+        User user = getUserById(user_id);
+        return user.role.roleName;
     }
 }
 

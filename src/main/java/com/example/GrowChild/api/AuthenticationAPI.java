@@ -3,6 +3,7 @@ package com.example.GrowChild.api;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.service.AuthenticationService;
 import com.example.GrowChild.service.EmailSenderService;
+import com.example.GrowChild.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -19,9 +20,9 @@ public class AuthenticationAPI {
     AuthenticationService authenticationService;
 
 
-    @PostMapping("register")
-    public ResponseEntity register(@RequestBody User user){
-        User newUser = authenticationService.register(user);
+    @PostMapping("register/{role_id}")
+    public ResponseEntity register(@RequestBody User user,@PathVariable long role_id){
+        User newUser = authenticationService.register(user,role_id);
         return ResponseEntity.ok(newUser); //.ok tra ve status 200-ok khi call api
     }
 
@@ -69,8 +70,10 @@ public class AuthenticationAPI {
 
     }
 
-
-
+    @GetMapping("roleCheck/{user_id}")
+    public String checkRole(@PathVariable String user_id){
+        return authenticationService.checkRole(user_id);
+    }
 
 
 }
