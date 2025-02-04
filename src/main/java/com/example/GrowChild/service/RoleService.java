@@ -25,7 +25,6 @@ public class RoleService {
                 .orElseThrow(() -> new RuntimeException("Role not found"));
     }
 
-
     public Role updateRole(long id,Role role){
         Role roleExisted = getRoleById(id);
         roleExisted.setRoleName(role.roleName);
