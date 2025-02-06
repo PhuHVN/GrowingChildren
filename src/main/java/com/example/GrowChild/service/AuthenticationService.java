@@ -1,5 +1,6 @@
 package com.example.GrowChild.service;
 
+import com.example.GrowChild.entity.OTP;
 import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.repository.AuthenticationRepository;
@@ -21,7 +22,7 @@ public class AuthenticationService {
     @Autowired
     RoleRepository roleRepository;
     @Autowired
-            RoleService roleService;
+    RoleService roleService;
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -35,7 +36,9 @@ public class AuthenticationService {
 //            throw new IllegalArgumentException("Username is taken!");
 //        }
         if((user.username == null || user.username.isEmpty()) && !user.email.isEmpty()){
-            senderService.sendEmail(user.email);
+            String otp = senderService.generateCode();
+            senderService.saveOTP(user.email, otp);
+            senderService.sendEmailWithHtml(user.email,otp);
         }
         Role role = roleRepository.findById(role_id)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
