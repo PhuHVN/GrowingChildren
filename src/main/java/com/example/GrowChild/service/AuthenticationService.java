@@ -50,11 +50,21 @@ public class AuthenticationService {
     }
 
     //Login
-    public User login(String username, String password) {
+    public User loginByUsername(String username, String password) {
+
         User user = authenticationRepository.findByUsername(username);
+
         if(user != null && bCryptPasswordEncoder.matches(password, user.password)){
             return user;
         }; //pass string encode to match pass hash
+        return null;
+    }
+
+    public User loginByEmail(String email, String password){
+        User user =  authenticationRepository.findByEmail(email);
+        if(user != null && bCryptPasswordEncoder.matches(password, user.password)){
+            return user;
+        }
         return null;
     }
 

@@ -49,5 +49,6 @@ public class User {
     @Max(5)
     public int rate;
 
+
 }
 

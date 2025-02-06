@@ -24,12 +24,22 @@ public class AuthenticationAPI {
 
     @PostMapping("login")
     public ResponseEntity login(@RequestParam String username, @RequestParam String password) {
-        User user = authenticationService.login(username, password);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-        } else {
-            return ResponseEntity.ok(" " + user.role.roleName);
+        try {
+            User user = new User() ;
+            if(username.contains("@gmail.com")){
+                user = authenticationService.loginByEmail(username,password);
+            }else{
+                user = authenticationService.loginByUsername(username,password);
+            }
+            if(user == null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username/email or password ");
+            }
+            return ResponseEntity.ok("Role: " + user.role.roleName);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the full stack trace for debugging
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
+
     }
 
     @GetMapping("getUser")
