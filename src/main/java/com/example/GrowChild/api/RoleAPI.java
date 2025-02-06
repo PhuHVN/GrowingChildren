@@ -26,20 +26,21 @@ public class RoleAPI {
         return roleService.getAll();
     }
 
-    @GetMapping("/{role_id}")
+    @GetMapping("getRole/{role_id}")
     public Role getRoleById(@PathVariable("role_id") long id){
         return roleService.getRoleById(id);
     }
 
-    @PutMapping("/{role_id}")
+    @PutMapping("update/{role_id}")
     public Role updateRole(@PathVariable("role_id") long id,@RequestBody Role role){
         return roleService.updateRole(id,role);
     }
 
-    @DeleteMapping("/{role_id}")
+    @DeleteMapping("delete/{role_id}")
     public String deleteRole(@PathVariable("role_id") long id){
         return roleService.deleteRole(id);
     }
+
 
 
 }

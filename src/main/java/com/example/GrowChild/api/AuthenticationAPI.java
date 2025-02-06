@@ -2,11 +2,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.service.AuthenticationService;
-import com.example.GrowChild.service.EmailSenderService;
-import com.example.GrowChild.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,19 +37,19 @@ public class AuthenticationAPI {
         return authenticationService.getUser();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("getUserById/{userId}")
     public User getUserById(@PathVariable("userId") String userId){
         return authenticationService.getUserById(userId);
     }
 
     //updateUserById
-    @PutMapping ("/{userId}")
+    @PutMapping ("updateUser/{userId}")
     public User updateUser(@PathVariable("userId") String userId,@RequestBody User user){
         return  authenticationService.updateUser(userId,user);
     }
 
     //deleteBId
-    @DeleteMapping ("/{userId}")
+    @DeleteMapping ("deleteUser/{userId}")
     public String deleteUser(@PathVariable("userId") String userId){
         authenticationService.deleteUser(userId);
         return "Delete successful";
@@ -74,6 +70,9 @@ public class AuthenticationAPI {
     public String checkRole(@PathVariable String user_id){
         return authenticationService.checkRole(user_id);
     }
-
+    @GetMapping("getUserByRole/{role_id}")
+    public List<User> getUserByRole(@PathVariable long role_id){
+        return authenticationService.getUserByRole(role_id);
+    }
 
 }

@@ -12,6 +12,7 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
+
     public Role createRole(Role role){
         return roleRepository.save(role);
     }
@@ -39,4 +40,7 @@ public class RoleService {
         roleRepository.delete(roleExisted);
         return "Delete Successful";
     }
+
+
+
 }
