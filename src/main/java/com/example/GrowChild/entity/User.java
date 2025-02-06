@@ -18,7 +18,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     public String user_id;
 
-    @Column(unique = true,nullable = true)
+    @Column(nullable = true)
     //@Size(min = 3,message = "Username must be more 3 character!") - BUG - cant no do same time with nullable vs valid size
     public String username;
 

@@ -18,7 +18,8 @@ import java.util.Optional;
 public class AuthenticationService {
     @Autowired
     AuthenticationRepository authenticationRepository;
-
+    @Autowired
+    EmailSenderService senderService;
     @Autowired
     RoleRepository roleRepository;
     @Autowired
@@ -32,10 +33,12 @@ public class AuthenticationService {
 
     //Register
     public User register(User user, long role_id) {
-        if (authenticationRepository.findByUsername(user.username) != null) {
-            throw new IllegalArgumentException("Username is taken!");
+//        if (authenticationRepository.findByUsername(user.username) != null) {
+//            throw new IllegalArgumentException("Username is taken!");
+//        }
+        if((user.username == null || user.username.isEmpty()) && !user.email.isEmpty()){
+            senderService.sendEmail(user.email);
         }
-
         Role role = roleRepository.findById(role_id)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRole(role);
@@ -47,9 +50,12 @@ public class AuthenticationService {
     }
 
     //Login
-    public boolean login(String username, String password) {
+    public User login(String username, String password) {
         User user = authenticationRepository.findByUsername(username);
-        return user != null && bCryptPasswordEncoder.matches(password, user.password); //pass string encode to match pass hash
+        if(user != null && bCryptPasswordEncoder.matches(password, user.password)){
+            return user;
+        }; //pass string encode to match pass hash
+        return null;
     }
 
     //getAllUser
