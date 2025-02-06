@@ -81,9 +81,13 @@ public class AuthenticationAPI {
         return authenticationService.checkRole(user_id);
     }
 
-    @GetMapping("getUserByRole/{role_id}")
+    @GetMapping("getUserByRoleId/{role_id}")
     public List<User> getUserByRole(@PathVariable long role_id) {
         return authenticationService.getUserByRole(role_id);
     }
 
+    @GetMapping("getUserByRoleName/{role_name}")
+    public List<User> getUserByRoleName(@PathVariable String role_name){
+        return authenticationService.getUserByRoleName(role_name);
+    }
 }

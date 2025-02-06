@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -126,16 +124,12 @@ public class AuthenticationService {
 
     //Get User by RoleID
     public List<User> getUserByRole(long role_id){
-        Role role = roleService.getRoleById(role_id);
-        List<User> users = new ArrayList<>();
+        return authenticationRepository.findByRole_RoleId(role_id);
 
-        for (int i = 0; i < getUser().size(); i++) {
-            if(getUser().get(i).role == role){
-                users.add(getUser().get(i));
-            }
-        }
-        return users;
+    }
 
+    public List<User> getUserByRoleName(String roleName){
+        return authenticationRepository.findByRole_RoleName(roleName);
     }
 }
 
