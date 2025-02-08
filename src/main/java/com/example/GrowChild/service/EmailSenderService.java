@@ -1,6 +1,7 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.entity.OTP;
+import com.example.GrowChild.repository.AuthenticationRepository;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,26 +19,16 @@ import java.util.Random;
 public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private AuthenticationRepository authenticationRepository;
 
-    private Map<String, OTP> otpStore = new HashMap<>();
 
-    public void saveOTP(String email, String code){
-        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5); //time now + 5min = expiration time
-        OTP otp = new OTP(code,expirationTime);
-        otpStore.put(email,otp); // add in map
-    }
 
     public String generateCode(){
         return String.valueOf((int)(Math.random() * 1000000)); // random 6 char number
     }
 
-    public boolean verifyOtp(String email ,String code){
-        OTP otp = otpStore.get(email); //get otp from key email
-        if(otp != null && otp.getExpirationTime().isAfter(LocalDateTime.now())){ //check time + 5min < time now
-            return otp.getCode().equals(code); //
-        }
-        return false; //ko dung or het han
-    }
+
     public void sendEmail(String toMail) {
         Random random = new Random();
         int code = random.nextInt(1000000);// random with 6 char number

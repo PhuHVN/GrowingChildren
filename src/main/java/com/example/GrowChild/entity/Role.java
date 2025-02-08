@@ -1,5 +1,7 @@
 package com.example.GrowChild.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,5 +19,6 @@ public class Role {
     public String roleName;
 
     @OneToMany(mappedBy = "role")
-    public List<User> users;
+    @JsonBackReference
+    private List<User> users;
 }

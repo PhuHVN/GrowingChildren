@@ -5,13 +5,16 @@ import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.repository.AuthenticationRepository;
 import com.example.GrowChild.repository.RoleRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AuthenticationService {
@@ -25,6 +28,7 @@ public class AuthenticationService {
     RoleService roleService;
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    private Map<String, User> storeUser = new HashMap<>();
 
     public AuthenticationService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -32,22 +36,55 @@ public class AuthenticationService {
 
     //Register
     public User register(User user, long role_id) {
-//        if (authenticationRepository.findByUsername(user.username) != null) {
-//            throw new IllegalArgumentException("Username is taken!");
-//        }
-        if((user.username == null || user.username.isEmpty()) && !user.email.isEmpty()){
-            String otp = senderService.generateCode();
-            senderService.saveOTP(user.email, otp);
-            senderService.sendEmailWithHtml(user.email,otp);
-        }
+        //check role exist
         Role role = roleRepository.findById(role_id)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRole(role);
 
+        //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.password));
 
-        return authenticationRepository.save(user); //create row in db
+        if(user.getUsername() != null && !user.getUsername().isEmpty()){
+            return authenticationRepository.save(user); //create row in db
+        }
+
+
+        if (  user.getEmail() != null &&  !user.getEmail().isEmpty()) {
+            String otp = senderService.generateCode();
+            saveOTP(user.email, otp);
+            senderService.sendEmailWithHtml(user.email, otp);
+            return storeUser.put(user.getEmail(),user);
+        }
+        return null;
+    }
+
+    private Map<String, OTP> otpStore = new HashMap<>();
+
+    public void saveOTP(String email, String code){
+        LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5); //time now + 5min = expiration time
+        OTP otp = new OTP(code,expirationTime);
+        otpStore.put(email,otp); // add in map
+    }
+
+
+    public String verifyOtp(String email ,String code){
+        OTP otp = otpStore.get(email); //get otp from key
+        if(otp == null){
+            return "OTP not found!?";
+        }
+        if(!otp.getExpirationTime().isAfter(LocalDateTime.now())){ // time now <= time expiration
+            otpStore.remove(email,otp);
+            return "OTP expiration...";
+        }
+        if(!otp.getCode().equals(code)){
+            return "OTP invalid!";
+        }
+        User user = storeUser.remove(email);
+        authenticationRepository.save(user);
+        otpStore.remove(email,otp);
+        return "Authentication OTP successful \n" + user;
+
     }
 
     //Login
@@ -55,15 +92,16 @@ public class AuthenticationService {
 
         User user = authenticationRepository.findByUsername(username);
 
-        if(user != null && bCryptPasswordEncoder.matches(password, user.password)){
+        if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
             return user;
-        }; //pass string encode to match pass hash
+        }
+        //pass string encode to match pass hash
         return null;
     }
 
-    public User loginByEmail(String email, String password){
-        User user =  authenticationRepository.findByEmail(email);
-        if(user != null && bCryptPasswordEncoder.matches(password, user.password)){
+    public User loginByEmail(String email, String password) {
+        User user = authenticationRepository.findByEmail(email);
+        if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
             return user;
         }
         return null;
@@ -84,10 +122,10 @@ public class AuthenticationService {
     public User updateUser(String userId, User user) {
         User user1 = getUserById(userId); //call fun getId to match user
 
-        user1.setFullName(user.fullName);
-        user1.setGender(user.gender);
-        user1.setEmail(user.email);
-        user1.setPhone(user.phone);
+        user1.setFullName(user.getFullName());
+        user1.setGender(user.getGender());
+        user1.setEmail(user.getEmail());
+        user1.setPhone(user.getPhone());
 
         return authenticationRepository.save(user1);
     }
@@ -98,20 +136,20 @@ public class AuthenticationService {
     }
 
     //change password
-    public boolean changePassword(String userId, String oldPassword, String newPassword,String confirmPassword ){
-        if(userId == null || oldPassword == null || newPassword == null || confirmPassword == null ){ //check value not null
+    public boolean changePassword(String userId, String oldPassword, String newPassword, String confirmPassword) {
+        if (userId == null || oldPassword == null || newPassword == null || confirmPassword == null) { //check value not null
             throw new IllegalArgumentException("Input not null !");
         }
         User user = getUserById(userId); // find user by id
-        if(user == null){
-             throw new IllegalArgumentException("User not found !");
+        if (user == null) {
+            throw new IllegalArgumentException("User not found !");
         }
 
-        if(!new BCryptPasswordEncoder().matches(oldPassword,user.password)){ // check pass user to match with pass input when encode
-            throw  new IllegalArgumentException("Old password incorrect");
-        };
+        if (!new BCryptPasswordEncoder().matches(oldPassword, user.password)) { // check pass user to match with pass input when encode
+            throw new IllegalArgumentException("Old password incorrect");
+        }
 
-        if(!newPassword.equals(confirmPassword)){ //check new pass = confirm pass
+        if (!newPassword.equals(confirmPassword)) { //check new pass = confirm pass
             throw new IllegalArgumentException("New password and confirm password must same!");
         }
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));  // update new pass
@@ -120,18 +158,18 @@ public class AuthenticationService {
     }
 
     //Check role user by userId
-    public String checkRole(String user_id){
+    public String checkRole(String user_id) {
         User user = getUserById(user_id);
-        return user.role.roleName;
+        return user.getRole().roleName;
     }
 
     //Get User by RoleID
-    public List<User> getUserByRole(long role_id){
+    public List<User> getUserByRole(long role_id) {
         return authenticationRepository.findByRole_RoleId(role_id);
 
     }
 
-    public List<User> getUserByRoleName(String roleName){
+    public List<User> getUserByRoleName(String roleName) {
         return authenticationRepository.findByRole_RoleName(roleName);
     }
 }

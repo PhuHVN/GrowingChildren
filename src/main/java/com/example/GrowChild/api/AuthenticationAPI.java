@@ -2,6 +2,9 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.service.AuthenticationService;
+import com.example.GrowChild.service.EmailSenderService;
+import com.example.GrowChild.service.RoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +17,17 @@ import java.util.List;
 public class AuthenticationAPI {
     @Autowired
     AuthenticationService authenticationService;
-
+    @Autowired
+    EmailSenderService senderService;
 
     @PostMapping("register/{role_id}")
-    public ResponseEntity register(@RequestBody User user, @PathVariable long role_id) {
+    public ResponseEntity register(@Valid @RequestBody User user, @PathVariable long role_id) {
+
         User newUser = authenticationService.register(user, role_id);
-        return ResponseEntity.ok(newUser); //.ok tra ve status 200-ok khi call api
+        if(newUser != null){
+            return ResponseEntity.ok(newUser); //.ok tra ve status 200-ok khi call api
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error Create");
     }
 
     @PostMapping("login")
@@ -34,7 +42,7 @@ public class AuthenticationAPI {
             if(user == null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username/email or password ");
             }
-            return ResponseEntity.ok("Role: " + user.role.roleName);
+            return ResponseEntity.ok("Role: " + user.getRole().roleName);
         } catch (Exception e) {
             e.printStackTrace(); // Log the full stack trace for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
@@ -89,5 +97,10 @@ public class AuthenticationAPI {
     @GetMapping("getUserByRoleName/{role_name}")
     public List<User> getUserByRoleName(@PathVariable String role_name){
         return authenticationService.getUserByRoleName(role_name);
+    }
+
+    @PostMapping("verifyOtp")
+    public String verifyOtp(@RequestParam String email, @RequestParam String enterCode){
+        return authenticationService.verifyOtp(email, enterCode);
     }
 }

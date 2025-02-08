@@ -1,5 +1,6 @@
 package com.example.GrowChild.api;
 
+import com.example.GrowChild.service.AuthenticationService;
 import com.example.GrowChild.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 public class EmailSenderAPI {
     @Autowired
     private EmailSenderService senderService;
-
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @PostMapping("/send-email")
     public void mailSender(@RequestParam String to) {
@@ -34,12 +36,5 @@ public class EmailSenderAPI {
         }
     }
 
-    @PostMapping("verifyOtp")
-    public ResponseEntity<String> verifyOtp(@RequestParam String email, @RequestParam String enterCode){
-        boolean invalid = senderService.verifyOtp(email,enterCode);
-        if(invalid){
-           return  ResponseEntity.ok("Successful");
-        }
-        return  ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid OTP");
-    }
+
 }
