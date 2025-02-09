@@ -1,6 +1,8 @@
 package com.example.GrowChild.service;
 
+import com.example.GrowChild.dto.RoleDTO;
 import com.example.GrowChild.entity.Role;
+import com.example.GrowChild.mapstruct.RoleMapper;
 import com.example.GrowChild.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,30 +14,39 @@ import java.util.List;
 public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private RoleMapper roleMapper;
 
-
-    public Role createRole(Role role){
-        return roleRepository.save(role);
+    public RoleDTO createRole(RoleDTO roleDTO){
+        Role role = roleMapper.toEntity(roleDTO); // map fill DTO -> entity
+        Role saveRole = roleRepository.save(role); // save db
+        return roleMapper.toDTO(saveRole);  // return attribute of DTO
     }
 
-    public List<Role> getAll(){
-        return roleRepository.findAll();
+    public List<RoleDTO> getAll(){
+        List<Role> roles = roleRepository.findAll(); // find list role full info
+        return roleMapper.toDTOList(roles); //return some attribute this DTO
     }
 
-
-    public Role getRoleById(long id){
-        return roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+    //
+    public RoleDTO getRoleById(long id){
+        Role role = getRoleExisted(id);
+        return roleMapper.toDTO(role);
     }
 
-    public Role updateRole(long id,Role role){
-        Role roleExisted = getRoleById(id);
-        roleExisted.setRoleName(role.roleName);
-        return roleRepository.save(roleExisted);
+    public RoleDTO updateRole(long id,RoleDTO roleDTO){
+        Role roleExisted = getRoleExisted(id);
+        roleExisted = Role.builder()
+                .roleId(roleExisted.getRoleId()) //not change id // can del this line
+                .roleName(roleDTO.getRoleName())// change name
+                .build();
+        Role updateRole = roleRepository.save(roleExisted); // save db
+        return roleMapper.toDTO(updateRole);// return DTO
     }
+
 
     public String deleteRole(long id){
-        Role roleExisted = getRoleById(id);
+        Role roleExisted = getRoleExisted(id); // find role
         if(roleExisted == null){
             return "Error Deleted";
         }
@@ -43,6 +54,9 @@ public class RoleService {
         return "Delete Successful";
     }
 
+    public Role getRoleExisted(long id) {
+        return roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found!"));
+    }
 
 
 }
