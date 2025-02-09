@@ -5,7 +5,6 @@ import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.repository.AuthenticationRepository;
 import com.example.GrowChild.repository.RoleRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +27,8 @@ public class AuthenticationService {
     RoleService roleService;
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
-    private Map<String, User> storeUser = new HashMap<>();
+
+    Map<String, User> storeUser = new HashMap<>();
 
     public AuthenticationService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -36,54 +36,60 @@ public class AuthenticationService {
 
     //Register
     public User register(User user, long role_id) {
+
         //check role exist
-        Role role = roleRepository.findById(role_id)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+        Role role = roleService.getRoleById(role_id);
+        if (role == null){
+            throw new RuntimeException("Role not found");
+        }
         user.setRole(role);
 
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.password));
 
-        if(user.getUsername() != null && !user.getUsername().isEmpty()){
+        // username field not null
+        if (user.getUsername() != null && !user.getUsername().isEmpty()) {
             return authenticationRepository.save(user); //create row in db
         }
 
-
-        if (  user.getEmail() != null &&  !user.getEmail().isEmpty()) {
-            String otp = senderService.generateCode();
-            saveOTP(user.email, otp);
-            senderService.sendEmailWithHtml(user.email, otp);
-            return storeUser.put(user.getEmail(),user);
+        //email not null
+        if (user.getEmail() != null && !user.getEmail().isEmpty()) {
+            String otp = senderService.generateCode(); // create OTP code
+            saveOTP(user.getEmail(), otp); // save otp with key email
+            senderService.sendEmailWithHtml(user.getEmail(), otp); // send mail
         }
-        return null;
+        return storeUser.put(user.getEmail(), user); // return obj user = null
     }
 
     private Map<String, OTP> otpStore = new HashMap<>();
 
-    public void saveOTP(String email, String code){
+    public void saveOTP(String email, String code) {
         LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5); //time now + 5min = expiration time
-        OTP otp = new OTP(code,expirationTime);
-        otpStore.put(email,otp); // add in map
+        OTP otp = new OTP(code, expirationTime);
+        otpStore.put(email, otp); // add in map
     }
 
 
-    public String verifyOtp(String email ,String code){
-        OTP otp = otpStore.get(email); //get otp from key
-        if(otp == null){
-            return "OTP not found!?";
-        }
-        if(!otp.getExpirationTime().isAfter(LocalDateTime.now())){ // time now <= time expiration
-            otpStore.remove(email,otp);
-            return "OTP expiration...";
-        }
-        if(!otp.getCode().equals(code)){
-            return "OTP invalid!";
-        }
-        User user = storeUser.remove(email);
-        authenticationRepository.save(user);
-        otpStore.remove(email,otp);
-        return "Authentication OTP successful \n" + user;
+    public String verifyOtp(String email, String code)  {
+
+           OTP otp = otpStore.get(email); //get otp from key
+
+           if (otp == null) {
+               return "OTP not found!?";
+           }
+           if (!otp.getExpirationTime().isAfter(LocalDateTime.now())) { // time now <= time expiration
+               otpStore.remove(email, otp);
+               return "OTP expiration...";
+           }
+           if (!otp.getCode().equals(code)) { //check otp code = enter code
+               return "OTP invalid!";
+           }
+           User user = storeUser.remove(email); // take user
+           authenticationRepository.save(user); //save db when otp verify
+           otpStore.remove(email, otp); // remove otp out map
+           return "Authentication OTP successful " ;
+
 
     }
 

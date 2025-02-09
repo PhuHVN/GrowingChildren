@@ -22,7 +22,7 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    @Transactional
+
     public Role getRoleById(long id){
         return roleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Role not found"));
