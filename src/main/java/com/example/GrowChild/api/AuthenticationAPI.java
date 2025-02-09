@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("api")
 public class AuthenticationAPI {
     @Autowired
@@ -21,13 +22,17 @@ public class AuthenticationAPI {
     EmailSenderService senderService;
 
     @PostMapping("register/{role_id}")
-    public ResponseEntity register(@Valid @RequestBody User user, @PathVariable long role_id) {
-
+    public String register(@Valid @RequestBody User user, @PathVariable long role_id) {
+    try {
         User newUser = authenticationService.register(user, role_id);
-        if(newUser != null){
-            return ResponseEntity.ok(newUser); //.ok tra ve status 200-ok khi call api
+        if(newUser != null){ // username return != null
+            return "ok " + newUser; //.ok tra ve status 200-ok khi call api
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error Create");
+        return "user register by Gmail"; // return
+    } catch (Exception e) {
+        throw new RuntimeException(e);
+    }
+
     }
 
     @PostMapping("login")
@@ -101,6 +106,7 @@ public class AuthenticationAPI {
 
     @PostMapping("verifyOtp")
     public String verifyOtp(@RequestParam String email, @RequestParam String enterCode){
-        return authenticationService.verifyOtp(email, enterCode);
+
+            return authenticationService.verifyOtp(email, enterCode);
     }
 }
