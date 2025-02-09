@@ -1,5 +1,6 @@
 package com.example.GrowChild.api;
 
+import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.service.AuthenticationService;
 import com.example.GrowChild.service.EmailSenderService;
@@ -26,11 +27,11 @@ public class AuthenticationAPI {
     try {
         User newUser = authenticationService.register(user, role_id);
         if(newUser != null){ // username return != null
-            return "ok " + newUser; //.ok tra ve status 200-ok khi call api
+            return "ok " + newUser.toString(); //.ok tra ve status 200-ok khi call api
         }
         return "user register by Gmail"; // return
     } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new RuntimeException(e.getMessage());
     }
 
     }
@@ -38,7 +39,7 @@ public class AuthenticationAPI {
     @PostMapping("login")
     public ResponseEntity login(@RequestParam String username, @RequestParam String password) {
         try {
-            User user = new User() ;
+            UserDTO user = new UserDTO() ;
             if(username.contains("@gmail.com")){
                 user = authenticationService.loginByEmail(username,password);
             }else{
@@ -47,7 +48,7 @@ public class AuthenticationAPI {
             if(user == null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username/email or password ");
             }
-            return ResponseEntity.ok("Role: " + user.getRole().roleName);
+            return ResponseEntity.ok("Role: " + user.getRoleName());
         } catch (Exception e) {
             e.printStackTrace(); // Log the full stack trace for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
@@ -56,18 +57,18 @@ public class AuthenticationAPI {
     }
 
     @GetMapping("getUser")
-    public List<User> getUser() {
+    public List<UserDTO> getUser() {
         return authenticationService.getUser();
     }
 
     @GetMapping("getUserById/{userId}")
-    public User getUserById(@PathVariable("userId") String userId) {
+    public UserDTO getUserById(@PathVariable("userId") String userId) {
         return authenticationService.getUserById(userId);
     }
 
     //updateUserById
     @PutMapping("updateUser/{userId}")
-    public User updateUser(@PathVariable("userId") String userId, @RequestBody User user) {
+    public UserDTO updateUser(@PathVariable("userId") String userId, @RequestBody User user) {
         return authenticationService.updateUser(userId, user);
     }
 
@@ -95,12 +96,12 @@ public class AuthenticationAPI {
     }
 
     @GetMapping("getUserByRoleId/{role_id}")
-    public List<User> getUserByRole(@PathVariable long role_id) {
+    public List<UserDTO> getUserByRole(@PathVariable long role_id) {
         return authenticationService.getUserByRole(role_id);
     }
 
     @GetMapping("getUserByRoleName/{role_name}")
-    public List<User> getUserByRoleName(@PathVariable String role_name){
+    public List<UserDTO> getUserByRoleName(@PathVariable String role_name){
         return authenticationService.getUserByRoleName(role_name);
     }
 

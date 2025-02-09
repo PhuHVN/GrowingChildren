@@ -1,8 +1,10 @@
 package com.example.GrowChild.service;
 
+import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.OTP;
 import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
+import com.example.GrowChild.mapstruct.UserMapstruct;
 import com.example.GrowChild.repository.AuthenticationRepository;
 import com.example.GrowChild.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class AuthenticationService {
     RoleRepository roleRepository;
     @Autowired
     RoleService roleService;
+    @Autowired
+    UserMapstruct userMapstruct;
+
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -38,8 +43,8 @@ public class AuthenticationService {
     public User register(User user, long role_id) {
 
         //check role exist
-        Role role = roleService.getRoleById(role_id);
-        if (role == null){
+        Role role = roleService.getRoleExisted(role_id);
+        if (role == null) {
             throw new RuntimeException("Role not found");
         }
         user.setRole(role);
@@ -48,18 +53,21 @@ public class AuthenticationService {
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.password));
 
+
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {
             return authenticationRepository.save(user); //create row in db
         }
-
         //email not null
         if (user.getEmail() != null && !user.getEmail().isEmpty()) {
             String otp = senderService.generateCode(); // create OTP code
             saveOTP(user.getEmail(), otp); // save otp with key email
             senderService.sendEmailWithHtml(user.getEmail(), otp); // send mail
+            storeUser.put(user.getEmail(), user); // return obj user = null
+            return null; //save in map so use null
         }
-        return storeUser.put(user.getEmail(), user); // return obj user = null
+
+        throw new RuntimeException("Invalid register !");
     }
 
     private Map<String, OTP> otpStore = new HashMap<>();
@@ -71,69 +79,80 @@ public class AuthenticationService {
     }
 
 
-    public String verifyOtp(String email, String code)  {
+    public String verifyOtp(String email, String code) {
 
-           OTP otp = otpStore.get(email); //get otp from key
+        OTP otp = otpStore.get(email); //get otp from key
 
-           if (otp == null) {
-               return "OTP not found!?";
-           }
-           if (!otp.getExpirationTime().isAfter(LocalDateTime.now())) { // time now <= time expiration
-               otpStore.remove(email, otp);
-               return "OTP expiration...";
-           }
-           if (!otp.getCode().equals(code)) { //check otp code = enter code
-               return "OTP invalid!";
-           }
-           User user = storeUser.remove(email); // take user
-           authenticationRepository.save(user); //save db when otp verify
-           otpStore.remove(email, otp); // remove otp out map
-           return "Authentication OTP successful " ;
+        if (otp == null) {
+            return "OTP not found!?";
+        }
+        if (!otp.getExpirationTime().isAfter(LocalDateTime.now())) { // time now <= time expiration
+            otpStore.remove(email, otp);
+            return "OTP expiration...";
+        }
+        if (!otp.getCode().equals(code)) { //check otp code = enter code
+            return "OTP invalid!";
+        }
+        User user = storeUser.remove(email); // take user
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        authenticationRepository.save(user); //save db when otp verify
+        otpStore.remove(email, otp); // remove otp out map
+        return "Authentication OTP successful ";
 
 
     }
 
     //Login
-    public User loginByUsername(String username, String password) {
+    public UserDTO loginByUsername(String username, String password) {
 
         User user = authenticationRepository.findByUsername(username);
 
         if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
-            return user;
+            return userMapstruct.toDTO(user);
         }
         //pass string encode to match pass hash
         return null;
     }
 
-    public User loginByEmail(String email, String password) {
+    public UserDTO loginByEmail(String email, String password) {
         User user = authenticationRepository.findByEmail(email);
+
         if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
-            return user;
+            return userMapstruct.toDTO(user);
         }
         return null;
     }
 
     //getAllUser
-    public List<User> getUser() {
-        return authenticationRepository.findAll();
+    public List<UserDTO> getUser() {
+        List<User> users = authenticationRepository.findAll();
+        return userMapstruct.toDTOList(users);
     }
 
     //getUserByID
-    public User getUserById(String userID) {
+    public UserDTO getUserById(String userID) {
+        User user = getUser(userID);
+
+        return userMapstruct.toDTO(user);
+    }
+
+    private User getUser(String userID) {
         return authenticationRepository.findById(userID)
-                .orElseThrow(() -> new RuntimeException("User not found")); //return no found
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     //update user by ID
-    public User updateUser(String userId, User user) {
-        User user1 = getUserById(userId); //call fun getId to match user
+    public UserDTO updateUser(String userId, User user) {
+        User userExist = getUser(userId); //call fun getId to match user
+        userExist = User.builder()
+                .fullName(user.getFullName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .gender(user.getGender())
+                .build();
+        User updateUser = authenticationRepository.save(userExist);
 
-        user1.setFullName(user.getFullName());
-        user1.setGender(user.getGender());
-        user1.setEmail(user.getEmail());
-        user1.setPhone(user.getPhone());
-
-        return authenticationRepository.save(user1);
+        return userMapstruct.toDTO(updateUser);
     }
 
     //Delete User
@@ -146,7 +165,7 @@ public class AuthenticationService {
         if (userId == null || oldPassword == null || newPassword == null || confirmPassword == null) { //check value not null
             throw new IllegalArgumentException("Input not null !");
         }
-        User user = getUserById(userId); // find user by id
+        User user = getUser(userId); // find user by id
         if (user == null) {
             throw new IllegalArgumentException("User not found !");
         }
@@ -165,18 +184,19 @@ public class AuthenticationService {
 
     //Check role user by userId
     public String checkRole(String user_id) {
-        User user = getUserById(user_id);
+        User user = getUser(user_id);
         return user.getRole().roleName;
     }
 
     //Get User by RoleID
-    public List<User> getUserByRole(long role_id) {
-        return authenticationRepository.findByRole_RoleId(role_id);
-
+    public List<UserDTO> getUserByRole(long role_id) {
+        List<User> users = authenticationRepository.findByRole_RoleId(role_id);
+        return userMapstruct.toDTOList(users);
     }
 
-    public List<User> getUserByRoleName(String roleName) {
-        return authenticationRepository.findByRole_RoleName(roleName);
+    public List<UserDTO> getUserByRoleName(String roleName) {
+        List<User> users = authenticationRepository.findByRole_RoleName(roleName);
+        return userMapstruct.toDTOList(users);
     }
 }
 
