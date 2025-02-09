@@ -73,6 +73,7 @@ public class AuthenticationAPI {
     }
 
     //deleteBId
+
     @DeleteMapping("deleteUser/{userId}")
     public String deleteUser(@PathVariable("userId") String userId) {
         authenticationService.deleteUser(userId);
