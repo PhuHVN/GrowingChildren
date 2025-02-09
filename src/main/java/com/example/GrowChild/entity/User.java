@@ -8,14 +8,17 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.lang.Nullable;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 
 public class User {
     @Id
@@ -23,10 +26,9 @@ public class User {
     public String user_id;
 
     @Column(nullable = true)
-    //@Size(min = 3,message = "Username must be more 3 character!") - BUG - cant no do same time with nullable vs valid size
     public String username;
 
-    @Column(nullable = false)
+    @NotBlank(message = "password not blank!")
     public String password;
 
     @Nullable
@@ -37,11 +39,6 @@ public class User {
     @Pattern(regexp = "([A-Z a-z])\\w+",message ="Input must be range a - z")
     public String fullName;
 
-    @ManyToOne
-    @JoinColumn(name = "roleId")
-    @JsonBackReference()
-    private Role role;
-
     @Column(nullable = true)
     public String gender;
 
@@ -49,10 +46,39 @@ public class User {
     @Column(unique = true)
     public String phone;
 
-    @Min(0)
-    @Max(5)
+    @Min(value = 0,message =" rate must be greater 0")
+    @Max(value = 5,message =" rate must be lower 5")
     public int rate;
 
+
+    @ManyToOne
+    @JoinColumn(name = "roleId")
+    @JsonBackReference()
+    @ToString.Exclude
+    public Role role ;
+
+    private LocalDateTime createAt = LocalDateTime.now();
+
+    private boolean status = true; // 1 active - 0 delete
+
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = LocalDateTime.now();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "user_id='" + user_id + '\'' +
+                ",\n username='" + username + '\'' +
+                ",\n email='" + email + '\'' +
+                ",\n fullName='" + fullName + '\'' +
+                ",\n phone='" + phone + '\'' +
+                ",\n gender='" + gender + '\'' +
+                ",\n roleName='" + (role != null ? role.getRoleName() : "null") + '\'' +
+                ",\n status=" + status +
+                '}';
+    }
 
 }
 
