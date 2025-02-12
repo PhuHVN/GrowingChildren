@@ -22,7 +22,7 @@ public interface UserMapstruct {
                 .phone(user.getPhone())
                 .gender(user.getGender())
                 .roleName(user.getRole() != null ? user.getRole().getRoleName() : null)
-                .status(user.isStatus())
+                .isDelete(user.isDelete())
                 .build();
     }
 
@@ -34,7 +34,7 @@ public interface UserMapstruct {
                 .fullName(userDTO.getFullName())
                 .phone(userDTO.getPhone())
                 .gender(userDTO.getGender())
-                .status(userDTO.isStatus())
+                .isDelete(userDTO.isDelete())
                 .build();
     }
 
