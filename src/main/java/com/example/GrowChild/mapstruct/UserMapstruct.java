@@ -21,6 +21,7 @@ public interface UserMapstruct {
                 .fullName(user.getFullName())
                 .phone(user.getPhone())
                 .gender(user.getGender())
+                .address(user.getAddress())
                 .roleName(user.getRole() != null ? user.getRole().getRoleName() : null)
                 .isDelete(user.isDelete())
                 .build();
@@ -33,6 +34,7 @@ public interface UserMapstruct {
                 .email(userDTO.getEmail())
                 .fullName(userDTO.getFullName())
                 .phone(userDTO.getPhone())
+                .address(userDTO.getAddress())
                 .gender(userDTO.getGender())
                 .isDelete(userDTO.isDelete())
                 .build();

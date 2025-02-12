@@ -35,6 +35,11 @@ public class UserAPI {
 
     }
 
+
+    @GetMapping("getByGmail")
+    public User getUserByGmail(@RequestParam String email){
+        return userService.getUserByGmail(email);
+    }
     @GetMapping("getUser")
     public List<UserDTO> getUser() {
         return userService.getUser();
