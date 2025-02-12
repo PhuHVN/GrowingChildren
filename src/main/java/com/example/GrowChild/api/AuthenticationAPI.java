@@ -26,7 +26,7 @@ public class AuthenticationAPI {
             if(user == null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username/email or password ");
             }
-            return ResponseEntity.ok("Role: " + user.getRoleName());
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
