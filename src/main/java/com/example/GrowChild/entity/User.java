@@ -50,6 +50,10 @@ public class User {
     @Max(value = 5,message =" rate must be lower 5")
     public int rate;
 
+    @Column(nullable = true)
+    public String address;
+
+
 
     @ManyToOne
     @JoinColumn(name = "roleId")
@@ -59,7 +63,7 @@ public class User {
 
     private LocalDateTime createAt = LocalDateTime.now();
 
-    private boolean status = true; // 1 active - 0 delete
+    private boolean isDelete = false; // 0 active - 1 delete
 
     @PrePersist
     protected void onCreate() {
@@ -76,7 +80,7 @@ public class User {
                 ",\n phone='" + phone + '\'' +
                 ",\n gender='" + gender + '\'' +
                 ",\n roleName='" + (role != null ? role.getRoleName() : "null") + '\'' +
-                ",\n status=" + status +
+                ",\n isDelete=" + isDelete +
                 '}';
     }
 
