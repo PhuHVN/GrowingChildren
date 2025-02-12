@@ -5,7 +5,7 @@ import com.example.GrowChild.entity.OTP;
 import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.mapstruct.UserMapstruct;
-import com.example.GrowChild.repository.AuthenticationRepository;
+import com.example.GrowChild.repository.UserRepository;
 import com.example.GrowChild.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,9 +18,9 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class AuthenticationService {
+public class UserService {
     @Autowired
-    AuthenticationRepository authenticationRepository;
+    UserRepository userRepository;
     @Autowired
     EmailSenderService senderService;
     @Autowired
@@ -35,7 +35,7 @@ public class AuthenticationService {
 
     Map<String, User> storeUser = new HashMap<>();
 
-    public AuthenticationService() {
+    public UserService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -56,7 +56,7 @@ public class AuthenticationService {
 
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {
-            return authenticationRepository.save(user); //create row in db
+            return userRepository.save(user); //create row in db
         }
         //email not null
         if (user.getEmail() != null && !user.getEmail().isEmpty()) {
@@ -95,7 +95,7 @@ public class AuthenticationService {
         }
         User user = storeUser.remove(email); // take user
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        authenticationRepository.save(user); //save db when otp verify
+        userRepository.save(user); //save db when otp verify
         otpStore.remove(email, otp); // remove otp out map
         return "Authentication OTP successful ";
 
@@ -105,7 +105,7 @@ public class AuthenticationService {
     //Login
     public UserDTO loginByUsername(String username, String password) {
 
-        User user = authenticationRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
 
         if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
             return userMapstruct.toDTO(user);
@@ -115,7 +115,7 @@ public class AuthenticationService {
     }
 
     public UserDTO loginByEmail(String email, String password) {
-        User user = authenticationRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
 
         if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
             return userMapstruct.toDTO(user);
@@ -125,7 +125,7 @@ public class AuthenticationService {
 
     //getAllUser
     public List<UserDTO> getUser() {
-        List<User> users = authenticationRepository.findAll();
+        List<User> users = userRepository.findAll();
         return userMapstruct.toDTOList(users);
     }
 
@@ -137,8 +137,8 @@ public class AuthenticationService {
     }
 
     private User getUser(String userID) {
-        return authenticationRepository.findById(userID)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(userID)
+                .orElseThrow(() -> new RuntimeException("Parent not found"));
     }
 
     //update user by ID
@@ -150,15 +150,17 @@ public class AuthenticationService {
                 .phone(user.getPhone())
                 .gender(user.getGender())
                 .build();
-        User updateUser = authenticationRepository.save(userExist);
+        User updateUser = userRepository.save(userExist);
 
         return userMapstruct.toDTO(updateUser);
     }
 
     //Delete User
     public void deleteUser(String userId) {
-        authenticationRepository.deleteById(userId);
+        userRepository.deleteById(userId);
     }
+
+
 
     //change password
     public boolean changePassword(String userId, String oldPassword, String newPassword, String confirmPassword) {
@@ -178,7 +180,7 @@ public class AuthenticationService {
             throw new IllegalArgumentException("New password and confirm password must same!");
         }
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));  // update new pass
-        authenticationRepository.save(user); // update row
+        userRepository.save(user); // update row
         return true;
     }
 
@@ -190,12 +192,12 @@ public class AuthenticationService {
 
     //Get User by RoleID
     public List<UserDTO> getUserByRole(long role_id) {
-        List<User> users = authenticationRepository.findByRole_RoleId(role_id);
+        List<User> users = userRepository.findByRole_RoleId(role_id);
         return userMapstruct.toDTOList(users);
     }
 
     public List<UserDTO> getUserByRoleName(String roleName) {
-        List<User> users = authenticationRepository.findByRole_RoleName(roleName);
+        List<User> users = userRepository.findByRole_RoleName(roleName);
         return userMapstruct.toDTOList(users);
     }
 }
