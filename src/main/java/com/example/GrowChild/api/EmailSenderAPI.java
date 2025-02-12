@@ -1,11 +1,8 @@
 package com.example.GrowChild.api;
 
-import com.example.GrowChild.service.AuthenticationService;
+import com.example.GrowChild.service.UserService;
 import com.example.GrowChild.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +12,7 @@ public class EmailSenderAPI {
     @Autowired
     private EmailSenderService senderService;
     @Autowired
-    private AuthenticationService authenticationService;
+    private UserService userService;
 
     @PostMapping("/send-email")
     public void mailSender(@RequestParam String to) {
