@@ -31,7 +31,7 @@ public class ChildrenService {
 
 
     public Children getChildById(long child_id) {
-        Children existChild = childrenRepository.findChildrenByIsDeleteFalseAndChildrenId(child_id);
+        Children existChild = childrenRepository.findChildrenByIsDeleteFalseAndChildrenId(child_id); // find child with isDelete false!
         if (existChild == null) {
             throw new RuntimeException("Children not found!");
         }
