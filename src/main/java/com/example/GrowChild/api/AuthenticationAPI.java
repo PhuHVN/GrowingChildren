@@ -18,7 +18,7 @@ public class AuthenticationAPI {
     public ResponseEntity login(@RequestParam String username, @RequestParam String password) {
         try {
             UserDTO user ;
-            if(username.contains("@")){
+            if(username.contains("@")){ //check is email?
                 user = userService.loginByEmail(username,password);
             }else{
                 user = userService.loginByUsername(username,password);
