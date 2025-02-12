@@ -5,8 +5,8 @@ import com.example.GrowChild.entity.OTP;
 import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
 import com.example.GrowChild.mapstruct.UserMapstruct;
-import com.example.GrowChild.repository.UserRepository;
 import com.example.GrowChild.repository.RoleRepository;
+import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,7 +41,7 @@ public class UserService {
 
     //Register
     public User register(User user, long role_id) {
-
+        user.setDelete(false);
         //check role exist
         Role role = roleService.getRoleExisted(role_id);
         if (role == null) {
@@ -94,7 +94,6 @@ public class UserService {
             return "OTP invalid!";
         }
         User user = storeUser.remove(email); // take user
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user); //save db when otp verify
         otpStore.remove(email, otp); // remove otp out map
         return "Authentication OTP successful ";
@@ -107,7 +106,7 @@ public class UserService {
 
         User user = userRepository.findByUsername(username);
 
-        if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
+        if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
             return userMapstruct.toDTO(user);
         }
         //pass string encode to match pass hash
@@ -115,12 +114,14 @@ public class UserService {
     }
 
     public UserDTO loginByEmail(String email, String password) {
-        User user = userRepository.findByEmail(email);
 
-        if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
-            return userMapstruct.toDTO(user);
-        }
-        return null;
+        User user = getUserByGmail(email);
+
+        if (user == null) return null;
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) return null;
+
+        return userMapstruct.toDTO(user);
+
     }
 
     //getAllUser
@@ -132,9 +133,13 @@ public class UserService {
     //getUserByID
     public UserDTO getUserById(String userID) {
         User user = getUser(userID);
-
         return userMapstruct.toDTO(user);
     }
+
+    public User getUserByGmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 
     private User getUser(String userID) {
         return userRepository.findById(userID)
@@ -159,7 +164,6 @@ public class UserService {
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
-
 
 
     //change password

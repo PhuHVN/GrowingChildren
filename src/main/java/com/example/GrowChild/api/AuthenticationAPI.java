@@ -17,8 +17,8 @@ public class AuthenticationAPI {
     @PostMapping("login")
     public ResponseEntity login(@RequestParam String username, @RequestParam String password) {
         try {
-            UserDTO user = new UserDTO() ;
-            if(username.contains("@gmail.com")){
+            UserDTO user ;
+            if(username.contains("@")){
                 user = userService.loginByEmail(username,password);
             }else{
                 user = userService.loginByUsername(username,password);
