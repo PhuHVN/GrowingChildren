@@ -28,7 +28,6 @@ public class AuthenticationAPI {
             }
             return ResponseEntity.ok("Role: " + user.getRoleName());
         } catch (Exception e) {
-            e.printStackTrace(); // Log the full stack trace for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
 

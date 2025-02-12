@@ -33,7 +33,7 @@ public class UserService {
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    Map<String, User> storeUser = new HashMap<>();
+    Map<String, User> storeUser = new HashMap<>(); //store User with key email
 
     public UserService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -154,6 +154,7 @@ public class UserService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .gender(user.getGender())
+                .address(user.getAddress())
                 .build();
         User updateUser = userRepository.save(userExist);
 
