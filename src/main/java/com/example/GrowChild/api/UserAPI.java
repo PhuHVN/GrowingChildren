@@ -25,6 +25,7 @@ public class UserAPI {
     public String register(@Valid @RequestBody User user, @PathVariable long role_id) {
     try {
         User newUser = userService.register(user, role_id);
+
         if(newUser != null){ // username return != null
             return "ok " + newUser.toString(); //.ok tra ve status 200-ok khi call api
         }

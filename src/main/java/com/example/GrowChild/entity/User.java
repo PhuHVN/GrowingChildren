@@ -25,7 +25,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     public String user_id;
 
-    @Column(nullable = true)
+    @Column(nullable = true,unique = true)
     public String username;
 
     @NotBlank(message = "password not blank!")
