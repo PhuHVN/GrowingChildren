@@ -41,8 +41,11 @@ public class UserService {
 
     //Register
     public User register(User user, long role_id) {
-        if(userRepository.findByEmail(user.getEmail()) != null){
+        if(userRepository.findByUsername(user.getUsername()) != null){
             throw new RuntimeException("username is exist!");
+        }
+        if(userRepository.findByEmail(user.getEmail()) != null){
+            throw new RuntimeException("email is exist!");
         }
 
         user.setDelete(false);
