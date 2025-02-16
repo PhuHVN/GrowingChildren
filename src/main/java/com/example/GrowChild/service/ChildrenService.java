@@ -1,7 +1,10 @@
 package com.example.GrowChild.service;
 
+import com.example.GrowChild.dto.ChildDTO;
+import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.Children;
 import com.example.GrowChild.entity.User;
+import com.example.GrowChild.mapstruct.ChildMapper;
 import com.example.GrowChild.repository.ChildrenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,34 +17,43 @@ public class ChildrenService {
     ChildrenRepository childrenRepository;
     @Autowired
     UserService userService;
+    @Autowired
+    ChildMapper childMapper;
 
 
-    public boolean createChild(Children children) {
-        if (userService.getUserById(children.getParentId()) == null) {
+    public boolean createChild(Children children, String userId) {
+        User user = userService.getUser(userId);
+        if (user == null) {
             return false;
         }
+        children.setParentId(user);
+        children.setDelete(false);
         childrenRepository.save(children);
         return true;
     }
 
-    public List<Children> getAll() {
-        return childrenRepository.findChildrenByIsDeleteFalse();
+    public List<ChildDTO> getAll() {
+        List<Children> list = childrenRepository.findChildrenByIsDeleteFalse();
+        return childMapper.toDTOList(list);
     }
 
 
-
-    public Children getChildById(long child_id) {
-        Children existChild = childrenRepository.findChildrenByIsDeleteFalseAndChildrenId(child_id); // find child with isDelete false!
+    public ChildDTO getChildById(long child_id) {
+        Children existChild = getChildrenByIsDeleteFalseAndChildrenId(child_id); // find child with isDelete false!
         if (existChild == null) {
             throw new RuntimeException("Children not found!");
         }
-        return existChild;
+        return childMapper.toDTO(existChild);
+    }
+
+    private Children getChildrenByIsDeleteFalseAndChildrenId(long child_id) {
+        return childrenRepository.findChildrenByIsDeleteFalseAndChildrenId(child_id);
     }
 
     public Children updateChild(long child_id, Children children) {
-        Children existChild = getChildById(child_id);
+        Children existChild = getChildrenByIsDeleteFalseAndChildrenId(child_id);
         existChild = Children.builder()
-                .username(children.getUsername())
+                .childrenName(children.getChildrenName())
                 .age(children.getAge())
                 .gender(children.getGender())
                 .build();
@@ -49,10 +61,11 @@ public class ChildrenService {
     }
 
     public String deleteChild(long child_id) {
-        Children existChild = getChildById(child_id) ;
+        Children existChild = getChildrenByIsDeleteFalseAndChildrenId(child_id);
         existChild.setDelete(true);
         childrenRepository.save(existChild);
         return "Delete Successful!";
 
     }
+
 }

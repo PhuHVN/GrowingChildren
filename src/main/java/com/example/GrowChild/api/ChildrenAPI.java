@@ -1,5 +1,6 @@
 package com.example.GrowChild.api;
 
+import com.example.GrowChild.dto.ChildDTO;
 import com.example.GrowChild.entity.Children;
 import com.example.GrowChild.service.ChildrenService;
 import jakarta.validation.Valid;
@@ -18,21 +19,21 @@ public class ChildrenAPI {
     @Autowired
     ChildrenService childrenService;
 
-    @PostMapping("createChild")
-    public ResponseEntity createChild(@Valid  @RequestBody Children children){
-        if(!childrenService.createChild(children)){
+    @PostMapping("createChild/{user_id}")
+    public ResponseEntity createChild(@Valid  @RequestBody Children children, @RequestParam String userId){
+        if(!childrenService.createChild(children,userId)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error create children!");
         }
         return new  ResponseEntity<>(children,HttpStatus.CREATED);
     }
 
     @GetMapping("getAll")
-    public List<Children> getAllChildren(){
+    public List<ChildDTO> getAllChildren(){
         return childrenService.getAll();
     }
 
     @GetMapping("getChildrenById/{child_id}")
-    public Children getChildrenById(@RequestParam long child_id){
+    public ChildDTO getChildrenById(@RequestParam long child_id){
         return childrenService.getChildById(child_id);
     }
 
