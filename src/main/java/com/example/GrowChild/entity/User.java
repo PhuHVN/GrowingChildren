@@ -12,6 +12,7 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Entity
@@ -61,6 +62,9 @@ public class User {
     @ToString.Exclude
     public Role role ;
 
+    @OneToMany(mappedBy = "childrenId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Children> children;
+
     private LocalDateTime createAt = LocalDateTime.now();
 
     private boolean isDelete = false; // 0 active - 1 delete
@@ -74,7 +78,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "user_id='" + user_id + '\'' +
-                ",\n username='" + username + '\'' +
+                ",\n childrenName='" + username + '\'' +
                 ",\n email='" + email + '\'' +
                 ",\n fullName='" + fullName + '\'' +
                 ",\n phone='" + phone + '\'' +
