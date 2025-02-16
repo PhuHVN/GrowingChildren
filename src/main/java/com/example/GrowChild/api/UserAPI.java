@@ -96,4 +96,22 @@ public class UserAPI {
 
             return userService.verifyOtp(email, enterCode);
     }
+
+    @GetMapping("/findByChildren/{childrenId}")
+    public ResponseEntity<?> getUserByChildrenId(@PathVariable Long childrenId) {
+        try {
+            User user = userService.getUserByChildrenId(childrenId);
+            return ResponseEntity.ok(toDTO(user));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    private UserDTO toDTO(User user) {
+        return UserDTO.builder()
+                .user_id(user.getUser_id())  // UUID -> String
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .build();
+    }
 }

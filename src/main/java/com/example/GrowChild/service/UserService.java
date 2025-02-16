@@ -149,7 +149,7 @@ public class UserService {
     }
 
 
-    private User getUser(String userID) {
+    protected User getUser(String userID) {
         return userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("Parent not found"));
     }
@@ -213,5 +213,15 @@ public class UserService {
         List<User> users = userRepository.findByRole_RoleName(roleName);
         return userMapstruct.toDTOList(users);
     }
+
+    public User getUserByChildrenId(Long childrenId) {
+         User user = userRepository.findUserByChildrenId(childrenId);
+        if (user == null) {
+            throw new RuntimeException("Không tìm thấy User có childrenId = " + childrenId);
+        }
+        return user;
+
+    }
+
 }
 
