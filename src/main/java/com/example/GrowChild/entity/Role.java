@@ -21,6 +21,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     public long roleId;
+
     @Column(name = "role_name",unique = true)
     @NotBlank()
     public String roleName;

@@ -25,6 +25,7 @@ public class UserAPI {
     public String register(@Valid @RequestBody User user, @PathVariable long role_id) {
     try {
         User newUser = userService.register(user, role_id);
+
         if(newUser != null){ // username return != null
             return "ok " + newUser.toString(); //.ok tra ve status 200-ok khi call api
         }
@@ -35,6 +36,11 @@ public class UserAPI {
 
     }
 
+
+    @GetMapping("getByGmail")
+    public User getUserByGmail(@RequestParam String email){
+        return userService.getUserByGmail(email);
+    }
     @GetMapping("getUser")
     public List<UserDTO> getUser() {
         return userService.getUser();
@@ -89,5 +95,23 @@ public class UserAPI {
     public String verifyOtp(@RequestParam String email, @RequestParam String enterCode){
 
             return userService.verifyOtp(email, enterCode);
+    }
+
+    @GetMapping("/findByChildren/{childrenId}")
+    public ResponseEntity<?> getUserByChildrenId(@PathVariable Long childrenId) {
+        try {
+            User user = userService.getUserByChildrenId(childrenId);
+            return ResponseEntity.ok(toDTO(user));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    private UserDTO toDTO(User user) {
+        return UserDTO.builder()
+                .user_id(user.getUser_id())  // UUID -> String
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .build();
     }
 }

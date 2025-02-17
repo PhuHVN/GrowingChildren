@@ -20,6 +20,7 @@ public class UserDTO {
     private String fullName;
     private String phone;
     private String gender;
+    private String address;
     private String roleName;
     private boolean isDelete;
 
