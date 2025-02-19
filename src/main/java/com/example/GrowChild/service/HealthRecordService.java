@@ -55,13 +55,14 @@ public class HealthRecordService {
         for(HealthRecord record : records){ //list data
             Map<String, Object> data = new HashMap<>();
             data.put("date",record.getDate()); // add data date in map
-            data.put("bmi",record.getBmi()); // add bmi
+            data.put("bmi",calculateBMI(record.getWeight(), record.getHeight())); // add bmi
             response.add(data);
         }
 
         return response; //return info by Json
     }
 
+    //cal bmi
     private double calculateBMI(double weight, double height) {
         if (height == 0) return 0; // error div with 0
         return weight / (height * height);
