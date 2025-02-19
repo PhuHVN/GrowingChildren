@@ -2,9 +2,7 @@ package com.example.GrowChild.mapstruct;
 
 
 import com.example.GrowChild.dto.ChildDTO;
-import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.Children;
-import com.example.GrowChild.entity.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;
