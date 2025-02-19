@@ -44,7 +44,7 @@ public class UserService {
         if(userRepository.findByUsername(user.getUsername()) != null){
             throw new RuntimeException("username is exist!");
         }
-        if(userRepository.findByEmail(user.getEmail()) != null){
+        if(user.getEmail() != null && userRepository.existsByEmail(user.getEmail())){
             throw new RuntimeException("email is exist!");
         }
 
