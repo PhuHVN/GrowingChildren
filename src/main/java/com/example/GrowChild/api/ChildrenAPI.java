@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("children")
-public class ChildrenAPI {
+public class  ChildrenAPI {
 
     @Autowired
     ChildrenService childrenService;
@@ -29,21 +29,26 @@ public class ChildrenAPI {
 
     @GetMapping("getAll")
     public List<ChildDTO> getAllChildren(){
+
         return childrenService.getAll();
     }
 
     @GetMapping("getChildrenById/{child_id}")
     public ChildDTO getChildrenById(@RequestParam long child_id){
+
         return childrenService.getChildById(child_id);
     }
 
     @PutMapping("updateChild/{child_id}")
-    public Children updateChildById(@RequestParam long child_id, @RequestBody Children children){
+    public Children updateChildById(@RequestParam long child_id,
+                                    @RequestBody Children children){
+
         return childrenService.updateChild(child_id,children);
     }
 
     @DeleteMapping("deleteChild/{child_id}")
     public String deleteChild(@RequestParam long child_id){
+
         return childrenService.deleteChild(child_id);
     }
 

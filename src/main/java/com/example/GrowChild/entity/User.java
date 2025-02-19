@@ -65,6 +65,10 @@ public class User {
     @OneToMany(mappedBy = "childrenId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Children> children;
 
+    @OneToMany(mappedBy = "blogId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Blog> blog;
+
+
     private LocalDateTime createAt = LocalDateTime.now();
 
     private boolean isDelete = false; // 0 active - 1 delete
