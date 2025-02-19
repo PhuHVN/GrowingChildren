@@ -19,7 +19,7 @@ public class ChildrenAPI {
     @Autowired
     ChildrenService childrenService;
 
-    @PostMapping("createChild/{user_id}")
+    @PostMapping("createChild/{parent_id}")
     public ResponseEntity createChild(@Valid  @RequestBody Children children, @RequestParam String userId){
         if(!childrenService.createChild(children,userId)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error create children!");
@@ -32,17 +32,17 @@ public class ChildrenAPI {
         return childrenService.getAll();
     }
 
-    @GetMapping("getChildrenById/{child_id}")
+    @GetMapping("getChildrenById/{childId}")
     public ChildDTO getChildrenById(@RequestParam long child_id){
         return childrenService.getChildById(child_id);
     }
 
-    @PutMapping("updateChild/{child_id}")
+    @PutMapping("updateChild/{childId}")
     public ChildDTO updateChildById(@RequestParam long child_id, @RequestBody Children children){
         return childrenService.updateChild(child_id,children);
     }
 
-    @DeleteMapping("deleteChild/{child_id}")
+    @DeleteMapping("deleteChild/{childId}")
     public String deleteChild(@RequestParam long child_id){
         return childrenService.deleteChild(child_id);
     }
