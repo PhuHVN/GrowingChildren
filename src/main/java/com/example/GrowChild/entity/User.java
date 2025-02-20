@@ -44,7 +44,6 @@ public class User {
     public String gender;
 
     @Nullable
-    @Column(unique = true)
     public String phone;
 
     @Min(value = 0,message =" rate must be greater 0")

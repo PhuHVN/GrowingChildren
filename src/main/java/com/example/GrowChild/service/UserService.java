@@ -24,8 +24,6 @@ public class UserService {
     @Autowired
     EmailSenderService senderService;
     @Autowired
-    RoleRepository roleRepository;
-    @Autowired
     RoleService roleService;
     @Autowired
     UserMapstruct userMapstruct;
