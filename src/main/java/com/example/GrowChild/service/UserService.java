@@ -161,6 +161,7 @@ public class UserService {
                 .phone(user.getPhone())
                 .gender(user.getGender())
                 .address(user.getAddress())
+                .role(userExist.getRole())
                 .build();
         User updateUser = userRepository.save(userExist);
 

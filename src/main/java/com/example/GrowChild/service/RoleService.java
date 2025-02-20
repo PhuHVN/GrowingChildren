@@ -38,7 +38,8 @@ public class RoleService {
         Role roleExisted = getRoleExisted(id);
         roleExisted = Role.builder()
                 .roleId(roleExisted.getRoleId()) //not change id // can del this line
-                .roleName(roleDTO.getRoleName())// change name
+                .roleName(roleDTO.getRoleName())
+                .users(roleExisted.getUsers())// change name
                 .build();
         Role updateRole = roleRepository.save(roleExisted); // save db
         return roleMapper.toDTO(updateRole);// return DTO

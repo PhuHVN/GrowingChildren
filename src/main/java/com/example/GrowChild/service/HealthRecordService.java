@@ -87,11 +87,14 @@ public class HealthRecordService {
         HealthRecord record = getRecordById(recordId);
         if(record == null) return null;
         record = HealthRecord.builder()
+                .doctor(record.getDoctor())
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
+                .child(record.getChild())
+                .date(record.getDate())
                 .build();
-        healthRecordRepository.save(record);
-        return recordMapper.toDTO(record);
+        HealthRecord updateRecord = healthRecordRepository.save(record);
+        return recordMapper.toDTO(updateRecord);
     }
 
     public String deleteRecord(long recordId){
