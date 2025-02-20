@@ -20,8 +20,8 @@ public interface RecordMapper {
                 .date(record.getDate())
                 .childId(record.getChild() != null ? record.getChild().getChildrenId() : null)
                 .childName(record.getChild() != null ? record.getChild().getChildrenName() : null)
-                .doctorId(record.getDoctor() != null ? record.getDoctor().getUser_id() : null)
-                .doctorName(record.getDoctor() != null ? record.getDoctor().getFullName() : null)
+                .parentId(record.getParent() != null ? record.getParent().getUser_id() : null)
+                .parentName(record.getParent() != null ? record.getParent().getFullName() : null)
                 .build();
     }
 

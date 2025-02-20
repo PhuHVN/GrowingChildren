@@ -43,8 +43,8 @@ public class HealthRecord {
     public LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
-    public User doctor;
+    @JoinColumn(name = "parent_id", nullable = false)
+    public User parent;
 
 
     public boolean isDelete = false;

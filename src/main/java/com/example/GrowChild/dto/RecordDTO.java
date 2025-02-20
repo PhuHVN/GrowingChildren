@@ -17,6 +17,6 @@ public class RecordDTO {
     private LocalDate date;
     private String childName;
     private Long childId;
-    private String doctorName;
-    private String doctorId;
+    private String parentName;
+    private String parentId;
 }
