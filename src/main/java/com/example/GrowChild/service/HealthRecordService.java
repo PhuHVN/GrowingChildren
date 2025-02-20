@@ -36,7 +36,7 @@ public class HealthRecordService {
             throw new RuntimeException("Children not found");
         }
         healthRecord = HealthRecord.builder()
-                .parent(pa)
+                .parent(parent)
                 .child(child)
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
