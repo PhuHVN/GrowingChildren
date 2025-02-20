@@ -37,9 +37,9 @@ public class BlogAPI {
     }
 
     @PutMapping("updateBlog/{blog_id}")
-    public Blog updateBlogById(@RequestParam long blog_id,
+    public BlogDTO updateBlogById(@RequestParam long blog_id,
                                @RequestBody Blog blog){
-        return blogService.updateBlog(blog_id, blog);
+        return blogService.updateBlog(blog_id,blog);
     }
 
     @DeleteMapping("deleteBlog/{blog_id}")

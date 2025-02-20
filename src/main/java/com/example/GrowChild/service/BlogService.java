@@ -56,14 +56,15 @@ public class BlogService {
 
 
 
-    public Blog updateBlog(long blog_id, Blog blog){
+    public BlogDTO updateBlog(long blog_id, Blog blog){
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
         existBlog = Blog.builder()
                 .title(existBlog.getTitle())
                 .description(blog.getDescription())
                 .content(blog.getContent())
                 .build();
-        return blogRepository.save(existBlog);
+        Blog updateBlog = blogRepository.save(existBlog);
+        return blogMapper.toDTO(updateBlog);
     }
 
 
