@@ -26,9 +26,9 @@ public class HealthRecordService {
     @Autowired
     RecordMapper recordMapper;
     //create Record
-    public HealthRecord createRecord(HealthRecord healthRecord,String doctor_id,long childId) {
-        User doctor = userService.getUser(doctor_id);
-        if(doctor == null || !doctor.role.getRoleName().equals("Doctor")){ // find doctor
+    public HealthRecord createRecord(HealthRecord healthRecord,String parent_id,long childId) {
+        User parent = userService.getUser(parent_id);
+        if(parent == null || !parent.role.getRoleName().equals("Doctor")){ // find parent
             throw new RuntimeException("Doctor not found");
         }
         Children child = childrenService.getChildrenByIsDeleteFalseAndChildrenId(childId);
@@ -36,7 +36,7 @@ public class HealthRecordService {
             throw new RuntimeException("Children not found");
         }
         healthRecord = HealthRecord.builder()
-                .doctor(doctor)
+                .parent(pa)
                 .child(child)
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
@@ -87,7 +87,7 @@ public class HealthRecordService {
         HealthRecord record = getRecordById(recordId);
         if(record == null) return null;
         record = HealthRecord.builder()
-                .doctor(record.getDoctor())
+                .parent(record.getParent())
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
                 .child(record.getChild())

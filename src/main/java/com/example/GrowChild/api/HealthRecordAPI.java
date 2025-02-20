@@ -19,8 +19,8 @@ public class HealthRecordAPI {
     HealthRecordService healthRecordService;
 
     @PostMapping("createRecord/{doctorId}/{childId}")
-    public ResponseEntity createRecord(@Valid @RequestBody HealthRecord healthRecord , @RequestParam String doctorId, @RequestParam long childId){
-        HealthRecord record =healthRecordService.createRecord(healthRecord,doctorId,childId);
+    public ResponseEntity createRecord(@Valid @RequestBody HealthRecord healthRecord , @RequestParam String parentId, @RequestParam long childId){
+        HealthRecord record =healthRecordService.createRecord(healthRecord,parentId,childId);
         return new ResponseEntity<>(record, HttpStatus.CREATED);
     }
 
