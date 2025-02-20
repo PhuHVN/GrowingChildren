@@ -42,7 +42,7 @@ public class HealthRecord {
 
     public LocalDate date;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     public User doctor;
 
