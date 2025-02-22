@@ -58,18 +58,19 @@ public class BlogService {
 
     public BlogDTO updateBlog(long blog_id, Blog blog){
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
-//        existBlog = Blog.builder()
-//                .title(existBlog.getTitle())
-//                .description(blog.getDescription())
-//                .content(blog.getContent())
-//                .parentId(existBlog.getParentId())
-//                .date(existBlog.getDate());
+        existBlog = Blog.builder()
+                .title(blog.getTitle())
+                .description(blog.getDescription())
+                .content(blog.getContent())
+                .parentId(existBlog.getParentId())
+                .date(blog.getDate())
+                .build();
 
-        existBlog.setTitle(blog.getTitle());
-        existBlog.setDescription(blog.getDescription());
-        existBlog.setContent(blog.getContent());
-        existBlog.setParentId(blog.getParentId());
-        existBlog.setDate(blog.getDate());
+//        existBlog.setTitle(blog.getTitle());
+//        existBlog.setDescription(blog.getDescription());
+//        existBlog.setContent(blog.getContent());
+//        existBlog.setParentId(blog.getParentId());
+//        existBlog.setDate(blog.getDate());
 
         Blog updateBlog = blogRepository.save(existBlog);
         return blogMapper.toDTO(updateBlog);
