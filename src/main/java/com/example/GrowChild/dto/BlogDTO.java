@@ -27,5 +27,5 @@ public class BlogDTO {
     private String parentId;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") // Format thời gian hiển thị
-    private LocalDateTime createAt;
+    private LocalDateTime date;
 }

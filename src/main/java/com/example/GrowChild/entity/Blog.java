@@ -27,8 +27,7 @@ public class Blog {
     @NotBlank
     public String content;
 
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
+    private LocalDateTime date;
 
     public boolean isDelete = false;
 
@@ -38,6 +37,7 @@ public class Blog {
 
     @PrePersist
     protected void onCreate() {
-        this.createAt = LocalDateTime.now(); // Gán thời gian khi tạo blog
+        this.date = LocalDateTime.now(); // Gán thời gian khi tạo blog
     }
+
 }

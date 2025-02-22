@@ -16,6 +16,7 @@ public interface BlogMapper {
                 .title(blog.getTitle())
                 .description(blog.getDescription())
                 .content(blog.getContent())
+                .date(blog.getDate())
                 .parentId(blog.getParentId().getUser_id())
                 .build();
     }
