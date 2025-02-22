@@ -50,12 +50,13 @@ public class ChildrenService {
     }
 
     public ChildDTO updateChild(long child_id, Children children) {
-        Children existChildren = getChildrenByIsDeleteFalseAndChildrenId(child_id);
+        Children existChildren = getChildrenByIsDeleteFalseAndChildrenId(child_id); //get child
         existChildren = Children.builder()
+                .parentId(existChildren.getParentId())
                 .childrenName(children.getChildrenName())
                 .age(children.getAge())
                 .gender(children.getGender())
-                .build();
+                .build(); //set attribute child
         Children updateChild = childrenRepository.save(existChildren);
         return childMapper.toDTO(updateChild);
     }

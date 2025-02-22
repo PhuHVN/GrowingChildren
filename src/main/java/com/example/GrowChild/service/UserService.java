@@ -24,8 +24,6 @@ public class UserService {
     @Autowired
     EmailSenderService senderService;
     @Autowired
-    RoleRepository roleRepository;
-    @Autowired
     RoleService roleService;
     @Autowired
     UserMapstruct userMapstruct;
@@ -163,6 +161,7 @@ public class UserService {
                 .phone(user.getPhone())
                 .gender(user.getGender())
                 .address(user.getAddress())
+                .role(userExist.getRole())
                 .build();
         User updateUser = userRepository.save(userExist);
 

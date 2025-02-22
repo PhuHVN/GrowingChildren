@@ -1,19 +1,28 @@
 package com.example.GrowChild.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import lombok.*;
+import org.springframework.lang.Nullable;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class HealthRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public String record_id;
+    public long record_id;
 
-    public String child_id;
+    @ManyToOne
+    @JoinColumn(name = "childrenId", nullable = false)
+    private Children child;
 
     @Min(value = 0)
     public double weight;
@@ -21,8 +30,31 @@ public class HealthRecord {
     @Min(value = 0)
     public double height;
 
-    public LocalDateTime create_at;
+    @Min(value = 0)
+    @Max(value = 20)
+    public int age;
 
-    public String doctor_id;
+    @Nullable
+    public double bmi;
 
+    public String gender;
+
+
+    public LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id", nullable = false)
+    public User parent;
+
+
+    public boolean isDelete = false;
+
+
+    @PrePersist
+    @PreUpdate
+    public void calculateBMI() {
+        if (height > 0) {  // Đảm bảo chiều cao hợp lệ trước khi tính
+            this.bmi = weight / (height * height);
+        }
+    }
 }
