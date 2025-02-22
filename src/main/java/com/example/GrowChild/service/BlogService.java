@@ -64,7 +64,6 @@ public class BlogService {
 //                .content(blog.getContent())
 //                .parentId(existBlog.getParentId())
 //                .date(existBlog.getDate());
-        
 
         existBlog.setTitle(blog.getTitle());
         existBlog.setDescription(blog.getDescription());
