@@ -30,15 +30,10 @@ public class HealthRecord {
     @Min(value = 0)
     public double height;
 
-    @Min(value = 0)
-    @Max(value = 20)
-    public int age;
-
     @Nullable
     public double bmi;
 
-    public String gender;
-
+    public int age;
 
     public LocalDate date;
 
@@ -53,7 +48,7 @@ public class HealthRecord {
     @PrePersist
     @PreUpdate
     public void calculateBMI() {
-        if (height > 0) {  // Đảm bảo chiều cao hợp lệ trước khi tính
+        if (height > 0) { // cant div 0
             this.bmi = weight / (height * height);
         }
     }

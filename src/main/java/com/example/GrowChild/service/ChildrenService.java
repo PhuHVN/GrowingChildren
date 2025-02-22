@@ -52,6 +52,7 @@ public class ChildrenService {
     public ChildDTO updateChild(long child_id, Children children) {
         Children existChildren = getChildrenByIsDeleteFalseAndChildrenId(child_id); //get child
         existChildren = Children.builder()
+                .childrenId(existChildren.getChildrenId())
                 .parentId(existChildren.getParentId())
                 .childrenName(children.getChildrenName())
                 .age(children.getAge())

@@ -1,5 +1,6 @@
 package com.example.GrowChild.service;
 
+import com.example.GrowChild.dto.GrowthStatus;
 import com.example.GrowChild.dto.RecordDTO;
 import com.example.GrowChild.entity.Children;
 import com.example.GrowChild.entity.HealthRecord;
@@ -25,11 +26,13 @@ public class HealthRecordService {
     ChildrenService childrenService;
     @Autowired
     RecordMapper recordMapper;
+
+
     //create Record
     public HealthRecord createRecord(HealthRecord healthRecord,String parent_id,long childId) {
         User parent = userService.getUser(parent_id);
-        if(parent == null || !parent.role.getRoleName().equals("Doctor")){ // find parent
-            throw new RuntimeException("Doctor not found");
+        if(parent == null || !parent.role.getRoleName().equals("Parent")){ // find parent
+            throw new RuntimeException("Parent not found");
         }
         Children child = childrenService.getChildrenByIsDeleteFalseAndChildrenId(childId);
         if(child == null){
@@ -40,8 +43,6 @@ public class HealthRecordService {
                 .child(child)
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
-                .age(child.getAge())
-                .gender(child.getGender())
                 .date(LocalDate.now())
                 .build();
         return healthRecordRepository.save(healthRecord);
@@ -87,9 +88,11 @@ public class HealthRecordService {
         HealthRecord record = getRecordById(recordId);
         if(record == null) return null;
         record = HealthRecord.builder()
+                .record_id(record.getRecord_id())
                 .parent(record.getParent())
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
+                .age(record.getAge())
                 .child(record.getChild())
                 .date(record.getDate())
                 .build();
@@ -101,6 +104,34 @@ public class HealthRecordService {
         HealthRecord healthRecord = getRecordById(recordId);
         healthRecord.setDelete(true);
         return "Delete Successful!";
+    }
+
+    public List<Map<String,Object>> getRecordByChildId(long childId){
+        List<HealthRecord> records = healthRecordRepository.findByChildChildrenIdOrderByDateAsc(childId); // get data from db
+        List<Map<String,Object>> response = new ArrayList<>();
+
+        for(HealthRecord record : records){ //list data
+            Map<String, Object> data = new HashMap<>();
+            data.put("date",record.getDate()); // add data date in map
+            data.put("bmi",calculateBMI(record.getWeight(), record.getHeight())); // add bmi
+            data.put("weight",record.getWeight());
+            data.put("height",record.getWeight());
+            response.add(data);
+        }
+
+        return response; //return info by Json
+    }
+
+    public GrowthStatus getGrowStatus(double bmi){
+        if (bmi < 14) {
+            return GrowthStatus.UNDERWEIGHT;
+        } else if (bmi >= 14 && bmi < 18.5) {
+            return GrowthStatus.NORMAL;
+        } else if (bmi >= 18.5 && bmi < 22) {
+            return GrowthStatus.OVERWEIGHT;
+        } else {
+            return GrowthStatus.OBESE;
+        }
     }
 
 

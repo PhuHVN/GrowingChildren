@@ -156,6 +156,7 @@ public class UserService {
     public UserDTO updateUser(String userId, User user) {
         User userExist = getUser(userId); //call fun getId to match user
         userExist = User.builder()
+                .user_id(userExist.getUser_id())
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .phone(user.getPhone())

@@ -14,6 +14,7 @@ public class ChildDTO {
     private int age;
     private String gender;
     private String parentId;
+    private String parentName;
 
 
 }
