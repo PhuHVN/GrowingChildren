@@ -69,6 +69,8 @@ public class HealthRecordService {
         return weight / (height * height);
     }
 
+
+
     public List<RecordDTO> getAllRecordDTO(){
         List<HealthRecord> records = healthRecordRepository.findHealthRecordByIsDeleteFalse();
         return recordMapper.toDTOList(records);
@@ -76,6 +78,11 @@ public class HealthRecordService {
     public List<HealthRecord> getAllRecord(){
         return healthRecordRepository.findHealthRecordByIsDeleteFalse();
     }
+
+    public List<HealthRecord> getAllRecord_Admin(){
+        return healthRecordRepository.findAll();
+    }
+
     public RecordDTO getRecordDTOById(Long recordId){
         HealthRecord record = getRecordById(recordId);
         return recordMapper.toDTO(record);
@@ -100,9 +107,15 @@ public class HealthRecordService {
         return recordMapper.toDTO(updateRecord);
     }
 
-    public String deleteRecord(long recordId){
+    public String deleteRecord_User(long recordId){
         HealthRecord healthRecord = getRecordById(recordId);
         healthRecord.setDelete(true);
+        return "Delete Successful!";
+    }
+
+    public String deleteRecord_Admin(long recordId){
+        HealthRecord healthRecord = getRecordById(recordId);
+        healthRecordRepository.delete(healthRecord);
         return "Delete Successful!";
     }
 

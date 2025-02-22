@@ -28,6 +28,12 @@ public class HealthRecordAPI {
     public List<HealthRecord> getAllRecord(){
         return healthRecordService.getAllRecord();
     }
+
+    @GetMapping("getAllRecord_Admin")
+    public List<HealthRecord> getAllRecord_Admin(){
+        return healthRecordService.getAllRecord_Admin();
+    }
+
     @GetMapping("getAllRecordDTO")
     public List<RecordDTO> getAllRecordDTO(){
         return healthRecordService.getAllRecordDTO();
@@ -48,10 +54,16 @@ public class HealthRecordAPI {
         return healthRecordService.updateRecord(recordId,healthRecord);
     }
 
-    @DeleteMapping("deleteRecord/{recordId}")
-    public String deleteRecord(@RequestParam long recordId){
-        return healthRecordService.deleteRecord(recordId);
+    @DeleteMapping("deleteRecord_User/{recordId}")
+    public String deleteRecord_User(@RequestParam long recordId){
+        return healthRecordService.deleteRecord_User(recordId);
     }
+
+    @DeleteMapping("deleteRecord_Admin/{recordId}")
+    public String deleteRecord_Admin(@RequestParam long recordId){
+        return healthRecordService.deleteRecord_Admin(recordId);
+    }
+
 
     @GetMapping("bmi/history/{childId}")
     public ResponseEntity<List<Map<String, Object>>> getBMIHistory(@PathVariable int childId) {
