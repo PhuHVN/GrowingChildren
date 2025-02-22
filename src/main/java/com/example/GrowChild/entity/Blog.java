@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Setter
 @Getter
@@ -25,10 +27,17 @@ public class Blog {
     @NotBlank
     public String content;
 
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
+
     public boolean isDelete = false;
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
     public User parentId;
 
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = LocalDateTime.now(); // Gán thời gian khi tạo blog
+    }
 }

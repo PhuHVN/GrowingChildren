@@ -1,7 +1,10 @@
 package com.example.GrowChild.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -22,4 +25,7 @@ public class BlogDTO {
 
 
     private String parentId;
+
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") // Format thời gian hiển thị
+    private LocalDateTime createAt;
 }

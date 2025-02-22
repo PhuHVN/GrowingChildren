@@ -62,6 +62,7 @@ public class BlogService {
                 .title(existBlog.getTitle())
                 .description(blog.getDescription())
                 .content(blog.getContent())
+                .parentId(existBlog.getParentId())
                 .build();
         Blog updateBlog = blogRepository.save(existBlog);
         return blogMapper.toDTO(updateBlog);
