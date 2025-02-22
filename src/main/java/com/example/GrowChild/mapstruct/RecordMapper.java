@@ -22,6 +22,7 @@ public interface RecordMapper {
                 .childName(record.getChild() != null ? record.getChild().getChildrenName() : null)
                 .parentId(record.getParent() != null ? record.getParent().getUser_id() : null)
                 .parentName(record.getParent() != null ? record.getParent().getFullName() : null)
+                .isDelete(record.isDelete())
                 .build();
     }
 
