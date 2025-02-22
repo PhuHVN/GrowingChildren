@@ -15,6 +15,7 @@ public class ChildDTO {
     private String gender;
     private String parentId;
     private String parentName;
+    private boolean isDelete;
 
 
 }
