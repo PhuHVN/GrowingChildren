@@ -27,10 +27,17 @@ public class ChildrenAPI {
         return new  ResponseEntity<>(children,HttpStatus.CREATED);
     }
 
-    @GetMapping("getAll")
+    @GetMapping("getAll_User")
     public List<ChildDTO> getAllChildren(){
         return childrenService.getAll();
     }
+
+
+    @GetMapping("getAll_Admin")
+    public List<ChildDTO> getAllChildren_Admin(){
+        return childrenService.getAll_Admin();
+    }
+
 
     @GetMapping("getChildrenById/{childId}")
     public ChildDTO getChildrenById(@RequestParam long child_id){
@@ -42,9 +49,13 @@ public class ChildrenAPI {
         return childrenService.updateChild(child_id,children);
     }
 
-    @DeleteMapping("deleteChild/{childId}")
-    public String deleteChild(@RequestParam long child_id){
-        return childrenService.deleteChild(child_id);
+    @DeleteMapping("deleteChild_User/{childId}")
+    public String deleteChild_User(@RequestParam long child_id){
+        return childrenService.deleteChild_User(child_id);
+    }
+    @DeleteMapping("deleteChild_Admin/{childId}")
+    public String deleteChild_Admin(@RequestParam long child_id){
+        return childrenService.deleteChild_Admin(child_id);
     }
 
 }
