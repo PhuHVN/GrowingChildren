@@ -58,4 +58,15 @@ public class HealthRecordAPI {
         List<Map<String, Object>> history = healthRecordService.getBMIHistory(childId);
         return ResponseEntity.ok(history);
     }
+
+    @GetMapping("getRecordByChildId/{childId}")
+    public ResponseEntity<List<Map<String, Object>>> getRecordByChildId(@PathVariable int childId) {
+        List<Map<String, Object>> history = healthRecordService.getRecordByChildId(childId);
+        return ResponseEntity.ok(history);
+    }
+
+    @GetMapping("getGrowthStatus/{bmi}")
+    public ResponseEntity<String> getGrowthStatus(double bmi){
+        return ResponseEntity.ok("Status: " + healthRecordService.getGrowStatus(bmi));
+    }
 }

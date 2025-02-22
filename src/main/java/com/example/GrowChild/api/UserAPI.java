@@ -2,6 +2,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.User;
+import com.example.GrowChild.mapstruct.UserMapstruct;
 import com.example.GrowChild.service.UserService;
 import com.example.GrowChild.service.EmailSenderService;
 import jakarta.validation.Valid;
@@ -93,25 +94,6 @@ public class UserAPI {
 
     @PostMapping("verifyOtp")
     public String verifyOtp(@RequestParam String email, @RequestParam String enterCode){
-
             return userService.verifyOtp(email, enterCode);
-    }
-
-    @GetMapping("/findByChildren/{childrenId}")
-    public ResponseEntity<?> getUserByChildrenId(@PathVariable Long childrenId) {
-        try {
-            User user = userService.getUserByChildrenId(childrenId);
-            return ResponseEntity.ok(toDTO(user));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
-
-    private UserDTO toDTO(User user) {
-        return UserDTO.builder()
-                .user_id(user.getUser_id())  // UUID -> String
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .build();
     }
 }

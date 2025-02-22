@@ -13,8 +13,8 @@ public class RecordDTO {
     private double weight;
     private double height;
     private double bmi;
-    private int age;
     private LocalDate date;
+    private int age;
     private String childName;
     private Long childId;
     private String parentName;
