@@ -9,6 +9,7 @@ import com.example.GrowChild.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -59,18 +60,14 @@ public class BlogService {
     public BlogDTO updateBlog(long blog_id, Blog blog){
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
         existBlog = Blog.builder()
+                .blogId(existBlog.getBlogId())
                 .title(blog.getTitle())
                 .description(blog.getDescription())
                 .content(blog.getContent())
                 .parentId(existBlog.getParentId())
-                .date(blog.getDate())
+                .date(LocalDateTime.now())
                 .build();
 
-//        existBlog.setTitle(blog.getTitle());
-//        existBlog.setDescription(blog.getDescription());
-//        existBlog.setContent(blog.getContent());
-//        existBlog.setParentId(blog.getParentId());
-//        existBlog.setDate(blog.getDate());
 
         Blog updateBlog = blogRepository.save(existBlog);
         return blogMapper.toDTO(updateBlog);
