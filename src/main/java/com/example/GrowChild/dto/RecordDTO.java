@@ -19,4 +19,5 @@ public class RecordDTO {
     private Long childId;
     private String parentName;
     private String parentId;
+    private boolean isDelete;
 }

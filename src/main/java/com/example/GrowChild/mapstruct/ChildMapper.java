@@ -20,6 +20,7 @@ public interface ChildMapper {
                 .gender(children.getGender())
                 .parentId(children.getParentId().getUser_id()) // Chuyển UUID thành String
                 .parentName(children.getParentId().getFullName())
+                .isDelete(children.isDelete())
                 .build();
     }
 

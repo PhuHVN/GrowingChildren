@@ -1,6 +1,7 @@
 package com.example.GrowChild.entity;
 
 
+import com.example.GrowChild.dto.ScheduleDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -64,11 +65,16 @@ public class User {
     @OneToMany(mappedBy = "childrenId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Children> children;
 
+
     @OneToMany(mappedBy = "blogId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Blog> blog;
 
 //    @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<FeedBack> feedback;
+
+
+    @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ScheduleDoctor> schedule;
 
 
     private LocalDateTime createAt = LocalDateTime.now();

@@ -31,6 +31,11 @@ public class ChildrenService {
         return true;
     }
 
+    public List<ChildDTO> getAll_Admin() {
+        List<Children> list = childrenRepository.findAll();
+        return childMapper.toDTOList(list);
+    }
+
     public List<ChildDTO> getAll() {
         List<Children> list = childrenRepository.findChildrenByIsDeleteFalse(); // getAllChildren with isDelete false
         return childMapper.toDTOList(list);
@@ -62,10 +67,17 @@ public class ChildrenService {
         return childMapper.toDTO(updateChild);
     }
 
-    public String deleteChild(long child_id) {
+    public String deleteChild_User(long child_id) {
         Children existChild = getChildrenByIsDeleteFalseAndChildrenId(child_id);
         existChild.setDelete(true);
         childrenRepository.save(existChild);
+        return "Delete Successful!";
+
+    }
+
+    public String deleteChild_Admin(long child_id) {
+        Children existChild = getChildrenByIsDeleteFalseAndChildrenId(child_id);
+        childrenRepository.delete(existChild);
         return "Delete Successful!";
 
     }
