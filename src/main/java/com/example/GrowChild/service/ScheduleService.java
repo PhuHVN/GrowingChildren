@@ -1,9 +1,9 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ScheduleDTO;
-import com.example.GrowChild.entity.ScheduleDoctor;
-import com.example.GrowChild.entity.User;
-import com.example.GrowChild.mapstruct.ScheduleMapper;
+import com.example.GrowChild.entity.respone.ScheduleDoctor;
+import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.mapstruct.toDTO.ScheduleToDTO;
 import com.example.GrowChild.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class ScheduleService {
     @Autowired
     UserService userService;
     @Autowired
-    ScheduleMapper scheduleMapper;
+    ScheduleToDTO scheduleToDTO;
 
     public boolean createSchedule(ScheduleDoctor scheduleDoctor, String doctorId) {
         User doctor = userService.getUser(doctorId);
@@ -36,12 +36,12 @@ public class ScheduleService {
     }
 
     public List<ScheduleDTO> getAll() {
-        return scheduleMapper.toDTOList(scheduleRepository.findSchdeduleDoctorByIsDeleteFalse());
+        return scheduleToDTO.toDTOList(scheduleRepository.findScheduleDoctorByIsDeleteFalse());
 
     }
 
     public  ScheduleDTO getScheduleDTOById(long scheduleId){
-        return scheduleMapper.toDTO(scheduleRepository.findById(scheduleId).orElseThrow(()-> new RuntimeException("Schedule not found!"))) ;
+        return scheduleToDTO.toDTO(scheduleRepository.findById(scheduleId).orElseThrow(()-> new RuntimeException("Schedule not found!"))) ;
     }
 
     public  ScheduleDoctor getScheduleById(long scheduleId){
@@ -59,7 +59,11 @@ public class ScheduleService {
     }
 
     public ScheduleDTO updateSchedule(ScheduleDoctor scheduleDoctor, long scheduleId){
-        return null;
+        ScheduleDoctor schedule = getScheduleById(scheduleId);
+        schedule.setScheduleWork(scheduleDoctor.getScheduleWork());
+        ScheduleDoctor updateSchedule = scheduleRepository.save(schedule);
+        return scheduleToDTO.toDTO(updateSchedule);
+
     }
 
     public String deleteSchedule(long scheduleId){

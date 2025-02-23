@@ -2,12 +2,15 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.GrowthStatus;
 import com.example.GrowChild.dto.RecordDTO;
-import com.example.GrowChild.entity.Children;
-import com.example.GrowChild.entity.HealthRecord;
-import com.example.GrowChild.entity.User;
-import com.example.GrowChild.mapstruct.RecordMapper;
+import com.example.GrowChild.entity.respone.Children;
+import com.example.GrowChild.entity.respone.HealthRecord;
+import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.request.HealthRecordRequest;
+import com.example.GrowChild.mapstruct.toDTO.RecordToDTO;
 import com.example.GrowChild.repository.HealthRecordRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,11 +28,12 @@ public class HealthRecordService {
     @Autowired
     ChildrenService childrenService;
     @Autowired
-    RecordMapper recordMapper;
+    RecordToDTO recordToDTO;
+
 
 
     //create Record
-    public HealthRecord createRecord(HealthRecord healthRecord,String parent_id,long childId) {
+    public HealthRecord createRecord(HealthRecordRequest healthRecordRequest, String parent_id, long childId) {
         User parent = userService.getUser(parent_id);
         if(parent == null || !parent.role.getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");
@@ -38,14 +42,16 @@ public class HealthRecordService {
         if(child == null){
             throw new RuntimeException("Children not found");
         }
-        healthRecord = HealthRecord.builder()
+
+        HealthRecord record = HealthRecord.builder()
                 .parent(parent)
                 .child(child)
-                .height(healthRecord.getHeight())
-                .weight(healthRecord.getWeight())
+                .height(healthRecordRequest.getHeight())
+                .weight(healthRecordRequest.getWeight())
                 .date(LocalDate.now())
                 .build();
-        return healthRecordRepository.save(healthRecord);
+
+        return healthRecordRepository.save(record);
 
     }
 
@@ -73,7 +79,7 @@ public class HealthRecordService {
 
     public List<RecordDTO> getAllRecordDTO(){
         List<HealthRecord> records = healthRecordRepository.findHealthRecordByIsDeleteFalse();
-        return recordMapper.toDTOList(records);
+        return recordToDTO.toDTOList(records);
     }
     public List<HealthRecord> getAllRecord(){
         return healthRecordRepository.findHealthRecordByIsDeleteFalse();
@@ -85,7 +91,7 @@ public class HealthRecordService {
 
     public RecordDTO getRecordDTOById(Long recordId){
         HealthRecord record = getRecordById(recordId);
-        return recordMapper.toDTO(record);
+        return recordToDTO.toDTO(record);
     }
     public HealthRecord getRecordById(Long recordId){
         return healthRecordRepository.findById(recordId).orElseThrow(() -> new RuntimeException("Record not found!"));
@@ -104,7 +110,7 @@ public class HealthRecordService {
                 .date(record.getDate())
                 .build();
         HealthRecord updateRecord = healthRecordRepository.save(record);
-        return recordMapper.toDTO(updateRecord);
+        return recordToDTO.toDTO(updateRecord);
     }
 
     public String deleteRecord_User(long recordId){

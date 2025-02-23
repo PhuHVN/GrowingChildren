@@ -1,14 +1,14 @@
-package com.example.GrowChild.mapstruct;
+package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.RecordDTO;
-import com.example.GrowChild.entity.HealthRecord;
+import com.example.GrowChild.entity.respone.HealthRecord;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface RecordMapper {
+public interface RecordToDTO {
 
     default RecordDTO toDTO(HealthRecord record) {
         return RecordDTO.builder()

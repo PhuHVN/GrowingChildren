@@ -1,9 +1,9 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.OTP;
-import com.example.GrowChild.entity.Role;
-import com.example.GrowChild.entity.User;
+import com.example.GrowChild.entity.respone.OTP;
+import com.example.GrowChild.entity.respone.Role;
+import com.example.GrowChild.entity.respone.User;
 import com.example.GrowChild.mapstruct.toDTO.UserToDTO;
 import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,7 +156,7 @@ public class UserService {
         User userExist = getUser(userId); //call fun getId to match user
         userExist.setFullName(user.getFullName());
         userExist.setPhone(user.getPhone());
-        if(user.getEmail().isEmpty()){
+        if(userExist.getEmail().isEmpty()){
             userExist.setEmail(user.getEmail());
         }
         userExist.setAddress(user.getAddress());

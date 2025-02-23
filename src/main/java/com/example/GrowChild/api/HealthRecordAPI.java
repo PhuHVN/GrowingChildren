@@ -1,7 +1,8 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.RecordDTO;
-import com.example.GrowChild.entity.HealthRecord;
+import com.example.GrowChild.entity.respone.HealthRecord;
+import com.example.GrowChild.entity.request.HealthRecordRequest;
 import com.example.GrowChild.service.HealthRecordService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class HealthRecordAPI {
     HealthRecordService healthRecordService;
 
     @PostMapping("createRecord/{doctorId}/{childId}")
-    public ResponseEntity createRecord(@Valid @RequestBody HealthRecord healthRecord , @RequestParam String parentId, @RequestParam long childId){
+    public ResponseEntity createRecord(@Valid @RequestBody HealthRecordRequest healthRecord , @RequestParam String parentId, @RequestParam long childId){
         HealthRecord record =healthRecordService.createRecord(healthRecord,parentId,childId);
         return new ResponseEntity<>(record, HttpStatus.CREATED);
     }

@@ -1,9 +1,10 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ChildDTO;
-import com.example.GrowChild.entity.Children;
-import com.example.GrowChild.entity.User;
-import com.example.GrowChild.mapstruct.ChildMapper;
+import com.example.GrowChild.entity.respone.Children;
+import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.request.ChildrenRequest;
+import com.example.GrowChild.mapstruct.toDTO.ChildToDTO;
 import com.example.GrowChild.repository.ChildrenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,28 +18,36 @@ public class ChildrenService {
     @Autowired
     UserService userService;
     @Autowired
-    ChildMapper childMapper;
+    ChildToDTO childTODTO;
 
 
-    public boolean createChild(Children children, String userId) {
+
+
+    public boolean createChild(ChildrenRequest childrenRequest, String userId) {
         User parent = userService.getUser(userId); //get parent by id
         if (parent == null || !parent.role.getRoleName().equals("Parent")) { // not found or user not parent
             return false;
         }
-        children.setParentId(parent);
-        children.setDelete(false);
+
+        Children children = Children.builder()
+                .childrenName(childrenRequest.getChildrenName())
+                .age(childrenRequest.getAge())
+                .gender(childrenRequest.getGender())
+                .parentId(parent)
+                .isDelete(false)
+                .build();
         childrenRepository.save(children);
         return true;
     }
 
-    public List<ChildDTO> getAll_Admin() {
-        List<Children> list = childrenRepository.findAll();
-        return childMapper.toDTOList(list);
+    public List<Children> getAll_Admin() {
+       return childrenRepository.findAll();
+
     }
 
     public List<ChildDTO> getAll() {
         List<Children> list = childrenRepository.findChildrenByIsDeleteFalse(); // getAllChildren with isDelete false
-        return childMapper.toDTOList(list);
+        return childTODTO.toDTOList(list);
     }
 
 
@@ -47,14 +56,14 @@ public class ChildrenService {
         if (existChild == null) {
             throw new RuntimeException("Children not found!");
         }
-        return childMapper.toDTO(existChild);
+        return childTODTO.toDTO(existChild);
     }
 
     protected Children getChildrenByIsDeleteFalseAndChildrenId(long child_id) {
         return childrenRepository.findChildrenByIsDeleteFalseAndChildrenId(child_id);
     }
 
-    public ChildDTO updateChild(long child_id, Children children) {
+    public ChildDTO updateChild(long child_id, ChildrenRequest children) {
         Children existChildren = getChildrenByIsDeleteFalseAndChildrenId(child_id); //get child
         existChildren = Children.builder()
                 .childrenId(existChildren.getChildrenId())
@@ -64,7 +73,7 @@ public class ChildrenService {
                 .gender(children.getGender())
                 .build(); //set attribute child
         Children updateChild = childrenRepository.save(existChildren);
-        return childMapper.toDTO(updateChild);
+        return childTODTO.toDTO(updateChild);
     }
 
     public String deleteChild_User(long child_id) {
