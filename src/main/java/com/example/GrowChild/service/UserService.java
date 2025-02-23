@@ -4,8 +4,7 @@ import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.OTP;
 import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.entity.User;
-import com.example.GrowChild.mapstruct.UserMapstruct;
-import com.example.GrowChild.repository.RoleRepository;
+import com.example.GrowChild.mapstruct.toDTO.UserToDTO;
 import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +25,7 @@ public class UserService {
     @Autowired
     RoleService roleService;
     @Autowired
-    UserMapstruct userMapstruct;
+    UserToDTO userToDTO;
 
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -113,7 +112,7 @@ public class UserService {
         User user = userRepository.findByUsername(username);
 
         if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            return userMapstruct.toDTO(user);
+            return userToDTO.toDTO(user);
         }
         //pass string encode to match pass hash
         return null;
@@ -126,20 +125,20 @@ public class UserService {
         if (user == null) return null;
         if (!bCryptPasswordEncoder.matches(password, user.getPassword())) return null;
 
-        return userMapstruct.toDTO(user);
+        return userToDTO.toDTO(user);
 
     }
 
     //getAllUser
     public List<UserDTO> getUser() {
         List<User> users = userRepository.findAll();
-        return userMapstruct.toDTOList(users);
+        return userToDTO.toDTOList(users);
     }
 
     //getUserByID
     public UserDTO getUserById(String userID) {
         User user = getUser(userID);
-        return userMapstruct.toDTO(user);
+        return userToDTO.toDTO(user);
     }
 
     public User getUserByGmail(String email) {
@@ -155,18 +154,16 @@ public class UserService {
     //update user by ID
     public UserDTO updateUser(String userId, User user) {
         User userExist = getUser(userId); //call fun getId to match user
-        userExist = User.builder()
-                .user_id(userExist.getUser_id())
-                .fullName(user.getFullName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .gender(user.getGender())
-                .address(user.getAddress())
-                .role(userExist.getRole())
-                .build();
+        userExist.setFullName(user.getFullName());
+        userExist.setPhone(user.getPhone());
+        if(user.getEmail().isEmpty()){
+            userExist.setEmail(user.getEmail());
+        }
+        userExist.setAddress(user.getAddress());
+
         User updateUser = userRepository.save(userExist);
 
-        return userMapstruct.toDTO(updateUser);
+        return userToDTO.toDTO(updateUser);
     }
 
     //Delete User
@@ -206,12 +203,12 @@ public class UserService {
     //Get User by RoleID
     public List<UserDTO> getUserByRole(long role_id) {
         List<User> users = userRepository.findByRole_RoleId(role_id);
-        return userMapstruct.toDTOList(users);
+        return userToDTO.toDTOList(users);
     }
 
     public List<UserDTO> getUserByRoleName(String roleName) {
         List<User> users = userRepository.findByRole_RoleName(roleName);
-        return userMapstruct.toDTOList(users);
+        return userToDTO.toDTOList(users);
     }
 
     public User getUserByChildrenId(Long childrenId) {
