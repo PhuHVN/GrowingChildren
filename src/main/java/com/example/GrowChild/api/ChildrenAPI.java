@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.List;
 
 @RestController
@@ -38,6 +39,10 @@ public class ChildrenAPI {
         return childrenService.getAll_Admin();
     }
 
+    @GetMapping("getChildrenByParentId/{parentId}")
+    public List<ChildDTO> getChildrenParentById(@RequestParam String parentId){
+        return childrenService.getChildByParentId(parentId);
+    }
 
     @GetMapping("getChildrenById/{childId}")
     public ChildDTO getChildrenById(@RequestParam long child_id){

@@ -9,6 +9,7 @@ import com.example.GrowChild.repository.ChildrenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -88,7 +89,17 @@ public class ChildrenService {
         Children existChild = getChildrenByIsDeleteFalseAndChildrenId(child_id);
         childrenRepository.delete(existChild);
         return "Delete Successful!";
+    }
 
+    public List<ChildDTO> getChildByParentId(String parentId){
+        List<ChildDTO> childrenList = getAll();
+        List<ChildDTO> list = new ArrayList<>();
+        for(ChildDTO childDTO : childrenList){
+            if(childDTO.getParentId().equals(parentId)){
+                list.add(childDTO);
+            }
+        }
+        return list;
     }
 
 }
