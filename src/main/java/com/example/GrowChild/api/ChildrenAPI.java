@@ -34,7 +34,7 @@ public class ChildrenAPI {
 
 
     @GetMapping("getAll_Admin")
-    public List<ChildDTO> getAllChildren_Admin(){
+    public List<Children> getAllChildren_Admin(){
         return childrenService.getAll_Admin();
     }
 
