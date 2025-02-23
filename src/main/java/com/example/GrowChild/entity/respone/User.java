@@ -1,9 +1,8 @@
-package com.example.GrowChild.entity;
+package com.example.GrowChild.entity.respone;
 
 
-import com.example.GrowChild.dto.ScheduleDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -60,12 +59,15 @@ public class User {
     @JoinColumn(name = "roleId")
     @JsonBackReference()
     @ToString.Exclude
+    @JsonIgnore
     public Role role ;
 
     @OneToMany(mappedBy = "childrenId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Children> children;
 
     @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<ScheduleDoctor> schedule;
 
     private LocalDateTime createAt = LocalDateTime.now();
@@ -81,7 +83,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "user_id='" + user_id + '\'' +
-                ",\n childrenName='" + username + '\'' +
+                ",\n Username='" + username + '\'' +
                 ",\n email='" + email + '\'' +
                 ",\n fullName='" + fullName + '\'' +
                 ",\n phone='" + phone + '\'' +

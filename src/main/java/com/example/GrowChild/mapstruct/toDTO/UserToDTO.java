@@ -1,17 +1,15 @@
-package com.example.GrowChild.mapstruct;
+package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.User;
+import com.example.GrowChild.entity.respone.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 
-public interface UserMapstruct {
+public interface UserToDTO {
 
     default UserDTO toDTO(User user) {
         return UserDTO.builder()

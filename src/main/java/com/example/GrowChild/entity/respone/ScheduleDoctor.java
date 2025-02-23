@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity;
+package com.example.GrowChild.entity.respone;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -20,6 +20,7 @@ public class ScheduleDoctor {
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     public User doctor;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime scheduleWork;
     public boolean isDelete;
