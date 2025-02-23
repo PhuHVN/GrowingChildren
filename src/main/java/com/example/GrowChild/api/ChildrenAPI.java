@@ -1,11 +1,11 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.ChildDTO;
-import com.example.GrowChild.entity.Children;
+import com.example.GrowChild.entity.respone.Children;
+import com.example.GrowChild.entity.request.ChildrenRequest;
 import com.example.GrowChild.service.ChildrenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.Repository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class ChildrenAPI {
     ChildrenService childrenService;
 
     @PostMapping("createChild/{parent_id}")
-    public ResponseEntity createChild(@Valid  @RequestBody Children children, @RequestParam String userId){
+    public ResponseEntity createChild(@Valid  @RequestBody ChildrenRequest children, @RequestParam String userId){
         if(!childrenService.createChild(children,userId)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error create children!");
         }
@@ -45,7 +45,7 @@ public class ChildrenAPI {
     }
 
     @PutMapping("updateChild/{childId}")
-    public ChildDTO updateChildById(@RequestParam long child_id, @RequestBody Children children){
+    public ChildDTO updateChildById(@RequestParam long child_id, @RequestBody ChildrenRequest children){
         return childrenService.updateChild(child_id,children);
     }
 

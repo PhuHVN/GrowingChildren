@@ -1,7 +1,7 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.ScheduleDTO;
-import com.example.GrowChild.entity.ScheduleDoctor;
+import com.example.GrowChild.entity.respone.ScheduleDoctor;
 import com.example.GrowChild.service.ScheduleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
