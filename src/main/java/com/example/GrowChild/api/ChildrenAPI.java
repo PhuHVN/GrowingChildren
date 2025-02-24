@@ -27,6 +27,7 @@ public class ChildrenAPI {
         return new ResponseEntity<>(children, HttpStatus.CREATED);
     }
 
+
     @GetMapping("getChildren")
     public List<ChildDTO> getAllChildren() {
         return childrenService.getAll();
