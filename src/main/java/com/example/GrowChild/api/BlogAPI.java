@@ -14,10 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("blog")
 public class BlogAPI {
-
     @Autowired
     BlogService blogService;
-
 
     @PostMapping("createBlog/{user_id}")
     public ResponseEntity createBlog(@Valid @RequestBody Blog blog, @RequestParam String userId){
