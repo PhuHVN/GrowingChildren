@@ -47,7 +47,7 @@ public class  ChildrenAPI {
     }
 
     @PutMapping("updateChild/{childId}")
-    
+
     public ChildDTO updateChildById(@RequestParam long child_id, @RequestBody ChildrenRequest children){
 
         return childrenService.updateChild(child_id,children);

@@ -18,6 +18,7 @@ public interface BlogMapper {
                 .content(blog.getContent())
                 .date(blog.getDate())
                 .parentId(blog.getParentId().getUser_id())
+                .fullName(blog.getParentId().getFullName())
                 .build();
     }
     default List<BlogDTO> toDTOList(List<Blog> blogList){

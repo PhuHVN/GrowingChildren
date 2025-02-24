@@ -14,15 +14,13 @@ import java.time.LocalDateTime;
 public class BlogDTO {
     private long blogId;
 
-
     private String title;
-
 
     private String description;
 
-
     private String content;
 
+    private String fullName;
 
     private String parentId;
 

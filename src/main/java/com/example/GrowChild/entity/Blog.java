@@ -1,6 +1,7 @@
 package com.example.GrowChild.entity;
 
 
+import com.example.GrowChild.entity.respone.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -26,6 +27,8 @@ public class Blog {
 
     @NotBlank
     public String content;
+
+    public String fullName;
 
     private LocalDateTime date;
 

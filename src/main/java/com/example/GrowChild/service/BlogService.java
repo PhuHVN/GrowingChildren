@@ -2,8 +2,9 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.Blog;
-import com.example.GrowChild.entity.Children;
-import com.example.GrowChild.entity.User;
+
+
+import com.example.GrowChild.entity.respone.User;
 import com.example.GrowChild.mapstruct.BlogMapper;
 import com.example.GrowChild.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;

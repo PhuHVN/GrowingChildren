@@ -1,6 +1,7 @@
 //package com.example.GrowChild.entity;
 //
 //
+//import com.example.GrowChild.entity.respone.User;
 //import jakarta.persistence.*;
 //import jakarta.validation.constraints.NotBlank;
 //import lombok.*;
@@ -14,13 +15,17 @@
 //public class FeedBack {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    public int feedbackId;
+//    public long feedbackId;
+//
+//    public long consultingId;
 //
 //    @NotBlank
 //    public int rate;
 //
 //    @NotBlank
 //    public String comment;
+//
+//    public boolean isDelete = false;
 //
 //    @ManyToOne
 //    @JoinColumn(name = "parent_id",nullable = false)
