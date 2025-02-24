@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("childrenAPI")
+@RequestMapping("children")
 public class ChildrenAPI {
 
     @Autowired
@@ -31,6 +31,7 @@ public class ChildrenAPI {
     public List<ChildDTO> getAllChildren() {
         return childrenService.getAll();
     }
+
 
     @GetMapping("children-admin")
     public List<Children> getAllChildren_Admin() {

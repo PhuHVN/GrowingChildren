@@ -18,7 +18,6 @@ public class ScheduleAPI {
     @Autowired
     ScheduleService scheduleService;
 
-
     @PostMapping("createSchedule")
     public ResponseEntity createSchedule(@Valid @RequestBody ScheduleRequest scheduleDoctor, @RequestParam String doctor) {
         boolean isCreated = scheduleService.createSchedule(scheduleDoctor, doctor);
