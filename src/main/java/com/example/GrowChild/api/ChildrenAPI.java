@@ -54,16 +54,15 @@ public class ChildrenAPI {
         return childrenService.updateChild(childId, children);
     }
 
-
-
+    //abc
     @DeleteMapping("deleteChild/{childId}")
-    public String deleteChild_User(@RequestParam long child_id) {
-        return childrenService.deleteChild_User(child_id);
+    public String deleteChild_User(@RequestParam long childId) {
+        return childrenService.deleteChild_User(childId);
     }
 
     @DeleteMapping("deleteChild-admin/{childId}")
-    public String deleteChild_Admin(@RequestParam long child_id) {
-        return childrenService.deleteChild_Admin(child_id);
+    public String deleteChild_Admin(@RequestParam long childId) {
+        return childrenService.deleteChild_Admin(childId);
     }
 
 }
