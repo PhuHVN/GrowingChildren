@@ -18,6 +18,7 @@ public class BlogAPI {
     @Autowired
     BlogService blogService;
 
+
     @PostMapping("createBlog/{user_id}")
     public ResponseEntity createBlog(@Valid @RequestBody Blog blog, @RequestParam String userId){
         if(!blogService.createBlog(blog,userId)){

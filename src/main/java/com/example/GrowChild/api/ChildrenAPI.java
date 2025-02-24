@@ -14,21 +14,25 @@ import java.util.List;
 
 @RestController
 @RequestMapping("children")
-public class  ChildrenAPI {
+public class ChildrenAPI {
 
     @Autowired
     ChildrenService childrenService;
 
     @PostMapping("createChild/{parent_id}")
-    public ResponseEntity createChild(@Valid @RequestBody ChildrenRequest children, @RequestParam String userId) {
+
+    public ResponseEntity createChild(@Valid @RequestBody ChildrenRequest children, @PathVariable String userId) {
+
         if (!childrenService.createChild(children, userId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error create children!");
         }
         return new ResponseEntity<>(children, HttpStatus.CREATED);
     }
 
-    @GetMapping("getAll_User")
-    public List<ChildDTO> getAllChildren(){
+
+    @GetMapping("children")
+    public List<ChildDTO> getAllChildren() {
+
         return childrenService.getAll();
     }
 
