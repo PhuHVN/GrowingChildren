@@ -1,10 +1,12 @@
 package com.example.GrowChild.entity.respone;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +26,9 @@ public class ScheduleDoctor {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     public LocalDateTime scheduleWork;
     public boolean isDelete;
+
+
+    @OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Booking> booking;
 }
