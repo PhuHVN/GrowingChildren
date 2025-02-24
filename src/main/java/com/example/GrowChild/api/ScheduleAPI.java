@@ -1,6 +1,7 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.ScheduleDTO;
+import com.example.GrowChild.entity.request.ScheduleRequest;
 import com.example.GrowChild.entity.respone.ScheduleDoctor;
 import com.example.GrowChild.service.ScheduleService;
 import jakarta.validation.Valid;
@@ -17,9 +18,8 @@ public class ScheduleAPI {
     @Autowired
     ScheduleService scheduleService;
 
-
     @PostMapping("createSchedule")
-    public ResponseEntity createSchedule(@Valid @RequestBody ScheduleDoctor scheduleDoctor, @RequestParam String doctor){
+    public ResponseEntity createSchedule(@Valid @RequestBody ScheduleRequest scheduleDoctor, @RequestParam String doctor) {
         boolean isCreated = scheduleService.createSchedule(scheduleDoctor, doctor);
 
         if (!isCreated) {
@@ -29,34 +29,38 @@ public class ScheduleAPI {
         return ResponseEntity.status(HttpStatus.CREATED).body(scheduleDoctor);
     }
 
-    @GetMapping("getAll_Admin")
-    public List<ScheduleDoctor> scheduleDoctorList(){
+    @GetMapping("schedules-admin")
+    public List<ScheduleDoctor> scheduleDoctorList() {
         return scheduleService.getAll_Admin();
     }
 
-    @GetMapping("getAllDTO")
-    public List<ScheduleDTO> scheduleDTOList(){
+    @GetMapping("schedulesDTO")
+    public List<ScheduleDTO> scheduleDTOList() {
         return scheduleService.getAll();
     }
 
-    @GetMapping("getScheduleDTOById/{scheduleId}")
-    public ScheduleDTO scheduleDTO(long scheduleId){
+    @GetMapping("scheduleDTO/{scheduleId}")
+    public ScheduleDTO scheduleDTO(@PathVariable long scheduleId) {
         return scheduleService.getScheduleDTOById(scheduleId);
     }
-    @GetMapping("getScheduleById/{scheduleId}")
-    public ScheduleDoctor schedule(long scheduleId){
+
+    @GetMapping("schedule/{scheduleId}")
+    public ScheduleDoctor getSchedule(@PathVariable long scheduleId) {
         return scheduleService.getScheduleById(scheduleId);
     }
 
-   //update
+    @PutMapping("schedule/{scheduleId}")
+    public ScheduleDTO updateSchedule(@Valid @RequestBody ScheduleDoctor scheduleDoctor , @PathVariable long scheduleId){
+        return scheduleService.updateSchedule(scheduleDoctor,scheduleId);
+    }
 
-    @DeleteMapping("deleteSchedule_Admin/{scheduleId}")
-    public String deleteSchedule_Admin(long scheduleId){
+    @DeleteMapping("deleteSchedule-admin/{scheduleId}")
+    public String deleteSchedule_Admin(@PathVariable long scheduleId) {
         return scheduleService.deleteSchedule_Admin(scheduleId);
     }
 
     @DeleteMapping("deleteSchedule/{scheduleId}")
-    public String deleteSchedule(long scheduleId){
+    public String deleteSchedule(@PathVariable long scheduleId) {
         return scheduleService.deleteSchedule(scheduleId);
     }
 

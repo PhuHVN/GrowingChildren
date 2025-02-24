@@ -16,7 +16,7 @@ public class RoleAPI {
     @Autowired
     RoleService roleService;
 
-    @PostMapping("create")
+    @PostMapping("createRole")
     public ResponseEntity createRole(@RequestBody RoleDTO role){
         RoleDTO newRole = roleService.createRole(role);
         return new ResponseEntity<>(newRole,HttpStatus.CREATED);

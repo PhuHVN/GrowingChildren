@@ -14,54 +14,54 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("HealthRecord")
+@RequestMapping("healthRecord")
 public class HealthRecordAPI {
     @Autowired
     HealthRecordService healthRecordService;
 
-    @PostMapping("createRecord/{doctorId}/{childId}")
+    @PostMapping("createRecord")
     public ResponseEntity createRecord(@Valid @RequestBody HealthRecordRequest healthRecord , @RequestParam String parentId, @RequestParam long childId){
         HealthRecord record =healthRecordService.createRecord(healthRecord,parentId,childId);
         return new ResponseEntity<>(record, HttpStatus.CREATED);
     }
 
-    @GetMapping("getAllRecord")
+    @GetMapping("records")
     public List<HealthRecord> getAllRecord(){
         return healthRecordService.getAllRecord();
     }
 
-    @GetMapping("getAllRecord_Admin")
+    @GetMapping("records-admin")
     public List<HealthRecord> getAllRecord_Admin(){
         return healthRecordService.getAllRecord_Admin();
     }
 
-    @GetMapping("getAllRecordDTO")
+    @GetMapping("recordsDTO")
     public List<RecordDTO> getAllRecordDTO(){
         return healthRecordService.getAllRecordDTO();
     }
 
-    @GetMapping("getRecordDTOById/{recordId}")
-    public RecordDTO getRecordDTOById(@RequestParam long recordId){
+    @GetMapping("recordDTO/{recordId}")
+    public RecordDTO getRecordDTOById(@PathVariable long recordId){
         return healthRecordService.getRecordDTOById(recordId);
     }
 
-    @GetMapping("getRecordById/{recordId}")
-    public HealthRecord getRecordById(@RequestParam long recordId){
+    @GetMapping("record/{recordId}")
+    public HealthRecord getRecordById(@PathVariable long recordId){
         return healthRecordService.getRecordById(recordId);
     }
 
     @PutMapping("updateRecord/{recordId}")
-    public RecordDTO updateRecord(@RequestParam long recordId , @RequestBody HealthRecord healthRecord ){
+    public RecordDTO updateRecord(@PathVariable long recordId , @RequestBody HealthRecord healthRecord ){
         return healthRecordService.updateRecord(recordId,healthRecord);
     }
 
     @DeleteMapping("deleteRecord_User/{recordId}")
-    public String deleteRecord_User(@RequestParam long recordId){
+    public String deleteRecord_User(@PathVariable long recordId){
         return healthRecordService.deleteRecord_User(recordId);
     }
 
     @DeleteMapping("deleteRecord_Admin/{recordId}")
-    public String deleteRecord_Admin(@RequestParam long recordId){
+    public String deleteRecord_Admin(@PathVariable long recordId){
         return healthRecordService.deleteRecord_Admin(recordId);
     }
 
@@ -72,7 +72,7 @@ public class HealthRecordAPI {
         return ResponseEntity.ok(history);
     }
 
-    @GetMapping("getRecordByChildId/{childId}")
+    @GetMapping("records/{childId}")
     public ResponseEntity<List<Map<String, Object>>> getRecordByChildId(@PathVariable int childId) {
         List<Map<String, Object>> history = healthRecordService.getRecordByChildId(childId);
         return ResponseEntity.ok(history);
