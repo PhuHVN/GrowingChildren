@@ -1,6 +1,8 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ScheduleDTO;
+import com.example.GrowChild.entity.request.HealthRecordRequest;
+import com.example.GrowChild.entity.request.ScheduleRequest;
 import com.example.GrowChild.entity.respone.ScheduleDoctor;
 import com.example.GrowChild.entity.respone.User;
 import com.example.GrowChild.mapstruct.toDTO.ScheduleToDTO;
@@ -19,13 +21,17 @@ public class ScheduleService {
     @Autowired
     ScheduleToDTO scheduleToDTO;
 
-    public boolean createSchedule(ScheduleDoctor scheduleDoctor, String doctorId) {
+    public boolean createSchedule(ScheduleRequest schedule, String doctorId) {
         User doctor = userService.getUser(doctorId);
         if (doctor == null || !doctor.getRole().getRoleName().equals("Doctor")) {
             return false;
         }
-        scheduleDoctor.setDoctor(doctor);
-        scheduleDoctor.setDelete(false);
+
+        ScheduleDoctor scheduleDoctor = ScheduleDoctor.builder()
+                .scheduleWork(schedule.getScheduleWork())
+                .doctor(doctor)
+                .isDelete(false)
+                .build();
         scheduleRepository.save(scheduleDoctor);
         return true;
 
