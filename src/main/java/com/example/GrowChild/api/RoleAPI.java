@@ -1,7 +1,6 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.RoleDTO;
-import com.example.GrowChild.entity.Role;
 import com.example.GrowChild.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ public class RoleAPI {
     @Autowired
     RoleService roleService;
 
-    @PostMapping("create")
+    @PostMapping("createRole")
     public ResponseEntity createRole(@RequestBody RoleDTO role){
         RoleDTO newRole = roleService.createRole(role);
         return new ResponseEntity<>(newRole,HttpStatus.CREATED);

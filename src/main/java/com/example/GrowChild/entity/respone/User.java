@@ -1,8 +1,8 @@
-package com.example.GrowChild.entity;
+package com.example.GrowChild.entity.respone;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -12,6 +12,7 @@ import lombok.*;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Entity
@@ -25,7 +26,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     public String user_id;
 
-    @Column(nullable = true)
+    @Column(nullable = true,unique = true)
     public String username;
 
     @NotBlank(message = "password not blank!")
@@ -43,7 +44,6 @@ public class User {
     public String gender;
 
     @Nullable
-    @Column(unique = true)
     public String phone;
 
     @Min(value = 0,message =" rate must be greater 0")
@@ -59,7 +59,16 @@ public class User {
     @JoinColumn(name = "roleId")
     @JsonBackReference()
     @ToString.Exclude
+    @JsonIgnore
     public Role role ;
+
+    @OneToMany(mappedBy = "childrenId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Children> children;
+
+    @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ScheduleDoctor> schedule;
 
     private LocalDateTime createAt = LocalDateTime.now();
 
@@ -74,7 +83,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "user_id='" + user_id + '\'' +
-                ",\n username='" + username + '\'' +
+                ",\n Username='" + username + '\'' +
                 ",\n email='" + email + '\'' +
                 ",\n fullName='" + fullName + '\'' +
                 ",\n phone='" + phone + '\'' +

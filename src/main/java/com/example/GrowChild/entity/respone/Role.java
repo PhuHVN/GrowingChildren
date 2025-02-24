@@ -1,7 +1,5 @@
-package com.example.GrowChild.entity;
+package com.example.GrowChild.entity.respone;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -21,6 +19,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     public long roleId;
+
     @Column(name = "role_name",unique = true)
     @NotBlank()
     public String roleName;

@@ -1,6 +1,7 @@
-package com.example.GrowChild.entity;
+package com.example.GrowChild.entity.respone;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -18,9 +19,10 @@ public class Children {
     public long childrenId;
 
     @NotBlank(message = "Name children not blank!")
-    public String username;
+    public String childrenName;
 
     @Min(value = 0,message = "Age greater than 0")
+    @Max(value = 20)
     public int age;
 
     @Column(nullable = false)
@@ -28,6 +30,8 @@ public class Children {
 
     public boolean isDelete = false;
 
-    public String parentId;
+    @ManyToOne
+    @JoinColumn(name = "parent_id",nullable = false)
+    public User parentId;
 
 }

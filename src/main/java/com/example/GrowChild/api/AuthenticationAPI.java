@@ -17,8 +17,8 @@ public class AuthenticationAPI {
     @PostMapping("login")
     public ResponseEntity login(@RequestParam String username, @RequestParam String password) {
         try {
-            UserDTO user = new UserDTO() ;
-            if(username.contains("@gmail.com")){
+            UserDTO user ;
+            if(username.contains("@")){ //check is email?
                 user = userService.loginByEmail(username,password);
             }else{
                 user = userService.loginByUsername(username,password);
@@ -26,9 +26,8 @@ public class AuthenticationAPI {
             if(user == null){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid username/email or password ");
             }
-            return ResponseEntity.ok("Role: " + user.getRoleName());
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
-            e.printStackTrace(); // Log the full stack trace for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
 
