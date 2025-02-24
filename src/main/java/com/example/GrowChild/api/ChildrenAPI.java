@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("children")
-public class ChildrenAPI {
+public class  ChildrenAPI {
 
     @Autowired
     ChildrenService childrenService;
@@ -27,8 +27,8 @@ public class ChildrenAPI {
         return new ResponseEntity<>(children, HttpStatus.CREATED);
     }
 
-    @GetMapping("children")
-    public List<ChildDTO> getAllChildren() {
+    @GetMapping("getAll_User")
+    public List<ChildDTO> getAllChildren(){
         return childrenService.getAll();
     }
 
@@ -45,6 +45,7 @@ public class ChildrenAPI {
 
     @GetMapping("child/{childId}")
     public ChildDTO getChildrenById(@PathVariable long child_id) {
+
         return childrenService.getChildById(child_id);
     }
 
@@ -55,6 +56,7 @@ public class ChildrenAPI {
 
     @DeleteMapping("deleteChild/{childId}")
     public String deleteChild_User(@RequestParam long child_id) {
+
         return childrenService.deleteChild_User(child_id);
     }
 

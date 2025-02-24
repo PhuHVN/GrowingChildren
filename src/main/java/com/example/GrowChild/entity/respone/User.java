@@ -1,6 +1,7 @@
 package com.example.GrowChild.entity.respone;
 
 
+import com.example.GrowChild.entity.Blog;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -66,9 +67,18 @@ public class User {
     @JsonIgnore
     private List<Children> children;
 
+
+    @OneToMany(mappedBy = "blogId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Blog> blog;
+
+//    @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<FeedBack> feedback;
+
+
     @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<ScheduleDoctor> schedule;
+
 
     private LocalDateTime createAt = LocalDateTime.now();
 
@@ -92,6 +102,8 @@ public class User {
                 ",\n isDelete=" + isDelete +
                 '}';
     }
+
+
 
 }
 
