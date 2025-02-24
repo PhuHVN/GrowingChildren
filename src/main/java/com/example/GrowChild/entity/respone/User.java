@@ -74,6 +74,9 @@ public class User {
 //    @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<FeedBack> feedback;
 
+    @OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Booking> booking;
 
     @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
