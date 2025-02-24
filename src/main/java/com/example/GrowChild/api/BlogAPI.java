@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("blog")
+@RequestMapping("blogAPI")
 public class BlogAPI {
-
     @Autowired
     BlogService blogService;
-
 
     @PostMapping("createBlog/{user_id}")
     public ResponseEntity createBlog(@Valid @RequestBody Blog blog, @RequestParam String userId){
