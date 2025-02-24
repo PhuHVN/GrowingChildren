@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("children")
+@RequestMapping("childrenAPI")
 public class ChildrenAPI {
 
     @Autowired
@@ -27,7 +27,7 @@ public class ChildrenAPI {
         return new ResponseEntity<>(children, HttpStatus.CREATED);
     }
 
-    @GetMapping("children")
+    @GetMapping("getChildren")
     public List<ChildDTO> getAllChildren() {
         return childrenService.getAll();
     }
@@ -44,14 +44,14 @@ public class ChildrenAPI {
     }
 
     @GetMapping("child/{childId}")
-    public ChildDTO getChildrenById(@PathVariable long child_id) {
-        return childrenService.getChildById(child_id);
+    public ChildDTO getChildrenById(@PathVariable long childId) {
+        return childrenService.getChildById(childId);
     }
 
     @PutMapping("updateChild/{childId}")
 
-    public ChildDTO updateChildById(@PathVariable long child_id, @RequestBody ChildrenRequest children) {
-        return childrenService.updateChild(child_id, children);
+    public ChildDTO updateChildById(@PathVariable long childId, @RequestBody ChildrenRequest children) {
+        return childrenService.updateChild(childId, children);
     }
 
 
