@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,6 +50,11 @@ public class ScheduleAPI {
         return scheduleService.getScheduleById(scheduleId);
     }
 
+    @GetMapping("scheduleDoctor")
+    public ScheduleDTO getSchedule(@PathVariable String doctorId) {
+        return scheduleService.getScheduleByDoctorId(doctorId);
+    }
+
     @PutMapping("schedule/{scheduleId}")
     public ScheduleDTO updateSchedule(@Valid @RequestBody ScheduleDoctor scheduleDoctor , @PathVariable long scheduleId){
         return scheduleService.updateSchedule(scheduleDoctor,scheduleId);
@@ -60,8 +66,8 @@ public class ScheduleAPI {
     }
 
     @DeleteMapping("deleteSchedule/{scheduleId}")
-    public String deleteSchedule(@PathVariable long scheduleId) {
-        return scheduleService.deleteSchedule(scheduleId);
+    public String deleteSchedule(@PathVariable long scheduleId, @RequestParam String doctorId) {
+        return scheduleService.deleteSchedule(scheduleId,doctorId);
     }
 
 
