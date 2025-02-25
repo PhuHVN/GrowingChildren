@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 public class BookingDTO {
     long bookId;
 
+    String doctorId;
+
     String doctorName;
 
     String parentName;

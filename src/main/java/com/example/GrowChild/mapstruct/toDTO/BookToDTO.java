@@ -13,6 +13,7 @@ public interface BookToDTO {
     default BookingDTO toDTO(Booking booking) {
         return BookingDTO.builder()
                 .bookId(booking.getBookId())
+                .doctorId(booking.getSchedule().getDoctor().getUser_id())
                 .doctorName(booking.getSchedule().getDoctor().getFullName())
                 .parentName(booking.getParent().getFullName())
                 .parentId(booking.getParent().getUser_id())
