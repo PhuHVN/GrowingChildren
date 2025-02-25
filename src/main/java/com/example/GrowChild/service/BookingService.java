@@ -2,18 +2,17 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.dto.BookingStatus;
-import com.example.GrowChild.dto.GrowthStatus;
 import com.example.GrowChild.entity.request.BookingRequest;
 import com.example.GrowChild.entity.respone.Booking;
 import com.example.GrowChild.entity.respone.ScheduleDoctor;
 import com.example.GrowChild.entity.respone.User;
 import com.example.GrowChild.mapstruct.toDTO.BookToDTO;
 import com.example.GrowChild.repository.BookingRepository;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,14 +27,14 @@ public class BookingService {
     @Autowired
     BookToDTO bookToDTO;
 
-    public boolean createBooking(BookingRequest bookingRequest){
+    public boolean createBooking(BookingRequest bookingRequest) {
         User parent = userService.getUser(bookingRequest.getParentId());
-        if(parent == null || ! parent.getRole().getRoleName().equals("Parent")){
-            throw new RuntimeException("Parent not found!");
+        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) {
+            throw new IllegalArgumentException("Parent not found!");
         }
         ScheduleDoctor scheduleDoctor = scheduleService.getScheduleById(bookingRequest.getScheduleId());
-        if (scheduleDoctor == null){
-            throw new RuntimeException("schedule not found!");
+        if (scheduleDoctor == null) {
+            throw new IllegalArgumentException("This schedule not found!");
         }
         Booking booking = Booking.builder()
                 .schedule(scheduleDoctor)
@@ -49,15 +48,15 @@ public class BookingService {
         return true;
     }
 
-    public List<Booking> getBookings(){
+    public List<Booking> getBookings() {
         return bookingRepository.findAll();
     }
 
-    public List<BookingDTO> getBookingsDTO(){
+    public List<BookingDTO> getBookingsDTO() {
         return bookToDTO.toDTOList(bookingRepository.findAll());
     }
 
-    public BookingDTO getBookingDTOById(long id){
+    public BookingDTO getBookingDTOById(long id) {
         return bookToDTO.toDTO(getBookingById(id));
     }
 
@@ -65,26 +64,68 @@ public class BookingService {
         return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found!"));
     }
 
-    public BookingDTO doctorConfirmBooking(long bookId){
+    public List<BookingDTO> getBookingDTOPendingByDoctorId(String doctorId) {
+        List<BookingDTO> bookinPendingoctor = new ArrayList<>();
+        List<BookingDTO> list = getBookingsDTO();
+        for (BookingDTO bookingDTO : list) {
+            if (bookingDTO.getDoctorId().equals(doctorId) && bookingDTO.getStatus().equals(BookingStatus.PENDING)) {
+                bookinPendingoctor.add(bookingDTO);
+            }
+        }
+        return bookinPendingoctor;
+    }
+
+    public List<BookingDTO> getBookingDTOByDoctorId(String doctorId) {
+        List<BookingDTO> bookingHistoryDoctor = new ArrayList<>();
+        List<BookingDTO> list = getBookingsDTO();
+        for (BookingDTO bookingDTO : list) {
+            if (bookingDTO.getDoctorId().equals(doctorId)) {
+                bookingHistoryDoctor.add(bookingDTO);
+            }
+        }
+        return bookingHistoryDoctor;
+    }
+
+    public List<BookingDTO> getBookingDTOByParentId(String parentId) {
+        List<BookingDTO> bookingHistoryParent = new ArrayList<>();
+        List<BookingDTO> list = getBookingsDTO();
+        for (BookingDTO bookingDTO : list) {
+            if (bookingDTO.getParentId().equals(parentId)) {
+                bookingHistoryParent.add(bookingDTO);
+            }
+        }
+        return bookingHistoryParent;
+    }
+
+    public BookingDTO doctorConfirmBooking(long bookId) {
         Booking booking = getBookingById(bookId);
+        if (!BookingStatus.PENDING.equals(booking.getBookingStatus())) {
+            throw new IllegalArgumentException("Only pending booking can be confirm!");
+        }
         booking.setBookingStatus(BookingStatus.CONFIRMED);
         Booking confirmBooking = bookingRepository.save(booking);
         return bookToDTO.toDTO(confirmBooking);
     }
 
-    public Booking updateBooking(long id){
+    public Booking updateBooking(long id) {
         return null;
     }
 
-    public String deleteBooking_Admin(long id){
+
+    public String deleteBooking_Admin(long id) {
         Booking booking = getBookingById(id);
         bookingRepository.delete(booking);
         return "Delete Successful!";
     }
 
-    public String deleteBooking_User(long id){
+    public String deleteBooking_User(long id, String parentId) {
         Booking booking = getBookingById(id);
+
+        if (!booking.getParent().getUser_id().equals(parentId)) {
+            throw new IllegalArgumentException("You only delete by your own booking");
+        }
         booking.setBookingStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
         return "Delete Successful!";
     }
 

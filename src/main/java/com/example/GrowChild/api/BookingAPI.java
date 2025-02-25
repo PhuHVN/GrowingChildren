@@ -3,7 +3,6 @@ package com.example.GrowChild.api;
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.entity.request.BookingRequest;
 import com.example.GrowChild.entity.respone.Booking;
-import com.example.GrowChild.repository.BookingRepository;
 import com.example.GrowChild.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,21 @@ public class BookingAPI {
         return bookingService.getBookingDTOById(bookId);
     }
 
+    @GetMapping("historyBooking-doctor")
+    public List<BookingDTO> getBookingHistory_Doctor(@RequestParam String doctorId){
+        return bookingService.getBookingDTOByDoctorId(doctorId);
+    }
+
+    @GetMapping("historyBooking-parent")
+    public List<BookingDTO> getBookingHistory_Parent(@RequestParam String parentId){
+        return bookingService.getBookingDTOByParentId(parentId);
+    }
+
+    @GetMapping("bookingPending-doctor")
+    public List<BookingDTO> getBookingPending(@RequestParam String doctorId){
+        return bookingService.getBookingDTOPendingByDoctorId(doctorId);
+    }
+
     @PutMapping("confirmBooking")
     public BookingDTO confirmBooking(@RequestParam long bookId){
         return bookingService.doctorConfirmBooking(bookId);
@@ -59,8 +73,8 @@ public class BookingAPI {
     }
 
     @DeleteMapping("delete-user")
-    public String delete_user(@RequestParam long bookId){
-        return bookingService.deleteBooking_User(bookId);
+    public String delete_user(@RequestParam long bookId,@RequestParam String parentId){
+        return bookingService.deleteBooking_User(bookId,parentId);
     }
 
 
