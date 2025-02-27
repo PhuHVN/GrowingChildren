@@ -1,11 +1,11 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.BlogDTO;
-import com.example.GrowChild.entity.Blog;
+import com.example.GrowChild.entity.respone.Blog;
 
 
 import com.example.GrowChild.entity.respone.User;
-import com.example.GrowChild.mapstruct.BlogMapper;
+import com.example.GrowChild.mapstruct.toDTO.BlogToDTO;
 import com.example.GrowChild.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class BlogService {
     UserService userService;
 
     @Autowired
-    BlogMapper blogMapper;
+    BlogToDTO blogToDTO;
 
     public boolean createBlog(Blog blog, String userId){
         User user = userService.getUser(userId);
@@ -39,7 +39,7 @@ public class BlogService {
 
     public List<BlogDTO> getAll(){
         List<Blog> list = blogRepository.findBlogByIsDeleteFalse();
-        return blogMapper.toDTOList(list);
+        return blogToDTO.toDTOList(list);
     }
 
 
@@ -48,7 +48,7 @@ public class BlogService {
         if(existBlog == null){
             throw new RuntimeException("Blog not found!");
         }
-        return blogMapper.toDTO(existBlog);
+        return blogToDTO.toDTO(existBlog);
     }
 
 
@@ -71,7 +71,7 @@ public class BlogService {
 
 
         Blog updateBlog = blogRepository.save(existBlog);
-        return blogMapper.toDTO(updateBlog);
+        return blogToDTO.toDTO(updateBlog);
     }
 
 

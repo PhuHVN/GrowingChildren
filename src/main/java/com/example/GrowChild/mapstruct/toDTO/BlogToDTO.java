@@ -1,14 +1,14 @@
-package com.example.GrowChild.mapstruct;
+package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.BlogDTO;
-import com.example.GrowChild.entity.Blog;
+import com.example.GrowChild.entity.respone.Blog;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface BlogMapper {
+public interface BlogToDTO {
 
     default BlogDTO toDTO(Blog blog){
         return BlogDTO.builder()
