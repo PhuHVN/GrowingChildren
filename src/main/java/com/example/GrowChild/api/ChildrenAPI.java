@@ -13,20 +13,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("children")
+@RequestMapping("childrenAPI")
 public class ChildrenAPI {
 
     @Autowired
     ChildrenService childrenService;
 
-    @PostMapping("createChild/{parent_id}")
-    public ResponseEntity createChild(@Valid @RequestBody ChildrenRequest children, @PathVariable String userId) {
-        if (!childrenService.createChild(children, userId)) {
+    @PostMapping("createChild")
+    public ResponseEntity createChild(@Valid @RequestBody ChildrenRequest children, @RequestParam String parentId) {
+        if (!childrenService.createChild(children, parentId)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error create children!");
         }
         return new ResponseEntity<>(children, HttpStatus.CREATED);
     }
-
 
     @GetMapping("getChildren")
     public List<ChildDTO> getAllChildren() {
@@ -38,8 +37,8 @@ public class ChildrenAPI {
         return childrenService.getAll_Admin();
     }
 
-    @GetMapping("children/{parentId}")
-    public List<ChildDTO> getChildrenParentById(@PathVariable String parentId) {
+    @GetMapping("childrenByParentId")
+    public List<ChildDTO> getChildrenParentById(@RequestParam String parentId) {
         return childrenService.getChildByParentId(parentId);
     }
 
@@ -54,16 +53,15 @@ public class ChildrenAPI {
         return childrenService.updateChild(childId, children);
     }
 
-
-
+    //abc
     @DeleteMapping("deleteChild/{childId}")
-    public String deleteChild_User(@RequestParam long child_id) {
-        return childrenService.deleteChild_User(child_id);
+    public String deleteChild_User(@RequestParam long childId) {
+        return childrenService.deleteChild_User(childId);
     }
 
     @DeleteMapping("deleteChild-admin/{childId}")
-    public String deleteChild_Admin(@RequestParam long child_id) {
-        return childrenService.deleteChild_Admin(child_id);
+    public String deleteChild_Admin(@RequestParam long childId) {
+        return childrenService.deleteChild_Admin(childId);
     }
 
 }

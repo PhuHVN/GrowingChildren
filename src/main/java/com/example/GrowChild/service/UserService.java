@@ -39,10 +39,10 @@ public class UserService {
     //Register
     public User register(User user, long role_id) {
         if(userRepository.findByUsername(user.getUsername()) != null){
-            throw new RuntimeException("username is exist!");
+            throw new IllegalArgumentException("Username: " + user.getUsername() + " is exist!");
         }
         if(user.getEmail() != null && userRepository.existsByEmail(user.getEmail())){
-            throw new RuntimeException("email is exist!");
+            throw new IllegalArgumentException("Email: "+user.getEmail()+" is exist!");
         }
 
         user.setDelete(false);
@@ -57,8 +57,6 @@ public class UserService {
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.password));
-
-
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {
             return userRepository.save(user); //create row in db
@@ -85,9 +83,7 @@ public class UserService {
 
 
     public String verifyOtp(String email, String code) {
-
         OTP otp = otpStore.get(email); //get otp from key
-
         if (otp == null) {
             return "OTP not found!?";
         }
@@ -108,9 +104,7 @@ public class UserService {
 
     //Login
     public UserDTO loginByUsername(String username, String password) {
-
         User user = userRepository.findByUsername(username);
-
         if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
             return userToDTO.toDTO(user);
         }
@@ -119,9 +113,7 @@ public class UserService {
     }
 
     public UserDTO loginByEmail(String email, String password) {
-
         User user = getUserByGmail(email);
-
         if (user == null) return null;
         if (!bCryptPasswordEncoder.matches(password, user.getPassword())) return null;
 
@@ -211,14 +203,6 @@ public class UserService {
         return userToDTO.toDTOList(users);
     }
 
-    public User getUserByChildrenId(Long childrenId) {
-         User user = userRepository.findUserByChildrenId(childrenId);
-        if (user == null) {
-            throw new RuntimeException("Không tìm thấy User có childrenId = " + childrenId);
-        }
-        return user;
-
-    }
 
 }
 

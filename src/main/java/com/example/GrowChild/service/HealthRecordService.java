@@ -76,7 +76,6 @@ public class HealthRecordService {
     }
 
 
-
     public List<RecordDTO> getAllRecordDTO(){
         List<HealthRecord> records = healthRecordRepository.findHealthRecordByIsDeleteFalse();
         return recordToDTO.toDTOList(records);

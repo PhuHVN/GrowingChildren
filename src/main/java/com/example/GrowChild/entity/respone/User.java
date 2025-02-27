@@ -4,10 +4,7 @@ package com.example.GrowChild.entity.respone;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
@@ -33,6 +30,7 @@ public class User {
     public String password;
 
     @Nullable
+    @Email(message = "Email is not valid")
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@gmail\\.com$",message = "Invalid Gmail address")
     public String email;
 
@@ -53,8 +51,6 @@ public class User {
     @Column(nullable = true)
     public String address;
 
-
-
     @ManyToOne
     @JoinColumn(name = "roleId")
     @JsonBackReference()
@@ -73,6 +69,9 @@ public class User {
 //    @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<FeedBack> feedback;
 
+    @OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Booking> booking;
 
     @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

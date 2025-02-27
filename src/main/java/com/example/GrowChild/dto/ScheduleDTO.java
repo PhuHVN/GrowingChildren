@@ -14,7 +14,9 @@ public class ScheduleDTO {
     private long scheduleId;
     private String doctorId;
     private String doctorName;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime scheduleWork;
+
     private boolean isDelete;
 }

@@ -72,8 +72,11 @@ public class ScheduleService {
 
     }
 
-    public String deleteSchedule(long scheduleId){
+    public String deleteSchedule(long scheduleId,String doctorId){
         ScheduleDoctor scheduleDoctor = getScheduleById(scheduleId);
+        if (!scheduleDoctor.getDoctor().getUser_id().equals(doctorId)) {
+            throw new IllegalArgumentException("You only delete by your own schedule");
+        }
         scheduleDoctor.setDelete(true);
         scheduleRepository.save(scheduleDoctor);
         return "Delete Successful!";
