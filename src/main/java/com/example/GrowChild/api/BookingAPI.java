@@ -63,14 +63,17 @@ public class BookingAPI {
     }
 
     @PutMapping("updateBooking")
-    public Booking updateBooking(@RequestParam long bookId){
-        return bookingService.updateBooking(bookId);
+    public Booking updateBooking(@RequestParam long bookId,@RequestParam String comment){
+        return bookingService.updateBooking(bookId,comment);
     }
+
 
     @DeleteMapping("delete-admin")
         public String delete_admin(@RequestParam long bookId){
         return bookingService.deleteBooking_Admin(bookId);
     }
+
+
 
     @DeleteMapping("delete-user")
     public String delete_user(@RequestParam long bookId,@RequestParam String parentId){

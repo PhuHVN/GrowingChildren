@@ -26,7 +26,7 @@ public class ChildrenService {
 
     public boolean createChild(ChildrenRequest childrenRequest, String userId) {
         User parent = userService.getUser(userId); //get parent by id
-        if (parent == null || !parent.role.getRoleName().equals("Parent")) { // not found or user not parent
+        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) { // not found or user not parent
             return false;
         }
 
