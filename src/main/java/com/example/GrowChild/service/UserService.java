@@ -88,7 +88,6 @@ public class UserService {
         otpStore.put(email, otp); // add in map
     }
 
-
     public String verifyOtp(String email, String code) {
         OTP otp = otpStore.get(email); //get otp from key
         if (otp == null) {
