@@ -3,6 +3,7 @@ package com.example.GrowChild.entity.respone;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDate;
@@ -13,40 +14,41 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class HealthRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long record_id;
+     long record_id;
 
     @ManyToOne
     @JoinColumn(name = "childrenId", nullable = false)
-    private Children child;
+     Children child;
 
     @Min(value = 0)
-    public double weight;
+     double weight;
 
     @Min(value = 0)
-    public double height;
+     double height;
 
     @Nullable
-    public double bmi;
+     double bmi;
 
-    public int age;
+     int age;
 
-    public LocalDate date;
+     LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
-    public User parent;
+     User parent;
 
 
-    public boolean isDelete = false;
+     boolean isDelete = false;
 
 
     @PrePersist
     @PreUpdate
-    public void calculateBMI() {
+     void calculateBMI() {
         if (height > 0) { // cant div 0
             this.bmi = weight / (height * height);
         }

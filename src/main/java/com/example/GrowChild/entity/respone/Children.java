@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Getter
@@ -12,26 +13,27 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Children {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long childrenId;
+     long childrenId;
 
     @NotBlank(message = "Name children not blank!")
-    public String childrenName;
+     String childrenName;
 
     @Min(value = 0,message = "Age greater than 0")
     @Max(value = 20)
-    public int age;
+     int age;
 
     @Column(nullable = false)
-    public String gender;
+     String gender;
 
-    public boolean isDelete = false;
+     boolean isDelete = false;
 
     @ManyToOne
     @JoinColumn(name = "parent_id",nullable = false)
-    public User parentId;
+     User parentId;
 
 }
