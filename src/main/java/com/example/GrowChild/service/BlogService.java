@@ -25,12 +25,12 @@ public class BlogService {
     @Autowired
     BlogToDTO blogToDTO;
 
-    public boolean createBlog(Blog blog, String userId){
-        User user = userService.getUser(userId);
-        if(user ==  null){
-            return false;
+    public boolean createBlog(Blog blog, String parent_id){
+        User parent = userService.getUser(parent_id);
+        if(parent == null || !parent.role.getRoleName().equals("Parent")){ // find parent
+            throw new RuntimeException("Parent not found");
         }
-        blog.setParentId(user);
+        blog.setParentId(parent);
         blog.setDelete(false);
         blogRepository.save(blog);
         return true;

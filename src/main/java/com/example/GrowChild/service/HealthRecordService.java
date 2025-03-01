@@ -33,7 +33,8 @@ public class HealthRecordService {
 
 
     //create Record
-    public HealthRecord createRecord(HealthRecordRequest healthRecordRequest, String parent_id, long childId) {
+    public HealthRecord createRecord(HealthRecordRequest healthRecordRequest,
+                                     String parent_id, long childId) {
         User parent = userService.getUser(parent_id);
         if(parent == null || !parent.role.getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");

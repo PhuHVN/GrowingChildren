@@ -31,12 +31,12 @@ public class BlogAPI {
     }
 
     @GetMapping("getBlogById/{blog_id}")
-    public BlogDTO getBlogById(@RequestParam long blog_id){
+    public BlogDTO getBlogById(@PathVariable long blog_id){
         return blogService.getBlogById(blog_id);
     }
 
     @PutMapping("updateBlog/{blog_id}")
-    public BlogDTO updateBlogById(@RequestParam long blog_id,
+    public BlogDTO updateBlogById(@PathVariable long blog_id,
                                @RequestBody Blog blog){
         return blogService.updateBlog(blog_id,blog);
     }

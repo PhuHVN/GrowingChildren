@@ -20,7 +20,8 @@ public class HealthRecordAPI {
     HealthRecordService healthRecordService;
 
     @PostMapping("createRecord")
-    public ResponseEntity createRecord(@Valid @RequestBody HealthRecordRequest healthRecord , @RequestParam String parentId, @RequestParam long childId){
+    public ResponseEntity createRecord(@Valid @RequestBody HealthRecordRequest healthRecord ,
+                                       @RequestParam String parentId, @RequestParam long childId){
         HealthRecord record =healthRecordService.createRecord(healthRecord,parentId,childId);
         return new ResponseEntity<>(record, HttpStatus.CREATED);
     }

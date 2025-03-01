@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface BlogToDTO {
 
+
     default BlogDTO toDTO(Blog blog){
         return BlogDTO.builder()
                 .blogId(blog.getBlogId())
