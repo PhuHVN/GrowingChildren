@@ -1,6 +1,6 @@
 package com.example.GrowChild.service;
 
-import com.example.GrowChild.dto.GrowthStatus;
+import com.example.GrowChild.entity.enumStatus.GrowthStatus;
 import com.example.GrowChild.dto.RecordDTO;
 import com.example.GrowChild.entity.respone.Children;
 import com.example.GrowChild.entity.respone.HealthRecord;
@@ -8,9 +8,7 @@ import com.example.GrowChild.entity.respone.User;
 import com.example.GrowChild.entity.request.HealthRecordRequest;
 import com.example.GrowChild.mapstruct.toDTO.RecordToDTO;
 import com.example.GrowChild.repository.HealthRecordRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,13 +28,11 @@ public class HealthRecordService {
     @Autowired
     RecordToDTO recordToDTO;
 
-
-
     //create Record
     public HealthRecord createRecord(HealthRecordRequest healthRecordRequest,
                                      String parent_id, long childId) {
         User parent = userService.getUser(parent_id);
-        if(parent == null || !parent.role.getRoleName().equals("Parent")){ // find parent
+        if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");
         }
         Children child = childrenService.getChildrenByIsDeleteFalseAndChildrenId(childId);
@@ -131,10 +127,11 @@ public class HealthRecordService {
 
         for(HealthRecord record : records){ //list data
             Map<String, Object> data = new HashMap<>();
+            data.put("recordId",record.getRecord_id());
             data.put("date",record.getDate()); // add data date in map
             data.put("bmi",calculateBMI(record.getWeight(), record.getHeight())); // add bmi
             data.put("weight",record.getWeight());
-            data.put("height",record.getWeight());
+            data.put("height",record.getHeight());
             response.add(data);
         }
 

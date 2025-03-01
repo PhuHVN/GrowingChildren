@@ -1,6 +1,7 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.UserDTO;
+import com.example.GrowChild.entity.enumStatus.MembershipType;
 import com.example.GrowChild.entity.respone.OTP;
 import com.example.GrowChild.entity.respone.Role;
 import com.example.GrowChild.entity.respone.User;
@@ -26,6 +27,8 @@ public class UserService {
     RoleService roleService;
     @Autowired
     UserToDTO userToDTO;
+    @Autowired
+    MembershipService membershipService;
 
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -56,7 +59,10 @@ public class UserService {
 
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
-        user.setPassword(hashPass.encode(user.password));
+        user.setPassword(hashPass.encode(user.getPassword()));
+        if(user.getRole().getRoleName().equals("Parent")){
+            user.setMembership(membershipService.getMembershipByType(MembershipType.DEFAULT));
+        }
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {
             return userRepository.save(user); //create row in db
@@ -70,6 +76,7 @@ public class UserService {
             return null; //save in map so use null
         }
 
+
         throw new RuntimeException("Invalid register !");
     }
 
@@ -80,7 +87,6 @@ public class UserService {
         OTP otp = new OTP(code, expirationTime);
         otpStore.put(email, otp); // add in map
     }
-
 
     public String verifyOtp(String email, String code) {
         OTP otp = otpStore.get(email); //get otp from key
@@ -174,7 +180,7 @@ public class UserService {
             throw new IllegalArgumentException("User not found !");
         }
 
-        if (!new BCryptPasswordEncoder().matches(oldPassword, user.password)) { // check pass user to match with pass input when encode
+        if (!new BCryptPasswordEncoder().matches(oldPassword, user.getPassword())) { // check pass user to match with pass input when encode
             throw new IllegalArgumentException("Old password incorrect");
         }
 
@@ -189,7 +195,7 @@ public class UserService {
     //Check role user by userId
     public String checkRole(String user_id) {
         User user = getUser(user_id);
-        return user.getRole().roleName;
+        return user.getRole().getRoleName();
     }
 
     //Get User by RoleID

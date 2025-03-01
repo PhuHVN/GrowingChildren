@@ -1,9 +1,10 @@
 package com.example.GrowChild.entity.respone;
 
-import com.example.GrowChild.dto.BookingStatus;
+import com.example.GrowChild.entity.enumStatus.BookingStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -13,19 +14,20 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long bookId;
+    long bookId;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_id",nullable = false)
-    private ScheduleDoctor schedule;
+    @JoinColumn(name = "schedule_id", nullable = false)
+    ScheduleDoctor schedule;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id",nullable = false)
-    private User parent;
+    @JoinColumn(name = "parent_id", nullable = false)
+    User parent;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime bookDate;
@@ -34,8 +36,7 @@ public class Booking {
     String comment;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus;
-
+    BookingStatus bookingStatus;
 
 
 }

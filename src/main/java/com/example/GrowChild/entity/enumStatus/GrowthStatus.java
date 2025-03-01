@@ -1,4 +1,4 @@
-package com.example.GrowChild.dto;
+package com.example.GrowChild.entity.enumStatus;
 
 public enum GrowthStatus {
     UNDERWEIGHT, // Suy dinh dưỡng

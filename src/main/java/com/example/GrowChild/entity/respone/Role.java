@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
@@ -13,21 +14,22 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    public long roleId;
+    long roleId;
 
-    @Column(name = "role_name",unique = true)
+    @Column(name = "role_name", unique = true)
     @NotBlank()
-    public String roleName;
+    String roleName;
 
     @OneToMany(mappedBy = "role")
     @JsonManagedReference
     @ToString.Exclude
-    private List<User> users;
+    List<User> users;
 
 
 }

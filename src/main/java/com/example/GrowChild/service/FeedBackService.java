@@ -24,14 +24,17 @@ public class FeedBackService {
     @Autowired
     FeedBackToDTO feedBackToDTO;
 
+
+
+
     public FeedBack createFeedBack(FeedBackRequest feedBackRequest,
                                    String doctor_id, String parent_id){
         User doctor = userService.getUser(doctor_id);
-        if(doctor == null || !doctor.role.getRoleName().equals("Doctor")){ // find doctor
+        if(doctor == null || !doctor.getRole().getRoleName().equals("Doctor")){ // find doctor
             throw new RuntimeException("Doctor not found");
         }
         User parent = userService.getUser(doctor_id);
-        if(parent == null || !parent.role.getRoleName().equals("Parent")){ // find parent
+        if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");
         }
         FeedBack feedBack = FeedBack.builder()

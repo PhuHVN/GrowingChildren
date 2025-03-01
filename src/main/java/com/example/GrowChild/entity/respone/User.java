@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -21,86 +22,81 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    public String user_id;
+    String user_id;
 
-    @Column(nullable = true,unique = true)
-    public String username;
+    @Column(nullable = true, unique = true)
+    String username;
 
     @NotBlank(message = "password not blank!")
-    public String password;
+    String password;
 
     @Nullable
     @Email(message = "Email is not valid")
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@gmail\\.com$",message = "Invalid Gmail address")
-    public String email;
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@gmail\\.com$", message = "Invalid Gmail address")
+    String email;
 
     @NotBlank(message = "Name is not blank!")
-    @Pattern(regexp = "([A-Z a-z])\\w+",message ="Input must be range a - z")
-    public String fullName;
+    @Pattern(regexp = "([A-Z a-z])\\w+", message = "Input must be range a - z")
+    String fullName;
 
     @Column(nullable = true)
-    public String gender;
+    String gender;
 
     @Nullable
-    public String phone;
+    String phone;
 
-    @Min(value = 0,message =" rate must be greater 0")
-    @Max(value = 5,message =" rate must be lower 5")
-    public int rate;
+    @Min(value = 0, message = " rate must be greater 0")
+    @Max(value = 5, message = " rate must be lower 5")
+    int rate;
 
     @Column(nullable = true)
-    public String address;
+    String address;
+
+    LocalDateTime createAt = LocalDateTime.now();
+
+    boolean isDelete = false; // 0 active - 1 delete
+
+    @PrePersist
+    void onCreate() {
+        this.createAt = LocalDateTime.now();
+    }
+
 
     @ManyToOne
     @JoinColumn(name = "roleId")
     @JsonBackReference()
     @ToString.Exclude
     @JsonIgnore
-    public Role role ;
+    Role role;
 
     @OneToMany(mappedBy = "childrenId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Children> children;
-
+    List<Children> children;
 
     @OneToMany(mappedBy = "blogId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Blog> blog;
+    @JsonIgnore
+    List<Blog> blog;
 
     @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedBack> feedback;
 
     @OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Booking> booking;
+    List<Booking> booking;
 
     @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<ScheduleDoctor> schedule;
+    List<ScheduleDoctor> schedule;
 
-
-    private LocalDateTime createAt = LocalDateTime.now();
-
-    private boolean isDelete = false; // 0 active - 1 delete
-
-    @PrePersist
-    protected void onCreate() {
-        this.createAt = LocalDateTime.now();
-    }
+    @ManyToOne
+    @JoinColumn(name = "membership_id", nullable = true)
+    @JsonIgnore
+    Membership membership;
 
     @Override
     public String toString() {
-        return "User{" +
-                "user_id='" + user_id + '\'' +
-                ",\n Username='" + username + '\'' +
-                ",\n email='" + email + '\'' +
-                ",\n fullName='" + fullName + '\'' +
-                ",\n phone='" + phone + '\'' +
-                ",\n gender='" + gender + '\'' +
-                ",\n roleName='" + (role != null ? role.getRoleName() : "null") + '\'' +
-                ",\n isDelete=" + isDelete +
-                '}';
+        return "User{" + "user_id='" + getUser_id() + '\'' + ",\n Username='" + getUsername() + '\'' + ",\n email='" + getEmail() + '\'' + ",\n fullName='" + getFullName() + '\'' + ",\n phone='" + getPhone() + '\'' + ",\n gender='" + getGender() + '\'' + ",\n roleName='" + (getRole() != null ? getRole().getRoleName() : "null") + '\'' + ",\n isDelete=" + isDelete() + '}';
     }
-
 
 
 }
