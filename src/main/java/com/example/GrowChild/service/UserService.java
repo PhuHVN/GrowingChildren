@@ -41,11 +41,11 @@ public class UserService {
 
     //Register
     public User register(User user, long role_id) {
-        if(userRepository.findByUsername(user.getUsername()) != null){
+        if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new IllegalArgumentException("Username: " + user.getUsername() + " is exist!");
         }
-        if(user.getEmail() != null && userRepository.existsByEmail(user.getEmail())){
-            throw new IllegalArgumentException("Email: "+user.getEmail()+" is exist!");
+        if (user.getEmail() != null && userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email: " + user.getEmail() + " is exist!");
         }
 
         user.setDelete(false);
@@ -60,7 +60,8 @@ public class UserService {
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.getPassword()));
-        if(user.getRole().getRoleName().equals("Parent")){
+
+        if (user.getRole().getRoleName().equals("Parent")) {
             user.setMembership(membershipService.getMembershipByType(MembershipType.DEFAULT));
         }
         // username field not null
@@ -154,7 +155,7 @@ public class UserService {
         User userExist = getUser(userId); //call fun getId to match user
         userExist.setFullName(user.getFullName());
         userExist.setPhone(user.getPhone());
-        if(userExist.getEmail().isEmpty()){
+        if (userExist.getEmail() == null || userExist.getEmail().isEmpty()) {
             userExist.setEmail(user.getEmail());
         }
         userExist.setAddress(user.getAddress());

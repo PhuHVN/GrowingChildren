@@ -3,7 +3,7 @@ package com.example.GrowChild.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -15,8 +15,8 @@ public class ScheduleDTO {
     private String doctorId;
     private String doctorName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime scheduleWork;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+    private LocalTime scheduleWork;
 
     private boolean isDelete;
 }

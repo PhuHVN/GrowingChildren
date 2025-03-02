@@ -36,6 +36,10 @@ public class BookingService {
         if (scheduleDoctor == null) {
             throw new IllegalArgumentException("This schedule not found!");
         }
+        if (scheduleDoctor.isBooking()) {
+            throw new IllegalArgumentException("This book already booking");
+        }
+        scheduleDoctor.setBooking(true);
         Booking booking = Booking.builder()
                 .schedule(scheduleDoctor)
                 .parent(parent)
@@ -107,9 +111,9 @@ public class BookingService {
         return bookToDTO.toDTO(confirmBooking);
     }
 
-    public Booking updateBooking(long id,String comment) {
+    public Booking updateBooking(long id, String comment) {
         Booking booking = getBookingById(id);
-        if(booking == null) throw new RuntimeException("Booking not found!");
+        if (booking == null) throw new RuntimeException("Booking not found!");
         booking.setComment(comment);
         bookingRepository.save(booking);
         return booking;
@@ -131,6 +135,11 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
         return "Delete Successful!";
+    }
+
+    public void bookingDone(long scheduleId) {
+        ScheduleDoctor doctor = scheduleService.getScheduleById(scheduleId);
+        doctor.setBooking(false);
     }
 
 }

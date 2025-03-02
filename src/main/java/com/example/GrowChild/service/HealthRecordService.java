@@ -1,11 +1,11 @@
 package com.example.GrowChild.service;
 
-import com.example.GrowChild.entity.enumStatus.GrowthStatus;
 import com.example.GrowChild.dto.RecordDTO;
+import com.example.GrowChild.entity.enumStatus.GrowthStatus;
+import com.example.GrowChild.entity.request.HealthRecordRequest;
 import com.example.GrowChild.entity.respone.Children;
 import com.example.GrowChild.entity.respone.HealthRecord;
 import com.example.GrowChild.entity.respone.User;
-import com.example.GrowChild.entity.request.HealthRecordRequest;
 import com.example.GrowChild.mapstruct.toDTO.RecordToDTO;
 import com.example.GrowChild.repository.HealthRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +31,19 @@ public class HealthRecordService {
     //create Record
     public HealthRecord createRecord(HealthRecordRequest healthRecordRequest, String parent_id, long childId) {
         User parent = userService.getUser(parent_id);
-        if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
+        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) { // find parent
             throw new RuntimeException("Parent not found");
         }
         Children child = childrenService.getChildrenByIsDeleteFalseAndChildrenId(childId);
-        if(child == null){
+        if (child == null) {
             throw new RuntimeException("Children not found");
         }
 
         HealthRecord record = HealthRecord.builder()
                 .parent(parent)
                 .child(child)
-                .height(healthRecordRequest.getHeight())
-                .weight(healthRecordRequest.getWeight())
+                .height(healthRecordRequest.getHeight_m())
+                .weight(healthRecordRequest.getWeight_kg())
                 .date(LocalDate.now())
                 .build();
 
@@ -51,14 +51,14 @@ public class HealthRecordService {
 
     }
 
-    public List<Map<String,Object>> getBMIHistory(long childId){
+    public List<Map<String, Object>> getBMIHistory(long childId) {
         List<HealthRecord> records = healthRecordRepository.findByChildChildrenIdOrderByDateAsc(childId); // get data from db
-        List<Map<String,Object>> response = new ArrayList<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
-        for(HealthRecord record : records){ //list data
+        for (HealthRecord record : records) { //list data
             Map<String, Object> data = new HashMap<>();
-            data.put("date",record.getDate()); // add data date in map
-            data.put("bmi",calculateBMI(record.getWeight(), record.getHeight())); // add bmi
+            data.put("date", record.getDate()); // add data date in map
+            data.put("bmi", calculateBMI(record.getWeight(), record.getHeight())); // add bmi
             response.add(data);
         }
 
@@ -72,29 +72,31 @@ public class HealthRecordService {
     }
 
 
-    public List<RecordDTO> getAllRecordDTO(){
+    public List<RecordDTO> getAllRecordDTO() {
         List<HealthRecord> records = healthRecordRepository.findHealthRecordByIsDeleteFalse();
         return recordToDTO.toDTOList(records);
     }
-    public List<HealthRecord> getAllRecord(){
+
+    public List<HealthRecord> getAllRecord() {
         return healthRecordRepository.findHealthRecordByIsDeleteFalse();
     }
 
-    public List<HealthRecord> getAllRecord_Admin(){
+    public List<HealthRecord> getAllRecord_Admin() {
         return healthRecordRepository.findAll();
     }
 
-    public RecordDTO getRecordDTOById(Long recordId){
+    public RecordDTO getRecordDTOById(Long recordId) {
         HealthRecord record = getRecordById(recordId);
         return recordToDTO.toDTO(record);
     }
-    public HealthRecord getRecordById(Long recordId){
+
+    public HealthRecord getRecordById(Long recordId) {
         return healthRecordRepository.findById(recordId).orElseThrow(() -> new RuntimeException("Record not found!"));
     }
 
-    public RecordDTO updateRecord(long recordId,HealthRecord healthRecord){
+    public RecordDTO updateRecord(long recordId, HealthRecord healthRecord) {
         HealthRecord record = getRecordById(recordId);
-        if(record == null) return null;
+        if (record == null) return null;
         record = HealthRecord.builder()
                 .record_id(record.getRecord_id())
                 .parent(record.getParent())
@@ -108,36 +110,37 @@ public class HealthRecordService {
         return recordToDTO.toDTO(updateRecord);
     }
 
-    public String deleteRecord_User(long recordId){
+    public String deleteRecord_User(long recordId) {
         HealthRecord healthRecord = getRecordById(recordId);
         healthRecord.setDelete(true);
+        healthRecordRepository.save(healthRecord);
         return "Delete Successful!";
     }
 
-    public String deleteRecord_Admin(long recordId){
+    public String deleteRecord_Admin(long recordId) {
         HealthRecord healthRecord = getRecordById(recordId);
         healthRecordRepository.delete(healthRecord);
         return "Delete Successful!";
     }
 
-    public List<Map<String,Object>> getRecordByChildId(long childId){
+    public List<Map<String, Object>> getRecordByChildId(long childId) {
         List<HealthRecord> records = healthRecordRepository.findByChildChildrenIdOrderByDateAsc(childId); // get data from db
-        List<Map<String,Object>> response = new ArrayList<>();
+        List<Map<String, Object>> response = new ArrayList<>();
 
-        for(HealthRecord record : records){ //list data
+        for (HealthRecord record : records) { //list data
             Map<String, Object> data = new HashMap<>();
-            data.put("recordId",record.getRecord_id());
-            data.put("date",record.getDate()); // add data date in map
-            data.put("bmi",calculateBMI(record.getWeight(), record.getHeight())); // add bmi
-            data.put("weight",record.getWeight());
-            data.put("height",record.getHeight());
+            data.put("recordId", record.getRecord_id());
+            data.put("date", record.getDate()); // add data date in map
+            data.put("bmi", calculateBMI(record.getWeight(), record.getHeight())); // add bmi
+            data.put("weight", record.getWeight());
+            data.put("height", record.getHeight());
             response.add(data);
         }
 
         return response; //return info by Json
     }
 
-    public GrowthStatus getGrowStatus(double bmi){
+    public GrowthStatus getGrowStatus(double bmi) {
         if (bmi < 14) {
             return GrowthStatus.UNDERWEIGHT;
         } else if (bmi >= 14 && bmi < 18.5) {
