@@ -63,7 +63,7 @@ public class BookingAPI {
     }
 
     @PutMapping("updateBooking")
-    public Booking updateBooking(@RequestParam long bookId,@RequestParam String comment){
+    public Booking updateBooking(@RequestBody long bookId,@RequestBody String comment){
         return bookingService.updateBooking(bookId,comment);
     }
 

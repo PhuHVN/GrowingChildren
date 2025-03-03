@@ -56,12 +56,6 @@ public class User {
 
     boolean isDelete = false; // 0 active - 1 delete
 
-    @PrePersist
-    void onCreate() {
-        this.createAt = LocalDateTime.now();
-    }
-
-
     @ManyToOne
     @JoinColumn(name = "roleId")
     @JsonBackReference()
