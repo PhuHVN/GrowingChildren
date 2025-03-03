@@ -49,7 +49,7 @@ public class ScheduleAPI {
     }
 
     @GetMapping("scheduleDoctor")
-    public ScheduleDTO getSchedule(@RequestParam String doctorId) {
+    public List<ScheduleDTO> getSchedule(@RequestParam String doctorId) {
         return scheduleService.getScheduleByDoctorId(doctorId);
     }
 

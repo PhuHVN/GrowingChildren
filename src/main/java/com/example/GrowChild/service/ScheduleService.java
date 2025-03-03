@@ -54,14 +54,15 @@ public class ScheduleService {
         return scheduleRepository.findById(scheduleId).orElseThrow(() -> new RuntimeException("Schedule not found!"));
     }
 
-    public ScheduleDTO getScheduleByDoctorId(String doctorId) {
+    public List<ScheduleDTO> getScheduleByDoctorId(String doctorId) {
         List<ScheduleDTO> schedules = getAll();
+        List<ScheduleDTO> list = new java.util.ArrayList<>();
         for (ScheduleDTO scheduleDTO : schedules) {
             if (scheduleDTO.getDoctorId().equals(doctorId)) {
-                return scheduleDTO;
+                list.add(scheduleDTO);
             }
         }
-        return null;
+        return list;
     }
 
     public ScheduleDTO updateSchedule(ScheduleDoctor scheduleDoctor, long scheduleId) {
