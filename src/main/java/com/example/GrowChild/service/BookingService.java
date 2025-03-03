@@ -137,8 +137,10 @@ public class BookingService {
         return "Delete Successful!";
     }
 
-    public void bookingDone(long scheduleId) {
+    public void bookingDone(long scheduleId,long bookingId) {
         ScheduleDoctor doctor = scheduleService.getScheduleById(scheduleId);
+        Booking booking = getBookingById(bookingId);
+        booking.setBookingStatus(BookingStatus.PENDING);
         doctor.setBooking(false);
     }
 
