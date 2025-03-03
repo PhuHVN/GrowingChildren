@@ -27,7 +27,7 @@ public class BlogService {
 
     public boolean createBlog(Blog blog, String parent_id){
         User parent = userService.getUser(parent_id);
-        if(parent == null || !parent.role.getRoleName().equals("Parent")){ // find parent
+        if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");
         }
         blog.setParentId(parent);

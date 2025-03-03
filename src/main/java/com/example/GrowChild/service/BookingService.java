@@ -60,7 +60,7 @@ public class BookingService {
         return bookToDTO.toDTO(getBookingById(id));
     }
 
-    private Booking getBookingById(long id) {
+    protected Booking getBookingById(long id) {
         return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found!"));
     }
 

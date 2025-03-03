@@ -3,6 +3,8 @@ package com.example.GrowChild.entity.respone;
 
 import com.example.GrowChild.entity.respone.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -17,7 +19,7 @@ public class FeedBack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long feedbackId;
 
-    @NotBlank
+    @Max(value = 5)@Min(value = 0)
     public int rate;
 
     @NotBlank

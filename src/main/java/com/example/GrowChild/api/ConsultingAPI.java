@@ -20,8 +20,8 @@ public class ConsultingAPI {
 
     @PostMapping("createConsulting/{user_id}")
     public ResponseEntity createConsulting(@Valid @RequestBody ConsultingRequest consultingRequest, @RequestParam String doctorId,
-                                           @RequestParam String parentId, @RequestParam long childId){
-        Consulting consulting = consultingSevice.createConsulting(consultingRequest, doctorId, parentId, childId);
+                                           @RequestParam String parentId, @RequestParam long childId, @RequestParam long bookingId){
+        Consulting consulting = consultingSevice.createConsulting(consultingRequest, doctorId, parentId, childId, bookingId);
         return new ResponseEntity<>(consulting, HttpStatus.CREATED);
     }
 
@@ -29,7 +29,7 @@ public class ConsultingAPI {
     public List<ConsultingDTO> getAllConsulting(){ return consultingSevice.getAll();}
 
     @GetMapping("getConsultingById/{consulting_id}")
-    public ConsultingDTO getConsutingById(@PathVariable long consulting_id){return consultingSevice.getConsultingById(consulting_id);}
+    public ConsultingDTO getConsultingById(@PathVariable long consulting_id){return consultingSevice.getConsultingById(consulting_id);}
 
     @PutMapping("updateConsulting/{consulting_id}")
     public ConsultingDTO updateConsulting(@PathVariable long consulting_id,

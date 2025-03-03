@@ -14,4 +14,6 @@ public class ConsultingRequest {
 
     @NotBlank
     public String comment;
+
+
 }

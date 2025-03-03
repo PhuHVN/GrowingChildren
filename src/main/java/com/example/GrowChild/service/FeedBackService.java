@@ -1,6 +1,7 @@
 package com.example.GrowChild.service;
 
 
+import com.example.GrowChild.dto.ConsultingDTO;
 import com.example.GrowChild.dto.FeedBackDTO;
 import com.example.GrowChild.entity.request.FeedBackRequest;
 import com.example.GrowChild.entity.respone.Consulting;
@@ -24,24 +25,35 @@ public class FeedBackService {
     @Autowired
     FeedBackToDTO feedBackToDTO;
 
+    @Autowired
+    ConsultingSevice consultingSevice;
+
 
 
 
     public FeedBack createFeedBack(FeedBackRequest feedBackRequest,
-                                   String doctor_id, String parent_id){
+                                   String doctor_id, String parent_id, long consulting_id){
         User doctor = userService.getUser(doctor_id);
         if(doctor == null || !doctor.getRole().getRoleName().equals("Doctor")){ // find doctor
             throw new RuntimeException("Doctor not found");
         }
-        User parent = userService.getUser(doctor_id);
+        User parent = userService.getUser(parent_id);
         if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");
         }
+        Consulting consulting = consultingSevice.getConsultingByID(consulting_id);
+        if (consulting == null){
+            throw new RuntimeException("Consulting not found");
+        }
+
+
+
         FeedBack feedBack = FeedBack.builder()
                 .parentId(parent)
                 .doctorId(doctor)
                 .rate(feedBackRequest.getRate())
                 .comment(feedBackRequest.getComment())
+                .consultingId(consulting)
                 .build();
         return feedBackRepository.save(feedBack);
     }

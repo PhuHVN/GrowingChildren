@@ -19,6 +19,7 @@ public interface ConsultingToDTO {
                 .parentId(consulting.getParentId().getUser_id())
                 .doctorId(consulting.getDoctorId().getUser_id())
                 .bookingId(consulting.getBookingId().getBookId())
+                .childId(consulting.getChildId().getChildrenId())
                 .build();
     }
 

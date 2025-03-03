@@ -2,15 +2,13 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ConsultingDTO;
 import com.example.GrowChild.entity.request.ConsultingRequest;
-import com.example.GrowChild.entity.respone.Blog;
-import com.example.GrowChild.entity.respone.Children;
-import com.example.GrowChild.entity.respone.Consulting;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.respone.*;
 import com.example.GrowChild.mapstruct.toDTO.ConsultingToDTO;
 import com.example.GrowChild.repository.ConsultingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,14 +26,17 @@ public class ConsultingSevice {
     @Autowired
     ChildrenService childrenService;
 
+    @Autowired
+    BookingService bookingService;
+
     //Create
     public Consulting createConsulting(ConsultingRequest consultingRequest, String doctor_id,
-                                       String parent_id, long child_id){
+                                       String parent_id, long child_id, long booking_id){
         User doctor = userService.getUser(doctor_id);
         if(doctor == null || !doctor.getRole().getRoleName().equals("Doctor")){ // find doctor
             throw new RuntimeException("Doctor not found");
         }
-        User parent = userService.getUser(doctor_id);
+        User parent = userService.getUser(parent_id);
         if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");
         }
@@ -44,6 +45,12 @@ public class ConsultingSevice {
             throw new RuntimeException("Children not found");
         }
 
+        Booking booking = bookingService.getBookingById(booking_id);
+            if (booking == null){
+                throw new RuntimeException("Booking not found");
+            }
+
+
         Consulting consulting = Consulting.builder()
                 .parentId(parent)
                 .childId(child)
@@ -51,14 +58,20 @@ public class ConsultingSevice {
                 .title(consultingRequest.getTitle())
                 .comment(consultingRequest.getComment())
                 .date(LocalDateTime.now())
+                .bookingId(booking)
                 .build();
 
         return consultingRepository.save(consulting);
     }
 
+
     public List<ConsultingDTO> getAll(){
         List<Consulting> list = consultingRepository.findConsultingByIsDeleteFalse();
         return consultingToDTO.toDTOList(list);
+    }
+
+    protected Consulting getConsultingByID(long id) {
+        return consultingRepository.findById(id).orElseThrow(() -> new RuntimeException("Consulting not found!"));
     }
 
     public ConsultingDTO getConsultingById(long consulting_id){
@@ -67,6 +80,11 @@ public class ConsultingSevice {
             throw new RuntimeException("Consulting not found!");
         }
         return consultingToDTO.toDTO(existConsulting);
+    }
+
+    //ham lam them de goi share record service
+    public Consulting getConsultingById2(long consulting_id){
+        return consultingRepository.findById(consulting_id).orElseThrow(() -> new RuntimeException("Consulting not found!"));
     }
 
     private Consulting getConsultingByIsDeleteAndConsultingId(long consulting_id){
@@ -84,6 +102,7 @@ public class ConsultingSevice {
                 .parentId(existConsulting.getParentId())
                 .doctorId(existConsulting.getDoctorId())
                 .bookingId(existConsulting.getBookingId())
+                .childId(existConsulting.getChildId())
                 .build();
         Consulting updateConsulting = consultingRepository.save(existConsulting);
         return consultingToDTO.toDTO(updateConsulting);

@@ -1,5 +1,7 @@
 package com.example.GrowChild.entity.request;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -9,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class FeedBackRequest {
-    @NotBlank
+    @Max(value = 5)@Min(value = 0)
     public int rate;
 
     @NotBlank
