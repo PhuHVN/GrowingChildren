@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
@@ -18,22 +18,22 @@ public class Children {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     long childrenId;
+    long childrenId;
 
     @NotBlank(message = "Name children not blank!")
-     String childrenName;
+    String childrenName;
 
-    @Min(value = 0,message = "Age greater than 0")
-    @Max(value = 20)
-     int age;
+    @Min(value = 0, message = "Age greater than 0")
+    @Max(value = 20, message = "Age lower than 20")
+    int age;
 
     @Column(nullable = false)
-     String gender;
+    String gender;
 
-     boolean isDelete = false;
+    boolean isDelete = false;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id",nullable = false)
-     User parentId;
+    @JoinColumn(name = "parent_id", nullable = false)
+    User parentId;
 
 }

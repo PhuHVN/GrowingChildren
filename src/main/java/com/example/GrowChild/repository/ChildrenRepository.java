@@ -1,6 +1,6 @@
 package com.example.GrowChild.repository;
 
-import com.example.GrowChild.entity.respone.Children;
+import com.example.GrowChild.entity.response.Children;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

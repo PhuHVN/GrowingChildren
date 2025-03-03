@@ -1,10 +1,9 @@
 package com.example.GrowChild.service;
 
-import com.example.GrowChild.entity.enumStatus.MembershipType;
 import com.example.GrowChild.entity.enumStatus.PaymentStatus;
-import com.example.GrowChild.entity.respone.Membership;
-import com.example.GrowChild.entity.respone.Payment;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.Membership;
+import com.example.GrowChild.entity.response.Payment;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.repository.PaymentRepository;
 import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

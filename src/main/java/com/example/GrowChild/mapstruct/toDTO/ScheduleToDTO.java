@@ -1,7 +1,7 @@
 package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.ScheduleDTO;
-import com.example.GrowChild.entity.respone.ScheduleDoctor;
+import com.example.GrowChild.entity.response.ScheduleDoctor;
 import org.mapstruct.Mapper;
 
 import java.util.List;

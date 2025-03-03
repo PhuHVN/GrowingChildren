@@ -3,9 +3,9 @@ package com.example.GrowChild.service;
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.respone.Blog;
 
-
-import com.example.GrowChild.entity.respone.User;
 import com.example.GrowChild.mapstruct.toDTO.BlogToDTO;
+
+
 import com.example.GrowChild.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class BlogService {
     BlogToDTO blogToDTO;
 
     public boolean createBlog(Blog blog, String parent_id){
-        User parent = userService.getUser(parent_id);
+        com.example.GrowChild.entity.response.User parent = userService.getUser(parent_id);
         if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
             throw new RuntimeException("Parent not found");
         }

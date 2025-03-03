@@ -1,7 +1,7 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.entity.enumStatus.MembershipType;
-import com.example.GrowChild.entity.respone.Membership;
+import com.example.GrowChild.entity.response.Membership;
 import com.example.GrowChild.repository.MembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

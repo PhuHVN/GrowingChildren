@@ -2,7 +2,7 @@ package com.example.GrowChild.mapstruct.toDTO;
 
 
 import com.example.GrowChild.dto.ChildDTO;
-import com.example.GrowChild.entity.respone.Children;
+import com.example.GrowChild.entity.response.Children;
 import org.mapstruct.Mapper;
 
 

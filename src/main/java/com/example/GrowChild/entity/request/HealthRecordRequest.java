@@ -12,10 +12,10 @@ import lombok.*;
 public class HealthRecordRequest {
 
     @Min(value = 0)
-    public double weight;
+    public double weight_kg;
 
     @Min(value = 0)
-    public double height;
+    public double height_m;
 
 
 }

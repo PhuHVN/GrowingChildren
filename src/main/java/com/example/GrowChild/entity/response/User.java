@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -55,12 +54,6 @@ public class User {
     LocalDateTime createAt = LocalDateTime.now();
 
     boolean isDelete = false; // 0 active - 1 delete
-
-    @PrePersist
-    void onCreate() {
-        this.createAt = LocalDateTime.now();
-    }
-
 
     @ManyToOne
     @JoinColumn(name = "roleId")

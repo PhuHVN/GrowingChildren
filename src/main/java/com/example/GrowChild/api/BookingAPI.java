@@ -2,7 +2,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.entity.request.BookingRequest;
-import com.example.GrowChild.entity.respone.Booking;
+import com.example.GrowChild.entity.response.Booking;
 import com.example.GrowChild.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class BookingAPI {
     }
 
     @PutMapping("updateBooking")
-    public Booking updateBooking(@RequestParam long bookId,@RequestParam String comment){
+    public Booking updateBooking(@RequestBody long bookId,@RequestBody String comment){
         return bookingService.updateBooking(bookId,comment);
     }
 
@@ -81,6 +81,10 @@ public class BookingAPI {
     }
 
 
-
+    @PutMapping("bookingDone")
+    public String bookingDone(@RequestParam long scheduleId,@RequestParam long bookingId){
+        bookingService.bookingDone(scheduleId,bookingId);
+        return "Success";
+    }
 
 }

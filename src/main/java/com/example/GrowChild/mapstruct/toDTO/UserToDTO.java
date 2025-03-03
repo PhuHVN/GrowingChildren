@@ -1,7 +1,7 @@
 package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.User;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -21,6 +21,7 @@ public interface UserToDTO {
                 .gender(user.getGender())
                 .address(user.getAddress())
                 .roleName(user.getRole() != null ? user.getRole().getRoleName() : null)
+                .membership(user.getMembership()!= null ?user.getMembership().getType():null)
                 .isDelete(user.isDelete())
                 .build();
     }

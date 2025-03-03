@@ -2,9 +2,9 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.enumStatus.MembershipType;
-import com.example.GrowChild.entity.respone.OTP;
-import com.example.GrowChild.entity.respone.Role;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.OTP;
+import com.example.GrowChild.entity.response.Role;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.UserToDTO;
 import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +41,11 @@ public class UserService {
 
     //Register
     public User register(User user, long role_id) {
-        if(userRepository.findByUsername(user.getUsername()) != null){
+        if (userRepository.findByUsername(user.getUsername()) != null) {
             throw new IllegalArgumentException("Username: " + user.getUsername() + " is exist!");
         }
-        if(user.getEmail() != null && userRepository.existsByEmail(user.getEmail())){
-            throw new IllegalArgumentException("Email: "+user.getEmail()+" is exist!");
+        if (user.getEmail() != null && userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email: " + user.getEmail() + " is exist!");
         }
 
         user.setDelete(false);
@@ -60,7 +60,8 @@ public class UserService {
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.getPassword()));
-        if(user.getRole().getRoleName().equals("Parent")){
+
+        if (user.getRole().getRoleName().equals("Parent")) {
             user.setMembership(membershipService.getMembershipByType(MembershipType.DEFAULT));
         }
         // username field not null
@@ -133,6 +134,10 @@ public class UserService {
         return userToDTO.toDTOList(users);
     }
 
+    public List<User> getUser_Admin() {
+       return userRepository.findAll();
+
+    }
     //getUserByID
     public UserDTO getUserById(String userID) {
         User user = getUser(userID);
@@ -144,7 +149,7 @@ public class UserService {
     }
 
 
-    protected User getUser(String userID) {
+    public User getUser(String userID) {
         return userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("Parent not found"));
     }
@@ -154,7 +159,7 @@ public class UserService {
         User userExist = getUser(userId); //call fun getId to match user
         userExist.setFullName(user.getFullName());
         userExist.setPhone(user.getPhone());
-        if(userExist.getEmail().isEmpty()){
+        if (userExist.getEmail() == null || userExist.getEmail().isEmpty()) {
             userExist.setEmail(user.getEmail());
         }
         userExist.setAddress(user.getAddress());
@@ -208,6 +213,7 @@ public class UserService {
         List<User> users = userRepository.findByRole_RoleName(roleName);
         return userToDTO.toDTOList(users);
     }
+
 
 
 }

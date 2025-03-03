@@ -2,6 +2,7 @@
 package com.example.GrowChild.dto;
 
 
+import com.example.GrowChild.entity.enumStatus.MembershipType;
 import lombok.*;
 
 @Getter
@@ -20,6 +21,7 @@ public class UserDTO {
     private String gender;
     private String address;
     private String roleName;
+    private MembershipType membership;
     private boolean isDelete;
 
 

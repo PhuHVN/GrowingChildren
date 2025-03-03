@@ -2,13 +2,12 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.ScheduleDTO;
 import com.example.GrowChild.entity.request.ScheduleRequest;
-import com.example.GrowChild.entity.respone.ScheduleDoctor;
+import com.example.GrowChild.entity.response.ScheduleDoctor;
 import com.example.GrowChild.service.ScheduleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public class ScheduleAPI {
     @PostMapping("createSchedule")
     public ResponseEntity createSchedule(@Valid @RequestBody ScheduleRequest scheduleDoctor, @RequestParam String doctor) {
         boolean isCreated = scheduleService.createSchedule(scheduleDoctor, doctor);
-
         if (!isCreated) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating schedule!");
         }
@@ -51,13 +49,13 @@ public class ScheduleAPI {
     }
 
     @GetMapping("scheduleDoctor")
-    public ScheduleDTO getSchedule(@PathVariable String doctorId) {
+    public List<ScheduleDTO> getSchedule(@RequestParam String doctorId) {
         return scheduleService.getScheduleByDoctorId(doctorId);
     }
 
     @PutMapping("schedule/{scheduleId}")
-    public ScheduleDTO updateSchedule(@Valid @RequestBody ScheduleDoctor scheduleDoctor , @PathVariable long scheduleId){
-        return scheduleService.updateSchedule(scheduleDoctor,scheduleId);
+    public ScheduleDTO updateSchedule(@Valid @RequestBody ScheduleDoctor scheduleDoctor, @PathVariable long scheduleId) {
+        return scheduleService.updateSchedule(scheduleDoctor, scheduleId);
     }
 
     @DeleteMapping("deleteSchedule-admin/{scheduleId}")
@@ -67,8 +65,9 @@ public class ScheduleAPI {
 
     @DeleteMapping("deleteSchedule/{scheduleId}")
     public String deleteSchedule(@PathVariable long scheduleId, @RequestParam String doctorId) {
-        return scheduleService.deleteSchedule(scheduleId,doctorId);
+        return scheduleService.deleteSchedule(scheduleId, doctorId);
     }
+
 
 
 }
