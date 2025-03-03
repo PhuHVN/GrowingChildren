@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 import com.example.GrowChild.entity.enumStatus.BookingStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;

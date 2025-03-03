@@ -2,9 +2,9 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.UserDTO;
 import com.example.GrowChild.entity.enumStatus.MembershipType;
-import com.example.GrowChild.entity.respone.OTP;
-import com.example.GrowChild.entity.respone.Role;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.OTP;
+import com.example.GrowChild.entity.response.Role;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.UserToDTO;
 import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,6 +134,10 @@ public class UserService {
         return userToDTO.toDTOList(users);
     }
 
+    public List<User> getUser_Admin() {
+       return userRepository.findAll();
+
+    }
     //getUserByID
     public UserDTO getUserById(String userID) {
         User user = getUser(userID);
@@ -145,7 +149,7 @@ public class UserService {
     }
 
 
-    protected User getUser(String userID) {
+    public User getUser(String userID) {
         return userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("Parent not found"));
     }

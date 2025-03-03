@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

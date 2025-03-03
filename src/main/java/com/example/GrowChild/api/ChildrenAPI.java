@@ -1,7 +1,7 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.ChildDTO;
-import com.example.GrowChild.entity.respone.Children;
+import com.example.GrowChild.entity.response.Children;
 import com.example.GrowChild.entity.request.ChildrenRequest;
 import com.example.GrowChild.service.ChildrenService;
 import jakarta.validation.Valid;

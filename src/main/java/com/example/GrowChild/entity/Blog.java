@@ -1,7 +1,7 @@
 package com.example.GrowChild.entity;
 
 
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

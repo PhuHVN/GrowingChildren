@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;

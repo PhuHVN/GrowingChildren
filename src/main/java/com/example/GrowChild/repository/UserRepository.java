@@ -1,7 +1,7 @@
 package com.example.GrowChild.repository;
 
 
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

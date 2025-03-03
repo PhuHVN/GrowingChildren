@@ -1,7 +1,7 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.entity.enumStatus.MembershipType;
-import com.example.GrowChild.entity.respone.Membership;
+import com.example.GrowChild.entity.response.Membership;
 import com.example.GrowChild.service.MembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

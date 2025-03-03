@@ -2,7 +2,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.entity.request.BookingRequest;
-import com.example.GrowChild.entity.respone.Booking;
+import com.example.GrowChild.entity.response.Booking;
 import com.example.GrowChild.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

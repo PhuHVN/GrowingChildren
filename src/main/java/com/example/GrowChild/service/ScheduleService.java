@@ -2,8 +2,8 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ScheduleDTO;
 import com.example.GrowChild.entity.request.ScheduleRequest;
-import com.example.GrowChild.entity.respone.ScheduleDoctor;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.ScheduleDoctor;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.ScheduleToDTO;
 import com.example.GrowChild.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ChildDTO;
-import com.example.GrowChild.entity.respone.Children;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.Children;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.entity.request.ChildrenRequest;
 import com.example.GrowChild.mapstruct.toDTO.ChildToDTO;
 import com.example.GrowChild.repository.ChildrenRepository;

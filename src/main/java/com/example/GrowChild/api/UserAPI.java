@@ -1,7 +1,7 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.service.EmailSenderService;
 import com.example.GrowChild.service.UserService;
 import jakarta.validation.Valid;
@@ -41,6 +41,10 @@ public class UserAPI {
         return userService.getUserByGmail(email);
     }
 
+    @GetMapping("getUser_admin")
+    public List<User> getUser_admin(){
+        return userService.getUser_Admin();
+    }
     @GetMapping("getUser")
     public List<UserDTO> getUser() {
         return userService.getUser();
@@ -58,7 +62,6 @@ public class UserAPI {
     }
 
     //deleteBId
-
     @DeleteMapping("deleteUser/{userId}")
     public String deleteUser(@PathVariable("userId") String userId) {
         userService.deleteUser(userId);

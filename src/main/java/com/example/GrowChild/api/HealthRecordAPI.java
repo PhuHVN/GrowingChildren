@@ -1,7 +1,7 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.RecordDTO;
-import com.example.GrowChild.entity.respone.HealthRecord;
+import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.request.HealthRecordRequest;
 import com.example.GrowChild.service.HealthRecordService;
 import jakarta.validation.Valid;

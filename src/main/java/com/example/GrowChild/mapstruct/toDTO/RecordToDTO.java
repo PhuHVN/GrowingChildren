@@ -1,7 +1,7 @@
 package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.RecordDTO;
-import com.example.GrowChild.entity.respone.HealthRecord;
+import com.example.GrowChild.entity.response.HealthRecord;
 import org.mapstruct.Mapper;
 
 import java.util.List;

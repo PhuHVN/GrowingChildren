@@ -4,7 +4,7 @@ import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.Blog;
 
 
-import com.example.GrowChild.entity.respone.User;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.BlogMapper;
 import com.example.GrowChild.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.RoleDTO;
-import com.example.GrowChild.entity.respone.Role;
+import com.example.GrowChild.entity.response.Role;
 import com.example.GrowChild.mapstruct.toDTO.RoleToDTO;
 import com.example.GrowChild.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

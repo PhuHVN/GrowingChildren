@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;

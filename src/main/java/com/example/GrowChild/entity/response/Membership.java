@@ -1,11 +1,9 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 import com.example.GrowChild.entity.enumStatus.MembershipType;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 @Entity
 @Getter

@@ -1,4 +1,4 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 
 import com.example.GrowChild.entity.Blog;
@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
