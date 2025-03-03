@@ -2,7 +2,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.FeedBackDTO;
 import com.example.GrowChild.dto.ShareRecordDTO;
-import com.example.GrowChild.entity.respone.ShareRecord;
+import com.example.GrowChild.entity.response.ShareRecord;
 import com.example.GrowChild.service.ShareRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,20 +35,31 @@ public class ShareRecordAPI {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    @GetMapping("getALl")
-    public List<ShareRecordDTO> getAllShareRecord(){
-        return shareRecordService.getAll();}
 
-    @GetMapping("getShareRecordId/{shareRecord_id}")
-    public ShareRecordDTO getShareRecordById(@PathVariable long shareRecord_id){
-        return shareRecordService.getShareRecordById(shareRecord_id);
-    }
 
     @GetMapping("/consulting/{consultingId}")
     public ResponseEntity<List<ShareRecord>> getSharedRecords(@PathVariable Long consultingId) {
         return ResponseEntity.ok(shareRecordService.getSharedRecordsByConsulting(consultingId));
     }
-    @DeleteMapping("deleteShareRecord/{shareRecord_id}")
-    public String deleteShareRecord(@RequestParam long shareRecord_id){
-        return shareRecordService.deleteShareRecord(shareRecord_id);}
+
+
+    @GetMapping("/all")
+    public ResponseEntity<List<ShareRecordDTO>> getAllSharedRecords() {
+        // Gọi service để lấy tất cả các bản ghi
+        List<ShareRecordDTO> allSharedRecords = shareRecordService.getAll();
+        return ResponseEntity.ok(allSharedRecords);  // Trả về danh sách ShareRecordDTO
+    }
+
+
+    @DeleteMapping("/deleteShareRecord/{shareRecordId}")
+    public ResponseEntity<String> deleteShareRecord(@PathVariable long shareRecordId) {
+        try {
+            // Gọi service để xóa bản ghi
+            String response = shareRecordService.deleteShareRecord(shareRecordId);
+            return ResponseEntity.ok(response);  // Trả về thông báo xóa thành công
+        } catch (RuntimeException e) {
+            // Trả về thông báo lỗi nếu không tìm thấy bản ghi
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

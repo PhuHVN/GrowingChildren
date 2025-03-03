@@ -3,7 +3,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.FeedBackDTO;
 import com.example.GrowChild.entity.request.FeedBackRequest;
-import com.example.GrowChild.entity.respone.FeedBack;
+import com.example.GrowChild.entity.response.FeedBack;
 import com.example.GrowChild.service.FeedBackService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

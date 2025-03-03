@@ -1,7 +1,7 @@
 package com.example.GrowChild.dto;
 
-import com.example.GrowChild.entity.respone.Consulting;
-import com.example.GrowChild.entity.respone.HealthRecord;
+import com.example.GrowChild.entity.response.Consulting;
+import com.example.GrowChild.entity.response.HealthRecord;
 import lombok.*;
 
 @AllArgsConstructor

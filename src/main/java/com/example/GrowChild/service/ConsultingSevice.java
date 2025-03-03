@@ -2,7 +2,7 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ConsultingDTO;
 import com.example.GrowChild.entity.request.ConsultingRequest;
-import com.example.GrowChild.entity.respone.*;
+import com.example.GrowChild.entity.response.*;
 import com.example.GrowChild.mapstruct.toDTO.ConsultingToDTO;
 import com.example.GrowChild.repository.ConsultingRepository;
 import org.springframework.beans.factory.annotation.Autowired;

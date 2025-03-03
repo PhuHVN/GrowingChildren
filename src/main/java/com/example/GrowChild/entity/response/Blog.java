@@ -1,10 +1,9 @@
-package com.example.GrowChild.entity.respone;
+package com.example.GrowChild.entity.response;
 
 
-<<<<<<< HEAD:src/main/java/com/example/GrowChild/entity/respone/Blog.java
-=======
+
 import com.example.GrowChild.entity.response.User;
->>>>>>> 0161734bcc285e1307519c6de4dad9e3d9a671f2:src/main/java/com/example/GrowChild/entity/Blog.java
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

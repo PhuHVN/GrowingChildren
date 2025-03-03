@@ -1,7 +1,7 @@
 package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.BlogDTO;
-import com.example.GrowChild.entity.respone.Blog;
+import com.example.GrowChild.entity.response.Blog;
 import org.mapstruct.Mapper;
 
 import java.util.List;

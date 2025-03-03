@@ -1,7 +1,7 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.BlogDTO;
-import com.example.GrowChild.entity.respone.Blog;
+import com.example.GrowChild.entity.response.Blog;
 
 import com.example.GrowChild.mapstruct.toDTO.BlogToDTO;
 

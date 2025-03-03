@@ -3,10 +3,10 @@ package com.example.GrowChild.service;
 import com.example.GrowChild.dto.ConsultingDTO;
 import com.example.GrowChild.dto.FeedBackDTO;
 import com.example.GrowChild.dto.ShareRecordDTO;
-import com.example.GrowChild.entity.respone.Consulting;
-import com.example.GrowChild.entity.respone.FeedBack;
-import com.example.GrowChild.entity.respone.HealthRecord;
-import com.example.GrowChild.entity.respone.ShareRecord;
+import com.example.GrowChild.entity.response.Consulting;
+import com.example.GrowChild.entity.response.FeedBack;
+import com.example.GrowChild.entity.response.HealthRecord;
+import com.example.GrowChild.entity.response.ShareRecord;
 import com.example.GrowChild.mapstruct.toDTO.ShareRecordToDTO;
 import com.example.GrowChild.repository.ConsultingRepository;
 import com.example.GrowChild.repository.HealthRecordRepository;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ShareRecordService {
@@ -52,26 +53,28 @@ public class ShareRecordService {
     public List<ShareRecord> getSharedRecordsByConsulting(Long consultingId) {
         return shareRecordRepository.findByConsulting_ConsultingId(consultingId);
     }
-    public List<ShareRecordDTO> getAll(){
-        List<ShareRecord> list = shareRecordRepository.findShareRecordByIsDeleteFalse();
-        return shareRecordToDTO.toDTOList(list);
+    public List<ShareRecordDTO> getAll() {
+        // Lấy tất cả bản ghi chưa bị xóa
+        List<ShareRecord> shareRecords = shareRecordRepository.findShareRecordByIsDeleteFalse();
+
+        // Chuyển đổi danh sách ShareRecord sang ShareRecordDTO
+        return shareRecords.stream()
+                .map(shareRecordToDTO::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public ShareRecordDTO getShareRecordById(long shareRecord_id){
-        ShareRecord existRecord = getShareRecordByIsDeleteAndShareRecordId(shareRecord_id);
-        if(existRecord == null){
-            throw new RuntimeException("Share record not found!");
-        }
-        return shareRecordToDTO.toDTO(existRecord);
-    }
 
-    private ShareRecord getShareRecordByIsDeleteAndShareRecordId(long shareRecord_id){
-        return shareRecordRepository.findShareRecordByIsDelete_ShareRecordId(shareRecord_id);
-    }
-    public String deleteShareRecord(long shareRecord_id){
-        ShareRecord existShareRecord = getShareRecordByIsDeleteAndShareRecordId(shareRecord_id);
-        existShareRecord.setDelete(true);
-        shareRecordRepository.save(existShareRecord);
-        return "Delete Successfully!";
+    public String deleteShareRecord(long shareRecordId) {
+        // Lấy bản ghi từ repository
+        ShareRecord recordToDelete = shareRecordRepository.findById(shareRecordId)
+                .orElseThrow(() -> new RuntimeException("Share record not found"));
+
+        // Đánh dấu bản ghi là đã xóa
+        recordToDelete.setDelete(true);
+
+        // Lưu bản ghi đã được cập nhật
+        shareRecordRepository.save(recordToDelete);
+
+        return "Delete successfully!";
     }
 }

@@ -1,7 +1,7 @@
 package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.ShareRecordDTO;
-import com.example.GrowChild.entity.respone.ShareRecord;
+import com.example.GrowChild.entity.response.ShareRecord;
 import org.mapstruct.Mapper;
 
 import java.util.List;
