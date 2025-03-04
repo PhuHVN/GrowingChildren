@@ -37,9 +37,9 @@ public class BookingService {
             throw new IllegalArgumentException("This schedule not found!");
         }
         if (scheduleDoctor.isBooking()) {
-            throw new IllegalArgumentException("This book already booking");
+            throw new IllegalArgumentException("This book is already booked");
         }
-        scheduleDoctor.setBooking(true);
+
         Booking booking = Booking.builder()
                 .schedule(scheduleDoctor)
                 .parent(parent)
@@ -48,6 +48,7 @@ public class BookingService {
                 .bookingStatus(BookingStatus.PENDING)
                 .build();
 
+        scheduleDoctor.setBooking(true);
         bookingRepository.save(booking);
         return true;
     }
@@ -137,9 +138,23 @@ public class BookingService {
         return "Delete Successful!";
     }
 
-    public void bookingDone(long scheduleId) {
+    //set schedule booking false for scheduleId
+    public void scheduleBookingDone(long scheduleId) {
         ScheduleDoctor doctor = scheduleService.getScheduleById(scheduleId);
         doctor.setBooking(false);
+    }
+
+
+    //Booking complete for bookingId
+    public boolean bookingComplete( long bookingId){
+        Booking booking = getBookingById(bookingId);
+        if(booking.getBookingStatus().equals(BookingStatus.CONFIRMED)){
+            throw new IllegalArgumentException("Booking is confirmed!");
+        }
+        booking.setBookingStatus(BookingStatus.COMPLETED);
+        booking.getSchedule().setBooking(false);
+        bookingRepository.save(booking);
+        return false;
     }
 
 }

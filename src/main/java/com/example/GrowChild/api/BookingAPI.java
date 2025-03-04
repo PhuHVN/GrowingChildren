@@ -83,7 +83,13 @@ public class BookingAPI {
 
     @PutMapping("bookingDone")
     public String bookingDone(@RequestParam long scheduleId){
-        bookingService.bookingDone(scheduleId);
+        bookingService.scheduleBookingDone(scheduleId);
+        return "Success";
+    }
+
+    @PutMapping("completeBooking")
+    public String completeBooking(@RequestParam long bookId){
+        bookingService.bookingComplete(bookId);
         return "Success";
     }
 
