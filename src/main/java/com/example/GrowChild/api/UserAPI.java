@@ -1,9 +1,9 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.User;
-import com.example.GrowChild.service.UserService;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.service.EmailSenderService;
+import com.example.GrowChild.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,24 +23,34 @@ public class UserAPI {
 
     @PostMapping("register/{role_id}")
     public String register(@Valid @RequestBody User user, @PathVariable long role_id) {
-    try {
-        User newUser = userService.register(user, role_id);
-        if(newUser != null){ // username return != null
-            return "ok " + newUser.toString(); //.ok tra ve status 200-ok khi call api
+        try {
+            User newUser = userService.register(user, role_id);
+
+            if (newUser != null) { // username return != null
+                return "ok " + newUser.toString(); //.ok tra ve status 200-ok khi call api
+            }
+            return "user register by Gmail"; // return
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
-        return "user register by Gmail"; // return
-    } catch (Exception e) {
-        throw new RuntimeException(e.getMessage());
-    }
 
     }
 
+    @GetMapping("gmail/{email}")
+    public User getUserByGmail(@PathVariable String email) {
+        return userService.getUserByGmail(email);
+    }
+
+    @GetMapping("getUser_admin")
+    public List<User> getUser_admin(){
+        return userService.getUser_Admin();
+    }
     @GetMapping("getUser")
     public List<UserDTO> getUser() {
         return userService.getUser();
     }
 
-    @GetMapping("getUserById/{userId}")
+    @GetMapping("user/{userId}")
     public UserDTO getUserById(@PathVariable("userId") String userId) {
         return userService.getUserById(userId);
     }
@@ -52,7 +62,6 @@ public class UserAPI {
     }
 
     //deleteBId
-
     @DeleteMapping("deleteUser/{userId}")
     public String deleteUser(@PathVariable("userId") String userId) {
         userService.deleteUser(userId);
@@ -80,14 +89,13 @@ public class UserAPI {
         return userService.getUserByRole(role_id);
     }
 
-    @GetMapping("getUserByRoleName/{role_name}")
-    public List<UserDTO> getUserByRoleName(@PathVariable String role_name){
+    @GetMapping("getUserByRoleName")
+    public List<UserDTO> getUserByRoleName(@RequestParam String role_name) {
         return userService.getUserByRoleName(role_name);
     }
 
     @PostMapping("verifyOtp")
-    public String verifyOtp(@RequestParam String email, @RequestParam String enterCode){
-
-            return userService.verifyOtp(email, enterCode);
+    public String verifyOtp(@RequestParam String email, @RequestParam String enterCode) {
+        return userService.verifyOtp(email, enterCode);
     }
 }

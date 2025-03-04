@@ -29,4 +29,8 @@ public class ExceptionHandle {
     ResponseEntity handIlleDuplicate(SQLIntegrityConstraintViolationException e){
         return new ResponseEntity("Duplicate!",HttpStatus.BAD_REQUEST);
     }
+
 }
+
+
+

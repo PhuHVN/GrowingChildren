@@ -1,17 +1,15 @@
-package com.example.GrowChild.mapstruct;
+package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.User;
+import com.example.GrowChild.entity.response.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 
-public interface UserMapstruct {
+public interface UserToDTO {
 
     default UserDTO toDTO(User user) {
         return UserDTO.builder()
@@ -21,7 +19,9 @@ public interface UserMapstruct {
                 .fullName(user.getFullName())
                 .phone(user.getPhone())
                 .gender(user.getGender())
+                .address(user.getAddress())
                 .roleName(user.getRole() != null ? user.getRole().getRoleName() : null)
+                .membership(user.getMembership()!= null ?user.getMembership().getType():null)
                 .isDelete(user.isDelete())
                 .build();
     }
@@ -33,6 +33,7 @@ public interface UserMapstruct {
                 .email(userDTO.getEmail())
                 .fullName(userDTO.getFullName())
                 .phone(userDTO.getPhone())
+                .address(userDTO.getAddress())
                 .gender(userDTO.getGender())
                 .isDelete(userDTO.isDelete())
                 .build();

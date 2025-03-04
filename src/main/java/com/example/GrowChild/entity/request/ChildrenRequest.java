@@ -1,33 +1,25 @@
-package com.example.GrowChild.entity;
+package com.example.GrowChild.entity.request;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
-@Entity
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Children {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long childrenId;
+@NoArgsConstructor
+public class ChildrenRequest {
 
     @NotBlank(message = "Name children not blank!")
-    public String username;
+    public String childrenName;
 
     @Min(value = 0,message = "Age greater than 0")
+    @Max(value = 20)
     public int age;
 
     @Column(nullable = false)
     public String gender;
-
-    public boolean isDelete = false;
-
-    public String parentId;
-
 }

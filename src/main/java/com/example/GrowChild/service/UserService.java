@@ -1,12 +1,12 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.OTP;
-import com.example.GrowChild.entity.Role;
-import com.example.GrowChild.entity.User;
-import com.example.GrowChild.mapstruct.UserMapstruct;
+import com.example.GrowChild.entity.enumStatus.MembershipType;
+import com.example.GrowChild.entity.response.OTP;
+import com.example.GrowChild.entity.response.Role;
+import com.example.GrowChild.entity.response.User;
+import com.example.GrowChild.mapstruct.toDTO.UserToDTO;
 import com.example.GrowChild.repository.UserRepository;
-import com.example.GrowChild.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,16 +24,16 @@ public class UserService {
     @Autowired
     EmailSenderService senderService;
     @Autowired
-    RoleRepository roleRepository;
-    @Autowired
     RoleService roleService;
     @Autowired
-    UserMapstruct userMapstruct;
+    UserToDTO userToDTO;
+    @Autowired
+    MembershipService membershipService;
 
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    Map<String, User> storeUser = new HashMap<>();
+    Map<String, User> storeUser = new HashMap<>(); //store User with key email
 
     public UserService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -41,6 +41,14 @@ public class UserService {
 
     //Register
     public User register(User user, long role_id) {
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new IllegalArgumentException("Username: " + user.getUsername() + " is exist!");
+        }
+        if (user.getEmail() != null && userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email: " + user.getEmail() + " is exist!");
+        }
+
+        user.setDelete(false);
 
         //check role exist
         Role role = roleService.getRoleExisted(role_id);
@@ -51,9 +59,11 @@ public class UserService {
 
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
-        user.setPassword(hashPass.encode(user.password));
+        user.setPassword(hashPass.encode(user.getPassword()));
 
-
+        if (user.getRole().getRoleName().equals("Parent")) {
+            user.setMembership(membershipService.getMembershipByType(MembershipType.DEFAULT));
+        }
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {
             return userRepository.save(user); //create row in db
@@ -67,6 +77,7 @@ public class UserService {
             return null; //save in map so use null
         }
 
+
         throw new RuntimeException("Invalid register !");
     }
 
@@ -78,11 +89,8 @@ public class UserService {
         otpStore.put(email, otp); // add in map
     }
 
-
     public String verifyOtp(String email, String code) {
-
         OTP otp = otpStore.get(email); //get otp from key
-
         if (otp == null) {
             return "OTP not found!?";
         }
@@ -94,7 +102,6 @@ public class UserService {
             return "OTP invalid!";
         }
         User user = storeUser.remove(email); // take user
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user); //save db when otp verify
         otpStore.remove(email, otp); // remove otp out map
         return "Authentication OTP successful ";
@@ -104,39 +111,45 @@ public class UserService {
 
     //Login
     public UserDTO loginByUsername(String username, String password) {
-
         User user = userRepository.findByUsername(username);
-
-        if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
-            return userMapstruct.toDTO(user);
+        if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            return userToDTO.toDTO(user);
         }
         //pass string encode to match pass hash
         return null;
     }
 
     public UserDTO loginByEmail(String email, String password) {
-        User user = userRepository.findByEmail(email);
+        User user = getUserByGmail(email);
+        if (user == null) return null;
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) return null;
 
-        if (user != null && bCryptPasswordEncoder.matches(password, user.password)) {
-            return userMapstruct.toDTO(user);
-        }
-        return null;
+        return userToDTO.toDTO(user);
+
     }
 
     //getAllUser
     public List<UserDTO> getUser() {
         List<User> users = userRepository.findAll();
-        return userMapstruct.toDTOList(users);
+        return userToDTO.toDTOList(users);
     }
 
+    public List<User> getUser_Admin() {
+       return userRepository.findAll();
+
+    }
     //getUserByID
     public UserDTO getUserById(String userID) {
         User user = getUser(userID);
-
-        return userMapstruct.toDTO(user);
+        return userToDTO.toDTO(user);
     }
 
-    private User getUser(String userID) {
+    public User getUserByGmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+
+    public User getUser(String userID) {
         return userRepository.findById(userID)
                 .orElseThrow(() -> new RuntimeException("Parent not found"));
     }
@@ -144,22 +157,22 @@ public class UserService {
     //update user by ID
     public UserDTO updateUser(String userId, User user) {
         User userExist = getUser(userId); //call fun getId to match user
-        userExist = User.builder()
-                .fullName(user.getFullName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .gender(user.getGender())
-                .build();
+        userExist.setFullName(user.getFullName());
+        userExist.setPhone(user.getPhone());
+        if (userExist.getEmail() == null || userExist.getEmail().isEmpty()) {
+            userExist.setEmail(user.getEmail());
+        }
+        userExist.setAddress(user.getAddress());
+
         User updateUser = userRepository.save(userExist);
 
-        return userMapstruct.toDTO(updateUser);
+        return userToDTO.toDTO(updateUser);
     }
 
     //Delete User
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
-
 
 
     //change password
@@ -172,7 +185,7 @@ public class UserService {
             throw new IllegalArgumentException("User not found !");
         }
 
-        if (!new BCryptPasswordEncoder().matches(oldPassword, user.password)) { // check pass user to match with pass input when encode
+        if (!new BCryptPasswordEncoder().matches(oldPassword, user.getPassword())) { // check pass user to match with pass input when encode
             throw new IllegalArgumentException("Old password incorrect");
         }
 
@@ -187,18 +200,21 @@ public class UserService {
     //Check role user by userId
     public String checkRole(String user_id) {
         User user = getUser(user_id);
-        return user.getRole().roleName;
+        return user.getRole().getRoleName();
     }
 
     //Get User by RoleID
     public List<UserDTO> getUserByRole(long role_id) {
         List<User> users = userRepository.findByRole_RoleId(role_id);
-        return userMapstruct.toDTOList(users);
+        return userToDTO.toDTOList(users);
     }
 
     public List<UserDTO> getUserByRoleName(String roleName) {
         List<User> users = userRepository.findByRole_RoleName(roleName);
-        return userMapstruct.toDTOList(users);
+        return userToDTO.toDTOList(users);
     }
+
+
+
 }
 

@@ -1,15 +1,15 @@
-package com.example.GrowChild.mapstruct;
+package com.example.GrowChild.mapstruct.toDTO;
 
 
 import com.example.GrowChild.dto.RoleDTO;
-import com.example.GrowChild.entity.Role;
+import com.example.GrowChild.entity.response.Role;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
-public interface RoleMapper {
+public interface RoleToDTO {
 
     default RoleDTO toDTO(Role role) {
         return RoleDTO.builder()
