@@ -2,6 +2,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.entity.request.BookingRequest;
+import com.example.GrowChild.entity.request.UpdateBookingRequest;
 import com.example.GrowChild.entity.response.Booking;
 import com.example.GrowChild.service.BookingService;
 import jakarta.validation.Valid;
@@ -63,8 +64,8 @@ public class BookingAPI {
     }
 
     @PutMapping("updateBooking")
-    public Booking updateBooking(@RequestBody long bookId,@RequestBody String comment){
-        return bookingService.updateBooking(bookId,comment);
+    public Booking updateBooking(@RequestBody UpdateBookingRequest bookingRequest){
+        return bookingService.updateBooking(bookingRequest);
     }
 
 

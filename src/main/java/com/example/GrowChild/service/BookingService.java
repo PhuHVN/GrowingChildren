@@ -3,6 +3,7 @@ package com.example.GrowChild.service;
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.entity.enumStatus.BookingStatus;
 import com.example.GrowChild.entity.request.BookingRequest;
+import com.example.GrowChild.entity.request.UpdateBookingRequest;
 import com.example.GrowChild.entity.response.Booking;
 import com.example.GrowChild.entity.response.ScheduleDoctor;
 import com.example.GrowChild.entity.response.User;
@@ -65,7 +66,7 @@ public class BookingService {
         return bookToDTO.toDTO(getBookingById(id));
     }
 
-    protected Booking getBookingById(long id) {
+    protected Booking   getBookingById(long id) {
         return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found!"));
     }
 
@@ -112,10 +113,10 @@ public class BookingService {
         return bookToDTO.toDTO(confirmBooking);
     }
 
-    public Booking updateBooking(long id, String comment) {
-        Booking booking = getBookingById(id);
+    public Booking updateBooking(UpdateBookingRequest bookingRequest) {
+        Booking booking = getBookingById(bookingRequest.getId());
         if (booking == null) throw new RuntimeException("Booking not found!");
-        booking.setComment(comment);
+        booking.setComment(bookingRequest.getComment());
         bookingRepository.save(booking);
         return booking;
     }
