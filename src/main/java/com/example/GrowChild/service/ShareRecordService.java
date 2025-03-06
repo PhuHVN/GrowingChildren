@@ -1,15 +1,10 @@
 package com.example.GrowChild.service;
 
-import com.example.GrowChild.dto.ConsultingDTO;
-import com.example.GrowChild.dto.FeedBackDTO;
 import com.example.GrowChild.dto.ShareRecordDTO;
 import com.example.GrowChild.entity.response.Consulting;
-import com.example.GrowChild.entity.response.FeedBack;
 import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.response.ShareRecord;
 import com.example.GrowChild.mapstruct.toDTO.ShareRecordToDTO;
-import com.example.GrowChild.repository.ConsultingRepository;
-import com.example.GrowChild.repository.HealthRecordRepository;
 import com.example.GrowChild.repository.ShareRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,9 +45,11 @@ public class ShareRecordService {
         shareRecordRepository.save(shareRecord);
         return shareRecordToDTO.toDTO(shareRecord);
     }
+
     public List<ShareRecord> getSharedRecordsByConsulting(Long consultingId) {
         return shareRecordRepository.findByConsulting_ConsultingId(consultingId);
     }
+
     public List<ShareRecordDTO> getAll() {
         // Lấy tất cả bản ghi chưa bị xóa
         List<ShareRecord> shareRecords = shareRecordRepository.findShareRecordByIsDeleteFalse();

@@ -1,9 +1,6 @@
 package com.example.GrowChild.entity.response;
 
 
-
-import com.example.GrowChild.entity.response.User;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -31,14 +28,11 @@ public class Blog {
     public String content;
 
     public String fullName;
-
-    private LocalDateTime date;
-
     public boolean isDelete = false;
-
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
     public User parentId;
+    private LocalDateTime date;
 
     @PrePersist
     protected void onCreate() {

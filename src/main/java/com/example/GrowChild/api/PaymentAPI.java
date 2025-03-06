@@ -17,7 +17,7 @@ public class PaymentAPI {
     PaymentService paymentService;
 
     @GetMapping("getAllPayment")
-    public List<Payment> payment(){
+    public List<Payment> payment() {
         return paymentService.getPayments();
     }
 }

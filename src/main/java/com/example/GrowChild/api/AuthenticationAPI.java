@@ -7,7 +7,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
@@ -19,13 +22,13 @@ public class AuthenticationAPI {
     @PostMapping("login")
     public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
-            UserDTO user ;
-            if(loginRequest.getUsernameOrEmail().contains("@")){ //check is email?
-                user = userService.loginByEmail(loginRequest.getUsernameOrEmail(),loginRequest.getPassword());
-            }else{
-                user = userService.loginByUsername(loginRequest.getUsernameOrEmail(),loginRequest.getPassword());
+            UserDTO user;
+            if (loginRequest.getUsernameOrEmail().contains("@")) { //check is email?
+                user = userService.loginByEmail(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
+            } else {
+                user = userService.loginByUsername(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
             }
-            if(user == null){
+            if (user == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username/email or password ");
             }
             return ResponseEntity.ok(user);

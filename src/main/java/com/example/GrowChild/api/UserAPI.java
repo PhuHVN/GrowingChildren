@@ -27,7 +27,7 @@ public class UserAPI {
             User newUser = userService.register(user, role_id);
 
             if (newUser != null) { // username return != null
-                return "ok " + newUser.toString(); //.ok tra ve status 200-ok khi call api
+                return "ok " + newUser; //.ok tra ve status 200-ok khi call api
             }
             return "user register by Gmail"; // return
         } catch (Exception e) {
@@ -42,9 +42,10 @@ public class UserAPI {
     }
 
     @GetMapping("getUser_admin")
-    public List<User> getUser_admin(){
+    public List<User> getUser_admin() {
         return userService.getUser_Admin();
     }
+
     @GetMapping("getUser")
     public List<UserDTO> getUser() {
         return userService.getUser();

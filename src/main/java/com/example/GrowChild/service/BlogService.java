@@ -2,10 +2,7 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.response.Blog;
-
 import com.example.GrowChild.mapstruct.toDTO.BlogToDTO;
-
-
 import com.example.GrowChild.repository.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +22,9 @@ public class BlogService {
     @Autowired
     BlogToDTO blogToDTO;
 
-    public boolean createBlog(Blog blog, String parent_id){
+    public boolean createBlog(Blog blog, String parent_id) {
         com.example.GrowChild.entity.response.User parent = userService.getUser(parent_id);
-        if(parent == null || !parent.getRole().getRoleName().equals("Parent")){ // find parent
+        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) { // find parent
             throw new RuntimeException("Parent not found");
         }
         blog.setParentId(parent);
@@ -37,28 +34,27 @@ public class BlogService {
     }
 
 
-    public List<BlogDTO> getAll(){
+    public List<BlogDTO> getAll() {
         List<Blog> list = blogRepository.findBlogByIsDeleteFalse();
         return blogToDTO.toDTOList(list);
     }
 
 
-    public BlogDTO getBlogById(long blog_id){
+    public BlogDTO getBlogById(long blog_id) {
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
-        if(existBlog == null){
+        if (existBlog == null) {
             throw new RuntimeException("Blog not found!");
         }
         return blogToDTO.toDTO(existBlog);
     }
 
 
-    private Blog getBlogByIsDeleteFalseAndBlogID(long blog_id){
+    private Blog getBlogByIsDeleteFalseAndBlogID(long blog_id) {
         return blogRepository.findBlogByIsDeleteFalseAndBlogId(blog_id);
     }
 
 
-
-    public BlogDTO updateBlog(long blog_id, Blog blog){
+    public BlogDTO updateBlog(long blog_id, Blog blog) {
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
         existBlog = Blog.builder()
                 .blogId(existBlog.getBlogId())
@@ -75,7 +71,7 @@ public class BlogService {
     }
 
 
-    public String deleteBlog(long blog_id){
+    public String deleteBlog(long blog_id) {
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
         existBlog.setDelete(true);
         blogRepository.save(existBlog);

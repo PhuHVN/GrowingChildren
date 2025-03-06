@@ -16,7 +16,7 @@ public class ChildrenRequest {
     @NotBlank(message = "Name children not blank!")
     public String childrenName;
 
-    @Min(value = 0,message = "Age greater than 0")
+    @Min(value = 0, message = "Age greater than 0")
     @Max(value = 20)
     public int age;
 

@@ -66,7 +66,7 @@ public class BookingService {
         return bookToDTO.toDTO(getBookingById(id));
     }
 
-    protected Booking   getBookingById(long id) {
+    protected Booking getBookingById(long id) {
         return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found!"));
     }
 
@@ -147,9 +147,9 @@ public class BookingService {
 
 
     //Booking complete for bookingId
-    public boolean bookingComplete( long bookingId){
+    public boolean bookingComplete(long bookingId) {
         Booking booking = getBookingById(bookingId);
-        if(booking.getBookingStatus().equals(BookingStatus.CONFIRMED)){
+        if (booking.getBookingStatus().equals(BookingStatus.CONFIRMED)) {
             throw new IllegalArgumentException("Booking is confirmed!");
         }
         booking.setBookingStatus(BookingStatus.COMPLETED);

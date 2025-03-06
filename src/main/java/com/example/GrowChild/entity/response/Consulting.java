@@ -28,19 +28,19 @@ public class Consulting {
     public boolean isDelete = false;
 
     @ManyToOne
-    @JoinColumn(name = "booking_id",nullable = false)
+    @JoinColumn(name = "booking_id", nullable = false)
     public Booking bookingId;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id",nullable = false)
+    @JoinColumn(name = "doctor_id", nullable = false)
     public User doctorId;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id",nullable = false)
+    @JoinColumn(name = "parent_id", nullable = false)
     public User parentId;
 
     @ManyToOne
-    @JoinColumn(name = "child_id",nullable = false)
+    @JoinColumn(name = "child_id", nullable = false)
     public Children childId;
 
     public LocalDateTime date;

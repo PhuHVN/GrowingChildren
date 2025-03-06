@@ -69,22 +69,18 @@ public class User {
     @OneToMany(mappedBy = "blogId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     List<Blog> blog;
-
-    @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FeedBack> feedback;
-
     @OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     List<Booking> booking;
-
     @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     List<ScheduleDoctor> schedule;
-
     @ManyToOne
     @JoinColumn(name = "membership_id", nullable = true)
     @JsonIgnore
     Membership membership;
+    @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FeedBack> feedback;
 
     @Override
     public String toString() {

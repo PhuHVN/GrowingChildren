@@ -34,6 +34,7 @@ public class UserService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     Map<String, User> storeUser = new HashMap<>(); //store User with key email
+    private final Map<String, OTP> otpStore = new HashMap<>();
 
     public UserService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -80,8 +81,6 @@ public class UserService {
 
         throw new RuntimeException("Invalid register !");
     }
-
-    private Map<String, OTP> otpStore = new HashMap<>();
 
     public void saveOTP(String email, String code) {
         LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5); //time now + 5min = expiration time
@@ -135,9 +134,10 @@ public class UserService {
     }
 
     public List<User> getUser_Admin() {
-       return userRepository.findAll();
+        return userRepository.findAll();
 
     }
+
     //getUserByID
     public UserDTO getUserById(String userID) {
         User user = getUser(userID);
@@ -213,7 +213,6 @@ public class UserService {
         List<User> users = userRepository.findByRole_RoleName(roleName);
         return userToDTO.toDTOList(users);
     }
-
 
 
 }

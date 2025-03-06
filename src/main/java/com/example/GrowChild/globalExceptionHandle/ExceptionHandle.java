@@ -11,23 +11,23 @@ import java.sql.SQLIntegrityConstraintViolationException;
 @ControllerAdvice
 public class ExceptionHandle {
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity handleRuntimeException(RuntimeException e){
+    ResponseEntity handleRuntimeException(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    ResponseEntity handIllegalArgumentException(IllegalArgumentException e){
+    ResponseEntity handIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(SQLException.class)
-    ResponseEntity handIllegalArgumentException(SQLException e){
+    ResponseEntity handIllegalArgumentException(SQLException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
-    ResponseEntity handIlleDuplicate(SQLIntegrityConstraintViolationException e){
-        return new ResponseEntity("Duplicate!",HttpStatus.BAD_REQUEST);
+    ResponseEntity handIlleDuplicate(SQLIntegrityConstraintViolationException e) {
+        return new ResponseEntity("Duplicate!", HttpStatus.BAD_REQUEST);
     }
 
 }

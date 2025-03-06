@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface FeedBackRepository extends JpaRepository<FeedBack, Long> {
     List<FeedBack> findFeedbackByIsDeleteFalse();
+
     FeedBack findFeedbackByIsDeleteFalseAndFeedbackId(long feedbackId);
 }
