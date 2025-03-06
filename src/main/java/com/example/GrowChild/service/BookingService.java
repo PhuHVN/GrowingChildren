@@ -71,14 +71,14 @@ public class BookingService {
     }
 
     public List<BookingDTO> getBookingDTOPendingByDoctorId(String doctorId) {
-        List<BookingDTO> bookinPendingoctor = new ArrayList<>();
+        List<BookingDTO> bookingPendingDoctor = new ArrayList<>();
         List<BookingDTO> list = getBookingsDTO();
         for (BookingDTO bookingDTO : list) {
             if (bookingDTO.getDoctorId().equals(doctorId) && bookingDTO.getStatus().equals(BookingStatus.PENDING)) {
-                bookinPendingoctor.add(bookingDTO);
+                bookingPendingDoctor.add(bookingDTO);
             }
         }
-        return bookinPendingoctor;
+        return bookingPendingDoctor;
     }
 
     public List<BookingDTO> getBookingDTOByDoctorId(String doctorId) {
