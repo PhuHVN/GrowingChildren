@@ -174,6 +174,11 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public void deleteUser_User(String userId ) {
+        User user = getUser(userId);
+        user.setDelete(true);
+        userRepository.save(user);
+    }
 
     //change password
     public boolean changePassword(String userId, String oldPassword, String newPassword, String confirmPassword) {

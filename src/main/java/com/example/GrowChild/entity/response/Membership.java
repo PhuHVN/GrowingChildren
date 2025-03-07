@@ -18,7 +18,7 @@ public class Membership {
     Long membershipId;
 
     @Enumerated(EnumType.STRING)
-    private MembershipType type; // DEFAULT, LIFETIME
+    private MembershipType type; // DEFAULT, PREMIUM
 
     double price;
 

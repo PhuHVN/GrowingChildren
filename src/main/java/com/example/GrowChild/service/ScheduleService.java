@@ -94,7 +94,6 @@ public class ScheduleService {
         ScheduleDoctor scheduleDoctor = getScheduleById(scheduleId);
         scheduleRepository.delete(scheduleDoctor);
         return "Delete Successful!";
-
     }
 
 }

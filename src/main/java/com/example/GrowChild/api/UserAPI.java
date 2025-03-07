@@ -94,6 +94,11 @@ public class UserAPI {
     public List<UserDTO> getUserByRoleName(@RequestParam String role_name) {
         return userService.getUserByRoleName(role_name);
     }
+    @DeleteMapping("deleteUser_User/{userId}")
+    public String deleteUser_User(@PathVariable String userId) {
+        userService.deleteUser_User(userId);
+        return "Delete successful";
+    }
 
     @PostMapping("verifyOtp")
     public String verifyOtp(@RequestParam String email, @RequestParam String enterCode) {
