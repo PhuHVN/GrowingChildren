@@ -1,11 +1,14 @@
 package com.example.GrowChild.entity.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,5 +38,9 @@ public class Children {
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
     User parentId;
+
+    @OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    List<Booking> Booking;
 
 }

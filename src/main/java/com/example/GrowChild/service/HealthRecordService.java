@@ -45,7 +45,7 @@ public class HealthRecordService {
                 .child(child)
                 .height(healthRecordRequest.getHeight_m())
                 .weight(healthRecordRequest.getWeight_kg())
-                .date(LocalDate.now())
+                .date(healthRecordRequest.getDate())
                 .build();
 
         return healthRecordRepository.save(record);

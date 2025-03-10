@@ -29,6 +29,10 @@ public class Booking {
     @JoinColumn(name = "parent_id", nullable = false)
     User parent;
 
+    @ManyToOne
+    @JoinColumn(name = "children_id", nullable = false)
+    Children children;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime bookDate;
 
