@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ConsultingRepository extends JpaRepository<Consulting, Long> {
     List<Consulting> findConsultingByIsDeleteFalse();
+
     Consulting findConsultingByIsDeleteFalseAndConsultingId(long ConsultingId);
 }

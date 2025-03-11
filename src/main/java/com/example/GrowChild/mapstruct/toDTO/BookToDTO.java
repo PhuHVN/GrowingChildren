@@ -19,6 +19,7 @@ public interface BookToDTO {
                 .parentId(booking.getParent().getUser_id())
                 .bookDate(booking.getBookDate())
                 .scheduleWork(booking.getSchedule().getScheduleWork())
+                .scheduleDate(booking.getSchedule().getScheduleDate())
                 .comment(booking.getComment())
                 .status(booking.getBookingStatus())
                 .build();

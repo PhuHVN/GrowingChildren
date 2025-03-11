@@ -16,21 +16,22 @@ public class MembershipAPI {
     MembershipService membershipService;
 
     @PostMapping("createMembership")
-    public Membership createMembership (@RequestParam MembershipType type,@RequestParam double price){
-        return  membershipService.createPackage(type,price);
+    public Membership createMembership(@RequestParam MembershipType type, @RequestParam double price) {
+        return membershipService.createPackage(type, price);
     }
+
     @GetMapping("getAllMembership")
-    public List<Membership> getAll(){
+    public List<Membership> getAll() {
         return membershipService.getAll();
     }
 
     @GetMapping("getMembership")
-    public Membership getByType(@RequestParam MembershipType membershipType){
+    public Membership getByType(@RequestParam MembershipType membershipType) {
         return membershipService.getMembershipByType(membershipType);
     }
 
     @DeleteMapping("deleteMembership")
-    public String delete(@RequestParam MembershipType type){
+    public String delete(@RequestParam MembershipType type) {
         return membershipService.deletePackage(type);
     }
 }

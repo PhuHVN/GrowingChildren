@@ -1,9 +1,9 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.ChildDTO;
+import com.example.GrowChild.entity.request.ChildrenRequest;
 import com.example.GrowChild.entity.response.Children;
 import com.example.GrowChild.entity.response.User;
-import com.example.GrowChild.entity.request.ChildrenRequest;
 import com.example.GrowChild.mapstruct.toDTO.ChildToDTO;
 import com.example.GrowChild.repository.ChildrenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +20,6 @@ public class ChildrenService {
     UserService userService;
     @Autowired
     ChildToDTO childTODTO;
-
-
 
 
     public boolean createChild(ChildrenRequest childrenRequest, String userId) {
@@ -42,7 +40,7 @@ public class ChildrenService {
     }
 
     public List<Children> getAll_Admin() {
-       return childrenRepository.findAll();
+        return childrenRepository.findAll();
 
     }
 
@@ -91,11 +89,11 @@ public class ChildrenService {
         return "Delete Successful!";
     }
 
-    public List<ChildDTO> getChildByParentId(String parentId){
+    public List<ChildDTO> getChildByParentId(String parentId) {
         List<ChildDTO> childrenList = getAll();
         List<ChildDTO> list = new ArrayList<>();
-        for(ChildDTO childDTO : childrenList){
-            if(childDTO.getParentId().equals(parentId)){
+        for (ChildDTO childDTO : childrenList) {
+            if (childDTO.getParentId().equals(parentId)) {
                 list.add(childDTO);
             }
         }

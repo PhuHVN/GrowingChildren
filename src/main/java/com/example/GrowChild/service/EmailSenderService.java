@@ -17,8 +17,8 @@ public class EmailSenderService {
     @Autowired
     private UserRepository userRepository;
 
-    public String generateCode(){
-        return String.valueOf((int)(Math.random() * 1000000)); // random 6 char number
+    public String generateCode() {
+        return String.valueOf((int) (Math.random() * 1000000)); // random 6 char number
     }
 
 
@@ -31,7 +31,7 @@ public class EmailSenderService {
             msg.setTo(toMail); // to register user email
             msg.setSubject("Mã xác nhận đăng nhập Website Tracking Grow cho trẻ "); // title
 
-            msg.setText("Xin chào " + toMail +" ,\n" + // content
+            msg.setText("Xin chào " + toMail + " ,\n" + // content
                     "\n" +
                     "Chúng tôi rất vui được chào đón bạn đến với **Tracking Grow** " +
                     "\nPhần mềm hỗ trợ theo dõi và phát triển toàn diện dành cho trẻ! Đây là nền tảng giúp phụ huynh dễ dàng quản lý, theo dõi sức khỏe, chiều cao, cân nặng của trẻ.\n" +
@@ -39,7 +39,7 @@ public class EmailSenderService {
                     "---\n" +
                     "\n" +
                     "**Mã xác nhận đăng nhập của bạn:**  \n" +
-                    " "+ generateCode() +"  \n" +
+                    " " + generateCode() + "  \n" +
                     "(Lưu ý: Mã này sẽ hết hạn sau 10 phút, vui lòng sử dụng ngay để hoàn tất đăng nhập.)");
 
             mailSender.send(msg);
@@ -50,11 +50,11 @@ public class EmailSenderService {
         }
     }
 
-    public void sendEmailWithHtml(String toMail,String otp) {
+    public void sendEmailWithHtml(String toMail, String otp) {
 
         try {
             MimeMessage msg = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(msg,true); // use format html
+            MimeMessageHelper helper = new MimeMessageHelper(msg, true); // use format html
 
             helper.setFrom("phuhvnse182371@fpt.edu.vn"); // email company
             helper.setTo(toMail); // to register user email
@@ -79,7 +79,7 @@ public class EmailSenderService {
                     + "</body></html>";
 
 
-            helper.setText(htmlContent,true);
+            helper.setText(htmlContent, true);
 
             mailSender.send(msg);
             System.out.println("Mail sent successfully!");

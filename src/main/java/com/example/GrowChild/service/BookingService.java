@@ -3,6 +3,7 @@ package com.example.GrowChild.service;
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.entity.enumStatus.BookingStatus;
 import com.example.GrowChild.entity.request.BookingRequest;
+import com.example.GrowChild.entity.request.UpdateBookingRequest;
 import com.example.GrowChild.entity.response.Booking;
 import com.example.GrowChild.entity.response.ScheduleDoctor;
 import com.example.GrowChild.entity.response.User;
@@ -70,14 +71,14 @@ public class BookingService {
     }
 
     public List<BookingDTO> getBookingDTOPendingByDoctorId(String doctorId) {
-        List<BookingDTO> bookinPendingoctor = new ArrayList<>();
+        List<BookingDTO> bookingPendingDoctor = new ArrayList<>();
         List<BookingDTO> list = getBookingsDTO();
         for (BookingDTO bookingDTO : list) {
             if (bookingDTO.getDoctorId().equals(doctorId) && bookingDTO.getStatus().equals(BookingStatus.PENDING)) {
-                bookinPendingoctor.add(bookingDTO);
+                bookingPendingDoctor.add(bookingDTO);
             }
         }
-        return bookinPendingoctor;
+        return bookingPendingDoctor;
     }
 
     public List<BookingDTO> getBookingDTOByDoctorId(String doctorId) {
@@ -112,10 +113,10 @@ public class BookingService {
         return bookToDTO.toDTO(confirmBooking);
     }
 
-    public Booking updateBooking(long id, String comment) {
-        Booking booking = getBookingById(id);
+    public Booking updateBooking(UpdateBookingRequest bookingRequest) {
+        Booking booking = getBookingById(bookingRequest.getId());
         if (booking == null) throw new RuntimeException("Booking not found!");
-        booking.setComment(comment);
+        booking.setComment(bookingRequest.getComment());
         bookingRepository.save(booking);
         return booking;
     }
@@ -146,9 +147,9 @@ public class BookingService {
 
 
     //Booking complete for bookingId
-    public boolean bookingComplete( long bookingId){
+    public boolean bookingComplete(long bookingId) {
         Booking booking = getBookingById(bookingId);
-        if(booking.getBookingStatus().equals(BookingStatus.CONFIRMED)){
+        if (booking.getBookingStatus().equals(BookingStatus.CONFIRMED)) {
             throw new IllegalArgumentException("Booking is confirmed!");
         }
         booking.setBookingStatus(BookingStatus.COMPLETED);

@@ -8,8 +8,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = "com.example.GrowChild")
 public class GrowChildApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(GrowChildApplication.class, args);
-		System.out.println("Running");
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(GrowChildApplication.class, args);
+        System.out.println("Running");
+    }
+
 }

@@ -1,17 +1,15 @@
 package com.example.GrowChild.mapstruct.toDTO;
 
 import com.example.GrowChild.dto.FeedBackDTO;
-import com.example.GrowChild.entity.response.Consulting;
 import com.example.GrowChild.entity.response.FeedBack;
 import org.mapstruct.Mapper;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface FeedBackToDTO {
-    default FeedBackDTO toDTO(FeedBack feedBack){
+    default FeedBackDTO toDTO(FeedBack feedBack) {
         return FeedBackDTO.builder()
                 .feedbackId(feedBack.getFeedbackId())
                 .rate(feedBack.getRate())
@@ -21,7 +19,8 @@ public interface FeedBackToDTO {
                 .consultingId(feedBack.getConsultingId().getConsultingId())
                 .build();
     }
-    default List<FeedBackDTO> toDTOList(List<FeedBack> feedBackList){
+
+    default List<FeedBackDTO> toDTOList(List<FeedBack> feedBackList) {
         return feedBackList.stream().map(this::toDTO).collect(Collectors.toList());
 
     }

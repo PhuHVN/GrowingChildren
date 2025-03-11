@@ -5,6 +5,6 @@ public enum BookingStatus {
     PENDING,    // Waiting confirm
     CONFIRMED,  // Confirm
     CANCELLED,  // Delete
-    COMPLETED;  // Complete
+    COMPLETED  // Complete
 
 }

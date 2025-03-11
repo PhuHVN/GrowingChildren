@@ -1,7 +1,6 @@
 package com.example.GrowChild.entity.response;
 
 
-import com.example.GrowChild.entity.response.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -19,7 +18,8 @@ public class FeedBack {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long feedbackId;
 
-    @Max(value = 5)@Min(value = 0)
+    @Max(value = 5)
+    @Min(value = 0)
     public int rate;
 
     @NotBlank
@@ -28,15 +28,15 @@ public class FeedBack {
     public boolean isDelete = false;
 
     @OneToOne
-    @JoinColumn(name = "consulting_id",nullable = false)
+    @JoinColumn(name = "consulting_id", nullable = false)
     public Consulting consultingId;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id",nullable = false)
+    @JoinColumn(name = "parent_id", nullable = false)
     public User parentId;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id",nullable = false)
+    @JoinColumn(name = "doctor_id", nullable = false)
     public User doctorId;
 
 }

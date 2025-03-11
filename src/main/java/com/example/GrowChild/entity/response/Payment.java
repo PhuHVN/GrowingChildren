@@ -30,10 +30,10 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-     User user; // Ai thực hiện thanh toán
+    User user; // Ai thực hiện thanh toán
 
     @ManyToOne
     @JoinColumn(name = "membership_id", nullable = false)
-     Membership membership; // Membership được mua
+    Membership membership; // Membership được mua
 
 }

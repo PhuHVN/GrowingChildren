@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public interface BlogToDTO {
 
 
-    default BlogDTO toDTO(Blog blog){
+    default BlogDTO toDTO(Blog blog) {
         return BlogDTO.builder()
                 .blogId(blog.getBlogId())
                 .title(blog.getTitle())
@@ -22,7 +22,8 @@ public interface BlogToDTO {
                 .fullName(blog.getParentId().getFullName())
                 .build();
     }
-    default List<BlogDTO> toDTOList(List<Blog> blogList){
+
+    default List<BlogDTO> toDTOList(List<Blog> blogList) {
         return blogList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 

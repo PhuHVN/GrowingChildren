@@ -19,36 +19,36 @@ public class HealthRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     long record_id;
+    long record_id;
 
     @ManyToOne
     @JoinColumn(name = "childrenId", nullable = false)
-     Children child;
+    Children child;
 
     @Min(value = 0)
-     double weight;
+    double weight;
 
     @Min(value = 0)
-     double height;
+    double height;
 
     @Nullable
-     double bmi;
+    double bmi;
 
-     int age;
+    int age;
 
-     LocalDate date;
+    LocalDate date;
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
-     User parent;
+    User parent;
 
 
-     boolean isDelete = false;
+    boolean isDelete = false;
 
 
     @PrePersist
     @PreUpdate
-     void calculateBMI() {
+    void calculateBMI() {
         if (height > 0) { // cant div 0
             this.bmi = weight / (height * height);
         }

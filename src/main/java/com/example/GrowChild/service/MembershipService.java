@@ -25,19 +25,20 @@ public class MembershipService {
         return membershipRepository.findAll();
     }
 
-    public Membership getMembershipById(long id){
+    public Membership getMembershipById(long id) {
         return membershipRepository.findById(id).orElseThrow(() -> new RuntimeException("Membership not found!"));
     }
-    public Membership createPackage(MembershipType membershipType,double price){
-       Membership membership = Membership.builder()
+
+    public Membership createPackage(MembershipType membershipType, double price) {
+        Membership membership = Membership.builder()
                 .type(membershipType)
                 .price(price)
                 .build();
         return membershipRepository.save(membership);
     }
 
-    public String deletePackage(MembershipType type){
-        Membership membership =getMembershipByType(type);
+    public String deletePackage(MembershipType type) {
+        Membership membership = getMembershipByType(type);
         membershipRepository.delete(membership);
         return "Delete Successful!";
     }

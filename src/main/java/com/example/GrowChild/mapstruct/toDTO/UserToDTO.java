@@ -21,7 +21,7 @@ public interface UserToDTO {
                 .gender(user.getGender())
                 .address(user.getAddress())
                 .roleName(user.getRole() != null ? user.getRole().getRoleName() : null)
-                .membership(user.getMembership()!= null ?user.getMembership().getType():null)
+                .membership(user.getMembership() != null ? user.getMembership().getType() : null)
                 .isDelete(user.isDelete())
                 .build();
     }

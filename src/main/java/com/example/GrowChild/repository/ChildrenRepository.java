@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ChildrenRepository extends JpaRepository<Children,Long> {
+public interface ChildrenRepository extends JpaRepository<Children, Long> {
 
     List<Children> findChildrenByIsDeleteFalse();
+
     Children findChildrenByIsDeleteFalseAndChildrenId(long childrenId);
 
 

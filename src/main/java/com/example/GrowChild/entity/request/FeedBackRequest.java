@@ -11,7 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class FeedBackRequest {
-    @Max(value = 5)@Min(value = 0)
+    @Max(value = 5)
+    @Min(value = 0)
     public int rate;
 
     @NotBlank
