@@ -19,7 +19,7 @@ public class HealthRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long record_id;
+    long recordId;
 
     @ManyToOne
     @JoinColumn(name = "childrenId", nullable = false)

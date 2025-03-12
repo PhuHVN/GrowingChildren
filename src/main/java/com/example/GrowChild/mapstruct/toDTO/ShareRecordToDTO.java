@@ -30,7 +30,7 @@ public interface ShareRecordToDTO {
         return ShareRecordDTO.builder()
                 .shareRecordId(shareRecord.getShareRecordId())
                 .consulting(shareRecord.getConsulting().getConsultingId())
-                .healthRecord(shareRecord.getHealthRecord().getRecord_id())
+                .healthRecord(shareRecord.getHealthRecord().getRecordId())
                 .height(shareRecord.getHealthRecord().getHeight())
                 .weight(shareRecord.getHealthRecord().getWeight())
                 .bmi(shareRecord.getHealthRecord().getBmi())

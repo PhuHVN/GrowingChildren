@@ -99,7 +99,7 @@ public class HealthRecordService {
         HealthRecord record = getRecordById(recordId);
         if (record == null) return null;
         record = HealthRecord.builder()
-                .record_id(record.getRecord_id())
+                .recordId(record.getRecordId())
                 .parent(record.getParent())
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
@@ -131,7 +131,7 @@ public class HealthRecordService {
 
         for (HealthRecord record : records) { //list data
             Map<String, Object> data = new HashMap<>();
-            data.put("recordId", record.getRecord_id());
+            data.put("recordId", record.getRecordId());
             data.put("date", record.getDate()); // add data date in map
             data.put("bmi", calculateBMI(record.getWeight(), record.getHeight())); // add bmi
             data.put("weight", record.getWeight());
