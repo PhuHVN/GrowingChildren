@@ -39,6 +39,12 @@ public class FeedBackAPI {
 
     }
 
+    @GetMapping("/getFeedbackByConsultingId/{consulting_id}")
+    public ResponseEntity<List<FeedBackDTO>> getFeedBackByConsultingId(@PathVariable("consulting_id") long consultingId) {
+        List<FeedBackDTO> feedBackDTOs = feedBackService.getFeedBackByConsultingId(consultingId);
+        return ResponseEntity.ok(feedBackDTOs);
+    }
+
     @PutMapping("updateFeedBack/{feedback_id}")
     public FeedBackDTO updateFeedBack(@PathVariable long feedback_id,
                                       @RequestBody FeedBack feedBack) {

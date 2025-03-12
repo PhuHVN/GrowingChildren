@@ -35,6 +35,12 @@ public class ConsultingAPI {
         return consultingSevice.getConsultingById(consulting_id);
     }
 
+    @GetMapping("getConsultingByBookingId/{booking_id}")
+    public ResponseEntity<List<ConsultingDTO>> getConsultingByBookingId(@PathVariable("booking_id") long bookingId) {
+        List<ConsultingDTO> consultingDTOs = consultingSevice.getConsultingByBookingId(bookingId);
+        return ResponseEntity.ok(consultingDTOs);
+    }
+
     @PutMapping("updateConsulting/{consulting_id}")
     public ConsultingDTO updateConsulting(@PathVariable long consulting_id,
                                           @RequestBody Consulting consulting) {

@@ -8,5 +8,5 @@ import java.util.List;
 public interface BlogRepository extends JpaRepository<Blog, Long> {
     List<Blog> findBlogByIsDeleteFalse();
 
-    Blog findBlogByIsDeleteFalseAndBlogId(long BlogId);
+    Blog findBlogByIsDeleteFalseAndBlogId(Long BlogId);
 }

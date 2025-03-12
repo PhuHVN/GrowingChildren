@@ -2,6 +2,8 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.response.Blog;
+import com.example.GrowChild.entity.response.HealthRecord;
+import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.service.BlogService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,15 @@ public class BlogAPI {
         }
         return new ResponseEntity<>(blog, HttpStatus.CREATED);
     }
+    @GetMapping("blogs")
+    public List<Blog> getAllRecord() {
+        return blogService.getAllBlog();
+    }
+
+    @GetMapping("blogs-admin")
+    public List<Blog> getAllRecord_Admin() {
+        return blogService.getAllBlog_Admin();
+    }
 
     @GetMapping("getAll")
     public List<BlogDTO> getAllBlog() {
@@ -32,10 +43,10 @@ public class BlogAPI {
 
     @GetMapping("getBlogById/{blog_id}")
     public BlogDTO getBlogById(@PathVariable long blog_id) {
-        return blogService.getBlogById(blog_id);
+        return blogService.getBlogDTOById(blog_id);
     }
 
-    @PutMapping("updateBlog/{blog_id}")
+    @PutMapping("updateBlog")
     public BlogDTO updateBlogById(@PathVariable long blog_id,
                                   @RequestBody Blog blog) {
         return blogService.updateBlog(blog_id, blog);
@@ -46,4 +57,8 @@ public class BlogAPI {
         return blogService.deleteBlog(blog_id);
     }
 
+    @DeleteMapping("deleteBlogByAdmin/{blog_id}")
+    public String deleteBlogByAdmin(@RequestParam long blog_id) {
+        return blogService.deleteBlog_Admin(blog_id);
+    }
 }
