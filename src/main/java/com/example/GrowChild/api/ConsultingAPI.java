@@ -18,7 +18,7 @@ public class ConsultingAPI {
     @Autowired
     ConsultingSevice consultingSevice;
 
-    @PostMapping("createConsulting/{user_id}")
+    @PostMapping("createConsulting")
     public ResponseEntity createConsulting(@Valid @RequestBody ConsultingRequest consultingRequest, @RequestParam String doctorId,
                                            @RequestParam String parentId, @RequestParam long childId, @RequestParam long bookingId) {
         Consulting consulting = consultingSevice.createConsulting(consultingRequest, doctorId, parentId, childId, bookingId);
