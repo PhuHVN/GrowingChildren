@@ -105,7 +105,7 @@ public class HealthRecordService {
                 .weight(healthRecord.getWeight())
                 .age(record.getAge())
                 .child(record.getChild())
-                .date(record.getDate())
+                .date(healthRecord.getDate())
                 .build();
         HealthRecord updateRecord = healthRecordRepository.save(record);
         return recordToDTO.toDTO(updateRecord);

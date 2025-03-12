@@ -74,7 +74,6 @@ public class ScheduleService {
     public ScheduleDTO updateSchedule(ScheduleDoctor scheduleDoctor, long scheduleId) {
         ScheduleDoctor schedule = getScheduleById(scheduleId);
         schedule.setScheduleWork(scheduleDoctor.getScheduleWork());
-        schedule.setScheduleDate(scheduleDoctor.getScheduleDate());
         ScheduleDoctor updateSchedule = scheduleRepository.save(schedule);
         return scheduleToDTO.toDTO(updateSchedule);
 
