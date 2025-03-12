@@ -107,6 +107,7 @@ public class HealthRecordService {
                 .child(record.getChild())
                 .date(healthRecord.getDate())
                 .build();
+
         HealthRecord updateRecord = healthRecordRepository.save(record);
         return recordToDTO.toDTO(updateRecord);
     }
