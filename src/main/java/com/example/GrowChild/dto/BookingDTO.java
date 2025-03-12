@@ -36,6 +36,7 @@ public class BookingDTO {
     LocalDate scheduleDate;
 
     long childId;
+
     String childName;
 
     String comment;

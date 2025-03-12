@@ -5,6 +5,7 @@ import com.example.GrowChild.entity.enumStatus.BookingStatus;
 import com.example.GrowChild.entity.request.BookingRequest;
 import com.example.GrowChild.entity.request.UpdateBookingRequest;
 import com.example.GrowChild.entity.response.Booking;
+import com.example.GrowChild.entity.response.Children;
 import com.example.GrowChild.entity.response.ScheduleDoctor;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BookToDTO;
@@ -28,6 +29,9 @@ public class BookingService {
     @Autowired
     BookToDTO bookToDTO;
 
+    @Autowired
+    ChildrenService childrenService;
+
     public boolean createBooking(BookingRequest bookingRequest) {
         User parent = userService.getUser(bookingRequest.getParentId());
         if (parent == null || !parent.getRole().getRoleName().equals("Parent")) {
@@ -40,6 +44,11 @@ public class BookingService {
         if (scheduleDoctor.isBooking()) {
             throw new IllegalArgumentException("This book is already booked");
         }
+        // Lấy thông tin children dựa trên childId
+        Children children = childrenService.getChildrenByIsDeleteFalseAndChildrenId(bookingRequest.getChildId());
+        if (children == null) {
+            throw new IllegalArgumentException("Child not found with ID: " + bookingRequest.getChildId());
+        }
 
         Booking booking = Booking.builder()
                 .schedule(scheduleDoctor)
@@ -47,6 +56,7 @@ public class BookingService {
                 .bookDate(LocalDateTime.now())
                 .comment(bookingRequest.getComment())
                 .bookingStatus(BookingStatus.PENDING)
+                .children(children)
                 .build();
 
         scheduleDoctor.setBooking(true);
