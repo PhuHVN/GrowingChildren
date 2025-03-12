@@ -88,6 +88,23 @@ public class FeedBackService {
         return feedBackToDTO.toDTOList(feedBacks);
     }
 
+    public List<FeedBackDTO> getFeedBackByDoctorId(String doctorId) {
+        // Kiểm tra xem Doctor có tồn tại không
+        User doctor = userService.getUser(doctorId);
+        if (doctor == null || !doctor.getRole().getRoleName().equals("Doctor")) {
+            throw new RuntimeException("Doctor not found with ID: " + doctorId);
+        }
+
+        // Tìm tất cả FeedBack dựa trên doctorId và isDelete = false
+        List<FeedBack> feedBacks = feedBackRepository.findFeedbackByIsDeleteFalseAndDoctorId(doctor);
+        if (feedBacks.isEmpty()) {
+            throw new RuntimeException("No feedback found for this doctor!");
+        }
+
+        // Chuyển đổi sang List DTO và trả về
+        return feedBackToDTO.toDTOList(feedBacks);
+    }
+
     public FeedBackDTO updateFeedBack(long feedback_id, FeedBack feedBack) {
         FeedBack existFeedBack = getFeedbackByIsDeleteAndFeedbackId(feedback_id);
         if (feedBack == null) return null;

@@ -20,9 +20,11 @@ public class FeedBackAPI {
     @Autowired
     FeedBackService feedBackService;
 
-    @PostMapping("createFeedBack/{user_id}")
+    @PostMapping("createFeedBack")
     public ResponseEntity createFeedBack(@Valid @RequestBody FeedBackRequest feedBackRequest,
-                                         String doctorId, String parentId, long consulting_id) {
+                                         @RequestParam String doctorId,
+                                         @RequestParam String parentId,
+                                         @RequestParam long consulting_id) {
 
         FeedBack feedBack = feedBackService.createFeedBack(feedBackRequest, doctorId, parentId, consulting_id);
         return new ResponseEntity<>(feedBack, HttpStatus.CREATED);
@@ -44,6 +46,13 @@ public class FeedBackAPI {
         List<FeedBackDTO> feedBackDTOs = feedBackService.getFeedBackByConsultingId(consultingId);
         return ResponseEntity.ok(feedBackDTOs);
     }
+
+    @GetMapping("/getFeedbackByDoctorId/{doctor_id}")
+    public ResponseEntity<List<FeedBackDTO>> getFeedBackByDoctorId(@PathVariable("doctor_id") String doctorId) {
+        List<FeedBackDTO> feedBackDTOs = feedBackService.getFeedBackByDoctorId(doctorId);
+        return ResponseEntity.ok(feedBackDTOs);
+    }
+
 
     @PutMapping("updateFeedBack/{feedback_id}")
     public FeedBackDTO updateFeedBack(@PathVariable long feedback_id,
