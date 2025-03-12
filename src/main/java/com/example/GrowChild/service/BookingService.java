@@ -85,7 +85,7 @@ public class BookingService {
         List<BookingDTO> bookingHistoryDoctor = new ArrayList<>();
         List<BookingDTO> list = getBookingsDTO();
         for (BookingDTO bookingDTO : list) {
-            if (bookingDTO.getDoctorId().equals(doctorId)) {
+            if (bookingDTO.getDoctorId().equals(doctorId) ) {
                 bookingHistoryDoctor.add(bookingDTO);
             }
         }
@@ -128,11 +128,14 @@ public class BookingService {
         return "Delete Successful!";
     }
 
-    public String deleteBooking_User(long id, String parentId) {
+    public String CancelledBooking_User(long id, String parentId) {
         Booking booking = getBookingById(id);
 
         if (!booking.getParent().getUser_id().equals(parentId)) {
             throw new IllegalArgumentException("You only delete by your own booking");
+        }
+        if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
+            throw new IllegalArgumentException("You only delete pending booking");
         }
         booking.setBookingStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);

@@ -11,4 +11,5 @@ public class BookingRequest {
     long scheduleId;
     String parentId;
     String comment;
+    String childId;
 }
