@@ -12,7 +12,7 @@ public interface RecordToDTO {
 
     default RecordDTO toDTO(HealthRecord record) {
         return RecordDTO.builder()
-                .recordId(record.getRecord_id())
+                .recordId(record.getRecordId())
                 .weight(record.getWeight())
                 .height(record.getHeight())
                 .bmi(record.getBmi())
