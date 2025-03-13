@@ -6,6 +6,7 @@ import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BlogToDTO;
 import com.example.GrowChild.repository.BlogRepository;
+import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +26,21 @@ public class BlogService {
     BlogToDTO blogToDTO;
 
 
-    public boolean createBlog(Blog blog, String parent_id) {
+    public Blog createBlog(Blog blog, String parent_id) {
         User parent = userService.getUser(parent_id);
         if (parent == null || !parent.getRole().getRoleName().equals("Parent")) { // find parent
             throw new RuntimeException("Parent not found");
         }
-        blog.setParentId(parent);
-        blog.setDelete(false);
-        blogRepository.save(blog);
-        return true;
+        Blog blog1 = Blog.builder()
+                .parentId(parent)
+                .blogId(blog.getBlogId())
+                .title(blog.getTitle())
+                .content(blog.getContent())
+                .description(blog.getDescription())
+                .date(LocalDateTime.now())
+                .build();
+
+        return blogRepository.save(blog1);
     }
 
 
@@ -63,7 +70,12 @@ public class BlogService {
         return blogRepository.findBlogByIsDeleteFalseAndBlogId(blog_id);
     }
 
-    public BlogDTO updateBlog(long blog_id, Blog blog) {
+    public BlogDTO updateBlog(long blog_id, Blog blog, String parent_id) {
+
+        User parent = userService.getUser(parent_id);
+        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) { // find parent
+            throw new RuntimeException("Parent not found");
+        }
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
 
         existBlog = Blog.builder()
@@ -80,15 +92,16 @@ public class BlogService {
         return blogToDTO.toDTO(updateBlog);
     }
 
-
-
-
-
-    public String deleteBlog(long blog_id) {
+    public String deleteBlog_User(long blog_id, String parent_id) {
+        User parent = userService.getUser(parent_id);
+        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) { // find parent
+            throw new RuntimeException("Parent not found");
+        }
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
         existBlog.setDelete(true);
         blogRepository.save(existBlog);
         return "Delete Successful!";
+
     }
 
     public String deleteBlog_Admin(long blogId) {

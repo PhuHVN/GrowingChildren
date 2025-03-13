@@ -2,6 +2,7 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.response.Blog;
+import com.example.GrowChild.entity.response.Consulting;
 import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.service.BlogService;
@@ -19,12 +20,10 @@ public class BlogAPI {
     @Autowired
     BlogService blogService;
 
-    @PostMapping("createBlog/{user_id}")
+    @PostMapping("createBlog")
     public ResponseEntity createBlog(@Valid @RequestBody Blog blog, @RequestParam String userId) {
-        if (!blogService.createBlog(blog, userId)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error create blog!");
-        }
-        return new ResponseEntity<>(blog, HttpStatus.CREATED);
+        Blog blog1 = blogService.createBlog(blog ,userId);
+        return new ResponseEntity<>(blog1, HttpStatus.CREATED);
     }
     @GetMapping("blogs")
     public List<Blog> getAllRecord() {
@@ -47,14 +46,16 @@ public class BlogAPI {
     }
 
     @PutMapping("updateBlog")
-    public BlogDTO updateBlogById(@PathVariable long blog_id,
+    public BlogDTO updateBlogById(@RequestParam long blog_id,
+
+                                  @RequestParam String parentId,
                                   @RequestBody Blog blog) {
-        return blogService.updateBlog(blog_id, blog);
+        return blogService.updateBlog(blog_id, blog, parentId);
     }
 
     @DeleteMapping("deleteBlog/{blog_id}")
-    public String deleteBlog(@RequestParam long blog_id) {
-        return blogService.deleteBlog(blog_id);
+    public String deleteBlog(@RequestParam long blog_id, @RequestParam String parentId) {
+        return blogService.deleteBlog_User(blog_id, parentId );
     }
 
     @DeleteMapping("deleteBlogByAdmin/{blog_id}")

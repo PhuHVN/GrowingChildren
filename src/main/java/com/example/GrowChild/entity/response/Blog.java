@@ -27,7 +27,6 @@ public class Blog {
     @NotBlank
     public String content;
 
-    public String fullName;
     public boolean isDelete = false;
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
