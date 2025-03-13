@@ -47,6 +47,7 @@ public class BlogAPI {
 
     @PutMapping("updateBlog")
     public BlogDTO updateBlogById(@RequestParam long blog_id,
+
                                   @RequestParam String parentId,
                                   @RequestBody Blog blog) {
         return blogService.updateBlog(blog_id, blog, parentId);

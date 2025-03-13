@@ -101,6 +101,7 @@ public class BlogService {
         existBlog.setDelete(true);
         blogRepository.save(existBlog);
         return "Delete Successful!";
+
     }
 
     public String deleteBlog_Admin(long blogId) {
