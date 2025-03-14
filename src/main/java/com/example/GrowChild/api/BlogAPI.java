@@ -51,12 +51,12 @@ public class BlogAPI {
         return blogService.updateBlog(blog_id, blog, parentId);
     }
 
-    @DeleteMapping("deleteBlog/{blog_id}")
+    @DeleteMapping("deleteBlog")
     public String deleteBlog(@RequestParam long blog_id, @RequestParam String parentId) {
         return blogService.deleteBlog_User(blog_id, parentId );
     }
 
-    @DeleteMapping("deleteBlogByAdmin/{blog_id}")
+    @DeleteMapping("deleteBlogByAdmin")
     public String deleteBlogByAdmin(@RequestParam long blog_id) {
         return blogService.deleteBlog_Admin(blog_id);
     }
