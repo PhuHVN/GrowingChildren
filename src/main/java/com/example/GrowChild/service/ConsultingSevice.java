@@ -93,6 +93,20 @@ public class ConsultingSevice {
         return consultingRepository.findConsultingByIsDeleteFalseAndConsultingId(consulting_id);
     }
 
+    public List<ConsultingDTO> getConsultingByBookingId(long bookingId) {
+        Booking booking = bookingService.getBookingById(bookingId);
+        if (booking == null) {
+            throw new RuntimeException("Booking not found!");
+        }
+
+        List<Consulting> consultings = consultingRepository.findConsultingByIsDeleteFalseAndBookingId(booking);
+        if (consultings.isEmpty()) {
+            throw new RuntimeException("Consulting not found for this booking!");
+        }
+
+        return consultingToDTO.toDTOList(consultings);
+    }
+
     public ConsultingDTO updateConsulting(long consulting_id, Consulting consulting) {
         Consulting existConsulting = getConsultingByIsDeleteAndConsultingId(consulting_id);
         if (consulting == null) return null;

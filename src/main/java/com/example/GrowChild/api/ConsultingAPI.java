@@ -18,7 +18,7 @@ public class ConsultingAPI {
     @Autowired
     ConsultingSevice consultingSevice;
 
-    @PostMapping("createConsulting/{user_id}")
+    @PostMapping("createConsulting")
     public ResponseEntity createConsulting(@Valid @RequestBody ConsultingRequest consultingRequest, @RequestParam String doctorId,
                                            @RequestParam String parentId, @RequestParam long childId, @RequestParam long bookingId) {
         Consulting consulting = consultingSevice.createConsulting(consultingRequest, doctorId, parentId, childId, bookingId);
@@ -33,6 +33,12 @@ public class ConsultingAPI {
     @GetMapping("getConsultingById/{consulting_id}")
     public ConsultingDTO getConsultingById(@PathVariable long consulting_id) {
         return consultingSevice.getConsultingById(consulting_id);
+    }
+
+    @GetMapping("getConsultingByBookingId/{booking_id}")
+    public ResponseEntity<List<ConsultingDTO>> getConsultingByBookingId(@PathVariable("booking_id") long bookingId) {
+        List<ConsultingDTO> consultingDTOs = consultingSevice.getConsultingByBookingId(bookingId);
+        return ResponseEntity.ok(consultingDTOs);
     }
 
     @PutMapping("updateConsulting/{consulting_id}")

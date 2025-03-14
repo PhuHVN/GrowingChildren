@@ -71,6 +71,40 @@ public class FeedBackService {
         return feedBackRepository.findFeedbackByIsDeleteFalseAndFeedbackId(feedback_id);
     }
 
+    public List<FeedBackDTO> getFeedBackByConsultingId(long consultingId) {
+        // Kiểm tra xem Consulting có tồn tại không
+        Consulting consulting = consultingSevice.getConsultingByID(consultingId);
+        if (consulting == null) {
+            throw new RuntimeException("Consulting not found!");
+        }
+
+        // Tìm tất cả FeedBack dựa trên consultingId và isDelete = false
+        List<FeedBack> feedBacks = feedBackRepository.findFeedbackByIsDeleteFalseAndConsultingId(consulting);
+        if (feedBacks.isEmpty()) {
+            throw new RuntimeException("No feedback found for this consulting!");
+        }
+
+        // Chuyển đổi sang List DTO và trả về
+        return feedBackToDTO.toDTOList(feedBacks);
+    }
+
+    public List<FeedBackDTO> getFeedBackByDoctorId(String doctorId) {
+        // Kiểm tra xem Doctor có tồn tại không
+        User doctor = userService.getUser(doctorId);
+        if (doctor == null || !doctor.getRole().getRoleName().equals("Doctor")) {
+            throw new RuntimeException("Doctor not found with ID: " + doctorId);
+        }
+
+        // Tìm tất cả FeedBack dựa trên doctorId và isDelete = false
+        List<FeedBack> feedBacks = feedBackRepository.findFeedbackByIsDeleteFalseAndDoctorId(doctor);
+        if (feedBacks.isEmpty()) {
+            throw new RuntimeException("No feedback found for this doctor!");
+        }
+
+        // Chuyển đổi sang List DTO và trả về
+        return feedBackToDTO.toDTOList(feedBacks);
+    }
+
     public FeedBackDTO updateFeedBack(long feedback_id, FeedBack feedBack) {
         FeedBack existFeedBack = getFeedbackByIsDeleteAndFeedbackId(feedback_id);
         if (feedBack == null) return null;
