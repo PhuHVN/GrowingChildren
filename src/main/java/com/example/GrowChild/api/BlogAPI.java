@@ -2,7 +2,6 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.response.Blog;
-import com.example.GrowChild.entity.response.Consulting;
 import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.service.BlogService;
@@ -47,18 +46,17 @@ public class BlogAPI {
 
     @PutMapping("updateBlog")
     public BlogDTO updateBlogById(@RequestParam long blog_id,
-
                                   @RequestParam String parentId,
                                   @RequestBody Blog blog) {
         return blogService.updateBlog(blog_id, blog, parentId);
     }
 
-    @DeleteMapping("deleteBlog/{blog_id}")
+    @DeleteMapping("deleteBlog")
     public String deleteBlog(@RequestParam long blog_id, @RequestParam String parentId) {
         return blogService.deleteBlog_User(blog_id, parentId );
     }
 
-    @DeleteMapping("deleteBlogByAdmin/{blog_id}")
+    @DeleteMapping("deleteBlogByAdmin")
     public String deleteBlogByAdmin(@RequestParam long blog_id) {
         return blogService.deleteBlog_Admin(blog_id);
     }
