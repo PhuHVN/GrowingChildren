@@ -20,7 +20,7 @@ public class UserDTO {
     private String gender;
     private String address;
     private String roleName;
-    private MembershipType membership;
+    private String membership;
     private boolean isDelete;
 
 

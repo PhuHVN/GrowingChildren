@@ -26,7 +26,7 @@ public class VNPayAPI {
 
     @PostMapping("/submitOrder")
     public String submitOrder(@RequestParam("amount") int price,
-                              @RequestParam("Status") MembershipType type,
+                              @RequestParam("Status") String type,
                               @RequestParam("userId") String userId,
                               HttpServletRequest request) {
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
@@ -59,7 +59,7 @@ public class VNPayAPI {
             System.out.println(userId);
             String membership = orderInfo.split("_userId:")[0];
             System.out.println(membership);
-            Membership membership1 = membershipService.getMembershipByType(MembershipType.valueOf(membership));
+            Membership membership1 = membershipService.getMembershipByType(membership);
             long membershipId = membership1.getMembershipId();
             double price = Double.parseDouble(totalPrice);
             paymentService.updatePaymentStatus(transactionId, userId, paymentTime, membershipId, price, PaymentStatus.SUCCESS);

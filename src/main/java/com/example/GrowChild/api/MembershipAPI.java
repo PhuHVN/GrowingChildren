@@ -1,6 +1,5 @@
 package com.example.GrowChild.api;
 
-import com.example.GrowChild.entity.enumStatus.MembershipType;
 import com.example.GrowChild.entity.response.Membership;
 import com.example.GrowChild.service.MembershipService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ public class MembershipAPI {
     MembershipService membershipService;
 
     @PostMapping("createMembership")
-    public Membership createMembership(@RequestParam MembershipType type, @RequestParam double price) {
+    public Membership createMembership(@RequestParam String type, @RequestParam double price) {
         return membershipService.createPackage(type, price);
     }
 
@@ -26,12 +25,16 @@ public class MembershipAPI {
     }
 
     @GetMapping("getMembership")
-    public Membership getByType(@RequestParam MembershipType membershipType) {
+    public Membership getByType(@RequestParam String membershipType) {
         return membershipService.getMembershipByType(membershipType);
+    }
+    @PutMapping("updateMembership")
+    public Membership updatePackage(@RequestParam long id, @RequestBody Membership membership) {
+        return membershipService.updatePackage(id, membership);
     }
 
     @DeleteMapping("deleteMembership")
-    public String delete(@RequestParam MembershipType type) {
+    public String delete(@RequestParam String type) {
         return membershipService.deletePackage(type);
     }
 }

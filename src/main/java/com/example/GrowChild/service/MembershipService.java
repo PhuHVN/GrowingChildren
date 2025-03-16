@@ -1,6 +1,5 @@
 package com.example.GrowChild.service;
 
-import com.example.GrowChild.entity.enumStatus.MembershipType;
 import com.example.GrowChild.entity.response.Membership;
 import com.example.GrowChild.repository.MembershipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ public class MembershipService {
     @Autowired
     MembershipRepository membershipRepository;
 
-    public Membership getMembershipByType(MembershipType type) {
+    public Membership getMembershipByType(String type) {
         Membership membership = membershipRepository.findByType(type);
         if (membership == null) {
             throw new RuntimeException("Membership not found!");
@@ -29,7 +28,7 @@ public class MembershipService {
         return membershipRepository.findById(id).orElseThrow(() -> new RuntimeException("Membership not found!"));
     }
 
-    public Membership createPackage(MembershipType membershipType, double price) {
+    public Membership createPackage(String membershipType, double price) {
         Membership membership = Membership.builder()
                 .type(membershipType)
                 .price(price)
@@ -37,10 +36,26 @@ public class MembershipService {
         return membershipRepository.save(membership);
     }
 
-    public String deletePackage(MembershipType type) {
+    public String deletePackage(String type) {
         Membership membership = getMembershipByType(type);
         membershipRepository.delete(membership);
         return "Delete Successful!";
     }
+
+    public Membership updatePackage(long id, Membership membership) {
+        Membership membership1 = getMembershipById(id);
+        if(membership.getType() == null){
+            membership1.setType(membership1.getType());
+        }
+        if(membership.getPrice() == 0){
+            membership1.setPrice(membership1.getPrice());
+        }
+        membership1.setType(membership.getType());
+        membership1.setPrice(membership.getPrice());
+        return membershipRepository.save(membership1);
+    }
+
+
+
 
 }
