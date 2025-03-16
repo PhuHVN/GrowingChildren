@@ -39,6 +39,12 @@ public class BlogAPI {
         return blogService.getAll();
     }
 
+    @GetMapping("getBlogsByUserId/{userId}")
+    public ResponseEntity<List<BlogDTO>> getBlogsByUserId(@PathVariable String userId) {
+        List<BlogDTO> blogs = blogService.getBlogByUserId(userId);
+        return new ResponseEntity<>(blogs, HttpStatus.OK);
+    }
+
     @GetMapping("getBlogById/{blog_id}")
     public BlogDTO getBlogById(@PathVariable long blog_id) {
         return blogService.getBlogDTOById(blog_id);
