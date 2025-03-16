@@ -17,7 +17,6 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long membershipId;
 
-
     private String type; // DEFAULT, PREMIUM
 
     double price;
