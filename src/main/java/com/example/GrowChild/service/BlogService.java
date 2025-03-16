@@ -56,6 +56,14 @@ public class BlogService {
     public List<Blog> getAllBlog_Admin() {
         return blogRepository.findAll();
     }
+    public List<BlogDTO> getBlogByUserId(String userId) {
+        User user = userService.getUser(userId);
+        if (user == null || !user.getRole().getRoleName().equals("Parent")) {
+            throw new RuntimeException("User not found or not authorized");
+        }
+        List<Blog> blogs = blogRepository.findByParentIdAndIsDeleteFalse(user);
+        return blogToDTO.toDTOList(blogs);
+    }
 
     public BlogDTO getBlogDTOById(long blog_id) {
         Blog existBlog = getBlogByIsDeleteFalseAndBlogID(blog_id);
@@ -64,7 +72,6 @@ public class BlogService {
         }
         return blogToDTO.toDTO(existBlog);
     }
-
 
     private Blog getBlogByIsDeleteFalseAndBlogID(long blog_id) {
         return blogRepository.findBlogByIsDeleteFalseAndBlogId(blog_id);
