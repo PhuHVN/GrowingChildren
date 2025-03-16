@@ -11,9 +11,12 @@ import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BookToDTO;
 import com.example.GrowChild.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +47,6 @@ public class BookingService {
         if (scheduleDoctor.isBooking()) {
             throw new IllegalArgumentException("This book is already booked");
         }
-        // Lấy thông tin children dựa trên childId
         Children children = childrenService.getChildrenByIsDeleteFalseAndChildrenId(bookingRequest.getChildId());
         if (children == null) {
             throw new IllegalArgumentException("Child not found with ID: " + bookingRequest.getChildId());
@@ -170,5 +172,19 @@ public class BookingService {
         bookingRepository.save(booking);
         return false;
     }
+
+
+    @Scheduled(fixedRate = 600000)
+    public void checkBookingTime() {
+        List<Booking> bookings = bookingRepository.findAll();
+        for (Booking booking : bookings) {
+            if (booking.getSchedule().getScheduleDate().isBefore(LocalDate.now()) || booking.getSchedule().getScheduleWork().isAfter(LocalTime.now().plusMinutes(10))) {
+                booking.setBookingStatus(BookingStatus.CANCELLED);
+                bookingRepository.save(booking);
+            }
+        }
+    }
+
+
 
 }
