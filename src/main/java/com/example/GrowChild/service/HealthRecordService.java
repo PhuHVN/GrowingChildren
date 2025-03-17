@@ -11,7 +11,6 @@ import com.example.GrowChild.repository.HealthRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -152,6 +151,26 @@ public class HealthRecordService {
         } else {
             return GrowthStatus.OBESE;
         }
+    }
+
+    // get change status of last record to now record
+    public String getChangeStatus(long childId, double bmiLastRecord, double bmiNowRecord){
+        List<HealthRecord> records = healthRecordRepository.findByChildChildrenIdOrderByDateAsc(childId);
+        double totalBmi = bmiNowRecord - bmiLastRecord;
+        String result = "";
+        if (totalBmi == 0) {
+             result = "No Change";
+        } else if (totalBmi > 0 && totalBmi <= 0.5) {
+             result = "Slight Increase";
+        } else if (totalBmi > 0.5) {
+            result = "Significant Increase";
+        } else if (totalBmi < 0 && totalBmi >= -0.5) {
+            result = "Slight Decrease";
+        } else {
+            result = "Significant Decrease";
+        }
+        totalBmi = (totalBmi / -1.00);
+        return String.format("%s with %.2f", result, totalBmi);
     }
 
 

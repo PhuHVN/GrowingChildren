@@ -79,8 +79,13 @@ public class HealthRecordAPI {
         return ResponseEntity.ok(history);
     }
 
-    @GetMapping("getGrowthStatus/{bmi}")
-    public ResponseEntity<String> getGrowthStatus(double bmi) {
+    @GetMapping("getGrowthStatus/bmi/{bmi}")
+    public ResponseEntity<String> getGrowthStatus(@RequestParam double bmi) {
         return ResponseEntity.ok("Status: " + healthRecordService.getGrowStatus(bmi));
+    }
+
+    @GetMapping("getGrowthStatusChange/childId/{childId}")
+    public ResponseEntity<String> getChangeStatus(@PathVariable long childId,@RequestParam double bmiLastRecord, @RequestParam double bmiCurrentRecord){
+        return ResponseEntity.ok("Current BMI status: " + bmiCurrentRecord +", compared to last month: "+ bmiLastRecord +", and there are changes: "+healthRecordService.getChangeStatus(childId,bmiLastRecord,bmiCurrentRecord)+".");
     }
 }
