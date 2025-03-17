@@ -64,4 +64,10 @@ public class FeedBackAPI {
     public String deleteFeedBack(@RequestParam long feedback_id) {
         return feedBackService.deleteFeedBack(feedback_id);
     }
+
+    @GetMapping("getFeedBackByDoctorId/{doctor_id}")
+    public ResponseEntity<List<FeedBackDTO>> getFeedBackByParentId(@PathVariable String doctorId) {
+        List<FeedBackDTO> feedBackDTOs = feedBackService.getFeedBackByDoctorId(doctorId);
+        return ResponseEntity.ok(feedBackDTOs);
+    }
 }
