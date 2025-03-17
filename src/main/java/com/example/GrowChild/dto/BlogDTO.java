@@ -16,7 +16,7 @@ public class BlogDTO {
 
     private String title;
 
-    private String description;
+    private String hashtag;
 
     private String content;
 

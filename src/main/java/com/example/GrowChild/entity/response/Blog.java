@@ -22,15 +22,17 @@ public class Blog {
     public String title;
 
     @NotBlank
-    public String description;
+    public String hashtag;
 
     @NotBlank
     public String content;
 
     public boolean isDelete = false;
+
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = false)
     public User parentId;
+
     private LocalDateTime date;
 
     @PrePersist
