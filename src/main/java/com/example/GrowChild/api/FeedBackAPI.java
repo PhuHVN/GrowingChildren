@@ -60,7 +60,7 @@ public class FeedBackAPI {
         return feedBackService.updateFeedBack(feedback_id, feedBack);
     }
 
-    @DeleteMapping("deleteFeedBack/{feedback_id}")
+    @DeleteMapping("deleteFeedBack")
     public String deleteFeedBack(@RequestParam long feedback_id) {
         return feedBackService.deleteFeedBack(feedback_id);
     }

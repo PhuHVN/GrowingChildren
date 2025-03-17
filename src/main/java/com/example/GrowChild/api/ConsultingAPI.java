@@ -47,7 +47,7 @@ public class ConsultingAPI {
         return consultingSevice.updateConsulting(consulting_id, consulting);
     }
 
-    @DeleteMapping("deleteConsulting/{consulting_id}")
+    @DeleteMapping("deleteConsulting")
     public String deleteConsulting(@RequestParam long consulting_id) {
         return consultingSevice.deleteConsulting(consulting_id);
     }
