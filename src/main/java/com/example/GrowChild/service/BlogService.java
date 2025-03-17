@@ -2,11 +2,9 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.response.Blog;
-import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BlogToDTO;
 import com.example.GrowChild.repository.BlogRepository;
-import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
