@@ -147,7 +147,11 @@ public class FeedBackService {
         for(FeedBack feedBack : feedBacksList) {
             totalRate += feedBack.getRate();
         }
-        totalRate = totalRate / feedBacksList.size();
+        if(feedBacksList.isEmpty()) {
+            return totalRate ;
+        }else{
+            totalRate = totalRate / feedBacksList.size();
+        }
         return totalRate;
     }
 }
