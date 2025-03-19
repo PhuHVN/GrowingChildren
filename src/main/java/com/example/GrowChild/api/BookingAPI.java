@@ -77,7 +77,12 @@ public class BookingAPI {
 
     @DeleteMapping("cancelledBooking-user")
     public String delete_user(@RequestParam long bookId, @RequestParam String parentId) {
-        return bookingService.CancelledBooking_User(bookId, parentId);
+        return bookingService.cancelledBooking_User(bookId, parentId);
+    }
+
+    @DeleteMapping("cancelledBooking-doctor")
+    public String cancel_doctor(@RequestParam long bookId, @RequestParam String doctorId) {
+        return bookingService.cancelledBooking_Doctor(bookId, doctorId);
     }
 
 

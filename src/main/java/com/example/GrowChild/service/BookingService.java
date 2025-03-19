@@ -140,10 +140,23 @@ public class BookingService {
         return "Delete Successful!";
     }
 
-    public String CancelledBooking_User(long id, String parentId) {
+    public String cancelledBooking_User(long id, String parentId) {
         Booking booking = getBookingById(id);
 
         if (!booking.getParent().getUser_id().equals(parentId)) {
+            throw new IllegalArgumentException("You only delete by your own booking");
+        }
+        if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
+            throw new IllegalArgumentException("You only delete pending booking");
+        }
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+        return "Delete Successful!";
+    }
+
+    public String cancelledBooking_Doctor(long id, String doctorId){
+        Booking booking = getBookingById(id);
+        if (!booking.getSchedule().getDoctor().getUser_id().equals(doctorId)) {
             throw new IllegalArgumentException("You only delete by your own booking");
         }
         if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
