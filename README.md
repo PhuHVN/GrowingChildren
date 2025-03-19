@@ -27,7 +27,6 @@
 | **Spring Boot** | Backend framework |
 | **MySQL** | Relational database |
 | **Spring Security** | Authentication and authorization |
-| **JWT** | User authentication |
 | **VNPay** | Payment integration |
 
 ---
