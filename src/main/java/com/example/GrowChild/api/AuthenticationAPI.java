@@ -19,13 +19,13 @@ public class AuthenticationAPI {
     @PostMapping("login")
     public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
-            UserDTO user ;
-            if(loginRequest.getUsernameOrEmail().contains("@")){ //check is email?
-                user = userService.loginByEmail(loginRequest.getUsernameOrEmail(),loginRequest.getPassword());
-            }else{
-                user = userService.loginByUsername(loginRequest.getUsernameOrEmail(),loginRequest.getPassword());
+            UserDTO user;
+            if (loginRequest.getUsernameOrEmail().contains("@")) { //check is email?
+                user = userService.loginByEmail(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
+            } else {
+                user = userService.loginByUsername(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
             }
-            if(user == null){
+            if (user == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username/email or password ");
             }
             return ResponseEntity.ok(user);
@@ -34,4 +34,21 @@ public class AuthenticationAPI {
         }
 
     }
+
+    @PostMapping("resetPassword")
+    public ResponseEntity resetPassword(@RequestParam String userId,@RequestParam String email,@RequestParam String code,@RequestParam String newPassword,@RequestParam String confirmPassword){
+        if(userService.resetPassword(userId, email, code, newPassword, confirmPassword)){
+            return ResponseEntity.ok("Password reset successfully");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password reset failed");
+    }
+
+    @PostMapping("forgotPasswordSender")
+    public ResponseEntity sendEmail(@RequestParam String email,@RequestParam String userId){
+        if(userService.resetPasswordEmailSender(userId,email)){
+            return ResponseEntity.ok("Email sent successfully");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email sent failed");
+    }
+
 }

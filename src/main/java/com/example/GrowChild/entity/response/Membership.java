@@ -17,15 +17,9 @@ public class Membership {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long membershipId;
 
-    @Enumerated(EnumType.STRING)
-    private MembershipType type; // DEFAULT, LIFETIME
+    private String type; // DEFAULT, PREMIUM
 
     double price;
-
-
-
-
-
 
 
 }

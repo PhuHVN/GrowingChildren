@@ -1,8 +1,8 @@
 package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.RecordDTO;
-import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.request.HealthRecordRequest;
+import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.service.HealthRecordService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,49 +20,49 @@ public class HealthRecordAPI {
     HealthRecordService healthRecordService;
 
     @PostMapping("createRecord")
-    public ResponseEntity createRecord(@Valid @RequestBody HealthRecordRequest healthRecord ,
-                                       @RequestParam String parentId, @RequestParam long childId){
-        HealthRecord record =healthRecordService.createRecord(healthRecord,parentId,childId);
+    public ResponseEntity createRecord(@Valid @RequestBody HealthRecordRequest healthRecord,
+                                       @RequestParam String parentId, @RequestParam long childId) {
+        HealthRecord record = healthRecordService.createRecord(healthRecord, parentId, childId);
         return new ResponseEntity<>(record, HttpStatus.CREATED);
     }
 
     @GetMapping("records")
-    public List<HealthRecord> getAllRecord(){
+    public List<HealthRecord> getAllRecord() {
         return healthRecordService.getAllRecord();
     }
 
     @GetMapping("records-admin")
-    public List<HealthRecord> getAllRecord_Admin(){
+    public List<HealthRecord> getAllRecord_Admin() {
         return healthRecordService.getAllRecord_Admin();
     }
 
     @GetMapping("recordsDTO")
-    public List<RecordDTO> getAllRecordDTO(){
+    public List<RecordDTO> getAllRecordDTO() {
         return healthRecordService.getAllRecordDTO();
     }
 
     @GetMapping("recordDTO/{recordId}")
-    public RecordDTO getRecordDTOById(@PathVariable long recordId){
+    public RecordDTO getRecordDTOById(@PathVariable long recordId) {
         return healthRecordService.getRecordDTOById(recordId);
     }
 
     @GetMapping("record/{recordId}")
-    public HealthRecord getRecordById(@PathVariable long recordId){
+    public HealthRecord getRecordById(@PathVariable long recordId) {
         return healthRecordService.getRecordById(recordId);
     }
 
     @PutMapping("updateRecord/{recordId}")
-    public RecordDTO updateRecord(@PathVariable long recordId , @RequestBody HealthRecord healthRecord ){
-        return healthRecordService.updateRecord(recordId,healthRecord);
+    public RecordDTO updateRecord(@PathVariable long recordId, @RequestBody HealthRecord healthRecord) {
+        return healthRecordService.updateRecord(recordId, healthRecord);
     }
 
     @DeleteMapping("deleteRecord_User/{recordId}")
-    public String deleteRecord_User(@PathVariable long recordId){
+    public String deleteRecord_User(@PathVariable long recordId) {
         return healthRecordService.deleteRecord_User(recordId);
     }
 
     @DeleteMapping("deleteRecord_Admin/{recordId}")
-    public String deleteRecord_Admin(@PathVariable long recordId){
+    public String deleteRecord_Admin(@PathVariable long recordId) {
         return healthRecordService.deleteRecord_Admin(recordId);
     }
 
@@ -79,8 +79,13 @@ public class HealthRecordAPI {
         return ResponseEntity.ok(history);
     }
 
-    @GetMapping("getGrowthStatus/{bmi}")
-    public ResponseEntity<String> getGrowthStatus(double bmi){
+    @GetMapping("getGrowthStatus/bmi/{bmi}")
+    public ResponseEntity<String> getGrowthStatus(@RequestParam double bmi) {
         return ResponseEntity.ok("Status: " + healthRecordService.getGrowStatus(bmi));
+    }
+
+    @GetMapping("getGrowthStatusChange/childId/{childId}")
+    public ResponseEntity<String> getChangeStatus(@PathVariable long childId,@RequestParam double bmiLastRecord, @RequestParam double bmiCurrentRecord){
+        return ResponseEntity.ok("Current BMI status: " + bmiCurrentRecord +", compared to last month: "+ bmiLastRecord +", and there are changes: "+healthRecordService.getChangeStatus(childId,bmiLastRecord,bmiCurrentRecord)+".");
     }
 }

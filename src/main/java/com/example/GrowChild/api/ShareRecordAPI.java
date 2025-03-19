@@ -1,6 +1,5 @@
 package com.example.GrowChild.api;
 
-import com.example.GrowChild.dto.FeedBackDTO;
 import com.example.GrowChild.dto.ShareRecordDTO;
 import com.example.GrowChild.entity.response.ShareRecord;
 import com.example.GrowChild.service.ShareRecordService;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("shareRecordAPI")

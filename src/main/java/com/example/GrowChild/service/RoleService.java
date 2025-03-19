@@ -16,24 +16,24 @@ public class RoleService {
     @Autowired
     private RoleToDTO roleToDTO;
 
-    public RoleDTO createRole(RoleDTO roleDTO){
+    public RoleDTO createRole(RoleDTO roleDTO) {
         Role role = roleToDTO.toEntity(roleDTO); // map fill DTO -> entity
         Role saveRole = roleRepository.save(role); // save db
         return roleToDTO.toDTO(saveRole);  // return attribute of DTO
     }
 
-    public List<RoleDTO> getAll(){
+    public List<RoleDTO> getAll() {
         List<Role> roles = roleRepository.findAll(); // find list role full info
         return roleToDTO.toDTOList(roles); //return some attribute this DTO
     }
 
     //
-    public RoleDTO getRoleById(long id){
+    public RoleDTO getRoleById(long id) {
         Role role = getRoleExisted(id);
         return roleToDTO.toDTO(role);
     }
 
-    public RoleDTO updateRole(long id,RoleDTO roleDTO){
+    public RoleDTO updateRole(long id, RoleDTO roleDTO) {
         Role roleExisted = getRoleExisted(id);
         roleExisted = Role.builder()
                 .roleId(roleExisted.getRoleId()) //not change id // can del this line
@@ -45,9 +45,9 @@ public class RoleService {
     }
 
 
-    public String deleteRole(long id){
+    public String deleteRole(long id) {
         Role roleExisted = getRoleExisted(id); // find role
-        if(roleExisted == null){
+        if (roleExisted == null) {
             return "Error Deleted";
         }
         roleRepository.delete(roleExisted);

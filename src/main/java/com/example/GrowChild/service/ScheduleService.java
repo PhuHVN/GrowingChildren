@@ -9,6 +9,7 @@ import com.example.GrowChild.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,9 +27,14 @@ public class ScheduleService {
             throw new IllegalArgumentException("Doctor not found!");
         }
 
+        if(LocalDate.now().isAfter(schedule.getScheduleDate())){
+            throw new IllegalArgumentException("Schedule date must be in the future!");
+        }
+
         ScheduleDoctor scheduleDoctor = ScheduleDoctor.builder()
                 .scheduleWork(schedule.getScheduleWork())
                 .doctor(doctor)
+                .scheduleDate(schedule.getScheduleDate())
                 .isDelete(false)
                 .isBooking(false)
                 .build();
@@ -88,7 +94,6 @@ public class ScheduleService {
         ScheduleDoctor scheduleDoctor = getScheduleById(scheduleId);
         scheduleRepository.delete(scheduleDoctor);
         return "Delete Successful!";
-
     }
 
 }

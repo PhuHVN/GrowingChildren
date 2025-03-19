@@ -11,7 +11,6 @@ import com.example.GrowChild.repository.HealthRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +44,7 @@ public class HealthRecordService {
                 .child(child)
                 .height(healthRecordRequest.getHeight_m())
                 .weight(healthRecordRequest.getWeight_kg())
-                .date(LocalDate.now())
+                .date(healthRecordRequest.getDate())
                 .build();
 
         return healthRecordRepository.save(record);
@@ -99,14 +98,15 @@ public class HealthRecordService {
         HealthRecord record = getRecordById(recordId);
         if (record == null) return null;
         record = HealthRecord.builder()
-                .record_id(record.getRecord_id())
+                .recordId(record.getRecordId())
                 .parent(record.getParent())
                 .height(healthRecord.getHeight())
                 .weight(healthRecord.getWeight())
                 .age(record.getAge())
                 .child(record.getChild())
-                .date(record.getDate())
+                .date(healthRecord.getDate())
                 .build();
+
         HealthRecord updateRecord = healthRecordRepository.save(record);
         return recordToDTO.toDTO(updateRecord);
     }
@@ -130,7 +130,7 @@ public class HealthRecordService {
 
         for (HealthRecord record : records) { //list data
             Map<String, Object> data = new HashMap<>();
-            data.put("recordId", record.getRecord_id());
+            data.put("recordId", record.getRecordId());
             data.put("date", record.getDate()); // add data date in map
             data.put("bmi", calculateBMI(record.getWeight(), record.getHeight())); // add bmi
             data.put("weight", record.getWeight());
@@ -151,6 +151,26 @@ public class HealthRecordService {
         } else {
             return GrowthStatus.OBESE;
         }
+    }
+
+    // get change status of last record to now record
+    public String getChangeStatus(long childId, double bmiLastRecord, double bmiNowRecord){
+        List<HealthRecord> records = healthRecordRepository.findByChildChildrenIdOrderByDateAsc(childId);
+        double totalBmi = bmiNowRecord - bmiLastRecord;
+        String result = "";
+        if (totalBmi == 0) {
+             result = "No Change";
+        } else if (totalBmi > 0 && totalBmi <= 0.5) {
+             result = "Slight Increase";
+        } else if (totalBmi > 0.5) {
+            result = "Significant Increase";
+        } else if (totalBmi < 0 && totalBmi >= -0.5) {
+            result = "Slight Decrease";
+        } else {
+            result = "Significant Decrease";
+        }
+        totalBmi = (totalBmi / -1.00);
+        return String.format("%s with %.2f", result, totalBmi);
     }
 
 

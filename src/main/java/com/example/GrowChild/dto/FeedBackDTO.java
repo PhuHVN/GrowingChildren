@@ -1,10 +1,7 @@
 package com.example.GrowChild.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,7 +13,12 @@ public class FeedBackDTO {
     private long consultingId;
     private int rate;
     private String comment;
+    private String fullNameParent;
     private String parentId;
+    private String fullNameDoctor;
     private String doctorId;
+
+
+
 
 }

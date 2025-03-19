@@ -9,6 +9,8 @@ import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 
 public class PaymentService {
@@ -21,7 +23,7 @@ public class PaymentService {
     @Autowired
     UserRepository userRepository;
 
-    public void updatePaymentStatus(String transactionId,String userId,String date,long membershipId,double price,PaymentStatus status) {
+    public void updatePaymentStatus(String transactionId, String userId, String date, long membershipId, double price, PaymentStatus status) {
         User user = userService.getUser(userId);
         Membership membership = membershipService.getMembershipById(membershipId);
         Payment payment = Payment.builder()
@@ -29,15 +31,18 @@ public class PaymentService {
                 .user(user)
                 .status(status)
                 .transactionId(transactionId)
-                .price(price/100)
+                .price(price / 100)
                 .membership(membership)
                 .build();
 
         paymentRepository.save(payment);
-        if(status.equals(PaymentStatus.SUCCESS)){
+        if (status.equals(PaymentStatus.SUCCESS)) {
             user.setMembership(membership);
             userRepository.save(user);
         }
+    }
 
+    public List<Payment> getPayments() {
+        return paymentRepository.findAll();
     }
 }

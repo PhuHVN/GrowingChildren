@@ -17,33 +17,57 @@ public class BlogAPI {
     @Autowired
     BlogService blogService;
 
-    @PostMapping("createBlog/{user_id}")
-    public ResponseEntity createBlog(@Valid @RequestBody Blog blog, @RequestParam String userId){
-        if(!blogService.createBlog(blog,userId)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error create blog!");
-        }
-        return new ResponseEntity<>(blog,HttpStatus.CREATED);
+    @PostMapping("createBlog")
+    public ResponseEntity createBlog(@Valid @RequestBody Blog blog, @RequestParam String userId) {
+        Blog blog1 = blogService.createBlog(blog ,userId);
+        return new ResponseEntity<>(blog1, HttpStatus.CREATED);
+    }
+    @GetMapping("blogs")
+    public List<Blog> getAllRecord() {
+        return blogService.getAllBlog();
+    }
+
+    @GetMapping("blogs-admin")
+    public List<Blog> getAllRecord_Admin() {
+        return blogService.getAllBlog_Admin();
     }
 
     @GetMapping("getAll")
-    public List<BlogDTO> getAllBlog(){
+    public List<BlogDTO> getAllBlog() {
         return blogService.getAll();
     }
 
+    @GetMapping("getBlogsByUserId/{userId}")
+    public ResponseEntity<List<BlogDTO>> getBlogsByUserId(@PathVariable String userId) {
+        List<BlogDTO> blogs = blogService.getBlogByUserId(userId);
+        return new ResponseEntity<>(blogs, HttpStatus.OK);
+    }
+
     @GetMapping("getBlogById/{blog_id}")
-    public BlogDTO getBlogById(@PathVariable long blog_id){
-        return blogService.getBlogById(blog_id);
+    public BlogDTO getBlogById(@PathVariable long blog_id) {
+        return blogService.getBlogDTOById(blog_id);
     }
 
-    @PutMapping("updateBlog/{blog_id}")
-    public BlogDTO updateBlogById(@PathVariable long blog_id,
-                               @RequestBody Blog blog){
-        return blogService.updateBlog(blog_id,blog);
+    @GetMapping("getBlogsByHashTag")
+    public ResponseEntity<List<BlogDTO>> getBlogsByHashTag(@RequestParam String hashtag) {
+        List<BlogDTO> blogs = blogService.getBlogByHashTag(hashtag);
+        return new ResponseEntity<>(blogs, HttpStatus.OK);
     }
 
-    @DeleteMapping("deleteBlog/{blog_id}")
-    public String deleteBlog(@RequestParam long blog_id){
-        return blogService.deleteBlog(blog_id);
+    @PutMapping("updateBlog")
+    public BlogDTO updateBlogById(@RequestParam long blog_id,
+                                  @RequestParam String parentId,
+                                  @RequestBody Blog blog) {
+        return blogService.updateBlog(blog_id, blog, parentId);
     }
 
+    @DeleteMapping("deleteBlog")
+    public String deleteBlog(@RequestParam long blog_id, @RequestParam String parentId) {
+        return blogService.deleteBlog_User(blog_id, parentId );
+    }
+
+    @DeleteMapping("deleteBlogByAdmin")
+    public String deleteBlogByAdmin(@RequestParam long blog_id) {
+        return blogService.deleteBlog_Admin(blog_id);
+    }
 }

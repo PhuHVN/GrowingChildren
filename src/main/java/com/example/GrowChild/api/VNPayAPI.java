@@ -18,20 +18,20 @@ import org.springframework.web.bind.annotation.*;
 public class VNPayAPI {
 
     @Autowired
-    private VNPayService vnPayService;
-    @Autowired
     PaymentService paymentService;
     @Autowired
     MembershipService membershipService;
+    @Autowired
+    private VNPayService vnPayService;
 
     @PostMapping("/submitOrder")
     public String submitOrder(@RequestParam("amount") int price,
-                              @RequestParam("Status") MembershipType type,
+                              @RequestParam("Status") String type,
                               @RequestParam("userId") String userId,
                               HttpServletRequest request) {
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         System.out.println(baseUrl);
-        String vnpayUrl = vnPayService.createOrder(price, type, userId,baseUrl);
+        String vnpayUrl = vnPayService.createOrder(price, type, userId, baseUrl);
         return "redirect:" + vnpayUrl;
     }
 
@@ -59,10 +59,10 @@ public class VNPayAPI {
             System.out.println(userId);
             String membership = orderInfo.split("_userId:")[0];
             System.out.println(membership);
-            Membership membership1 = membershipService.getMembershipByType(MembershipType.valueOf(membership));
+            Membership membership1 = membershipService.getMembershipByType(membership);
             long membershipId = membership1.getMembershipId();
             double price = Double.parseDouble(totalPrice);
-            paymentService.updatePaymentStatus(transactionId,userId,paymentTime,membershipId,price,PaymentStatus.SUCCESS);
+            paymentService.updatePaymentStatus(transactionId, userId, paymentTime, membershipId, price, PaymentStatus.SUCCESS);
             // Truyền thông tin đến giao diện
             model.addAttribute("orderId", txnRef);
             model.addAttribute("totalPrice", totalPrice);

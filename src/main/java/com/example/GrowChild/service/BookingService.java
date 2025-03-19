@@ -3,15 +3,20 @@ package com.example.GrowChild.service;
 import com.example.GrowChild.dto.BookingDTO;
 import com.example.GrowChild.entity.enumStatus.BookingStatus;
 import com.example.GrowChild.entity.request.BookingRequest;
+import com.example.GrowChild.entity.request.UpdateBookingRequest;
 import com.example.GrowChild.entity.response.Booking;
+import com.example.GrowChild.entity.response.Children;
 import com.example.GrowChild.entity.response.ScheduleDoctor;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BookToDTO;
 import com.example.GrowChild.repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +32,9 @@ public class BookingService {
     @Autowired
     BookToDTO bookToDTO;
 
+    @Autowired
+    ChildrenService childrenService;
+
     public boolean createBooking(BookingRequest bookingRequest) {
         User parent = userService.getUser(bookingRequest.getParentId());
         if (parent == null || !parent.getRole().getRoleName().equals("Parent")) {
@@ -39,6 +47,10 @@ public class BookingService {
         if (scheduleDoctor.isBooking()) {
             throw new IllegalArgumentException("This book is already booked");
         }
+        Children children = childrenService.getChildrenByIsDeleteFalseAndChildrenId(bookingRequest.getChildId());
+        if (children == null) {
+            throw new IllegalArgumentException("Child not found with ID: " + bookingRequest.getChildId());
+        }
 
         Booking booking = Booking.builder()
                 .schedule(scheduleDoctor)
@@ -46,6 +58,7 @@ public class BookingService {
                 .bookDate(LocalDateTime.now())
                 .comment(bookingRequest.getComment())
                 .bookingStatus(BookingStatus.PENDING)
+                .children(children)
                 .build();
 
         scheduleDoctor.setBooking(true);
@@ -70,21 +83,21 @@ public class BookingService {
     }
 
     public List<BookingDTO> getBookingDTOPendingByDoctorId(String doctorId) {
-        List<BookingDTO> bookinPendingoctor = new ArrayList<>();
+        List<BookingDTO> bookingPendingDoctor = new ArrayList<>();
         List<BookingDTO> list = getBookingsDTO();
         for (BookingDTO bookingDTO : list) {
             if (bookingDTO.getDoctorId().equals(doctorId) && bookingDTO.getStatus().equals(BookingStatus.PENDING)) {
-                bookinPendingoctor.add(bookingDTO);
+                bookingPendingDoctor.add(bookingDTO);
             }
         }
-        return bookinPendingoctor;
+        return bookingPendingDoctor;
     }
 
     public List<BookingDTO> getBookingDTOByDoctorId(String doctorId) {
         List<BookingDTO> bookingHistoryDoctor = new ArrayList<>();
         List<BookingDTO> list = getBookingsDTO();
         for (BookingDTO bookingDTO : list) {
-            if (bookingDTO.getDoctorId().equals(doctorId)) {
+            if (bookingDTO.getDoctorId().equals(doctorId) ) {
                 bookingHistoryDoctor.add(bookingDTO);
             }
         }
@@ -112,10 +125,10 @@ public class BookingService {
         return bookToDTO.toDTO(confirmBooking);
     }
 
-    public Booking updateBooking(long id, String comment) {
-        Booking booking = getBookingById(id);
+    public Booking updateBooking(UpdateBookingRequest bookingRequest) {
+        Booking booking = getBookingById(bookingRequest.getId());
         if (booking == null) throw new RuntimeException("Booking not found!");
-        booking.setComment(comment);
+        booking.setComment(bookingRequest.getComment());
         bookingRepository.save(booking);
         return booking;
     }
@@ -127,11 +140,27 @@ public class BookingService {
         return "Delete Successful!";
     }
 
-    public String deleteBooking_User(long id, String parentId) {
+    public String cancelledBooking_User(long id, String parentId) {
         Booking booking = getBookingById(id);
 
         if (!booking.getParent().getUser_id().equals(parentId)) {
             throw new IllegalArgumentException("You only delete by your own booking");
+        }
+        if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
+            throw new IllegalArgumentException("You only delete pending booking");
+        }
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+        return "Delete Successful!";
+    }
+
+    public String cancelledBooking_Doctor(long id, String doctorId){
+        Booking booking = getBookingById(id);
+        if (!booking.getSchedule().getDoctor().getUser_id().equals(doctorId)) {
+            throw new IllegalArgumentException("You only delete by your own booking");
+        }
+        if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
+            throw new IllegalArgumentException("You only delete pending booking");
         }
         booking.setBookingStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
@@ -146,9 +175,9 @@ public class BookingService {
 
 
     //Booking complete for bookingId
-    public boolean bookingComplete( long bookingId){
+    public boolean bookingComplete(long bookingId) {
         Booking booking = getBookingById(bookingId);
-        if(booking.getBookingStatus().equals(BookingStatus.CONFIRMED)){
+        if (booking.getBookingStatus().equals(BookingStatus.CONFIRMED)) {
             throw new IllegalArgumentException("Booking is confirmed!");
         }
         booking.setBookingStatus(BookingStatus.COMPLETED);
@@ -156,5 +185,19 @@ public class BookingService {
         bookingRepository.save(booking);
         return false;
     }
+
+
+    @Scheduled(fixedRate = 600000)
+    public void checkBookingTime() {
+        List<Booking> bookings = bookingRepository.findAll();
+        for (Booking booking : bookings) {
+            if (booking.getSchedule().getScheduleDate().isBefore(LocalDate.now()) || booking.getSchedule().getScheduleWork().isAfter(LocalTime.now().plusMinutes(10))) {
+                booking.setBookingStatus(BookingStatus.CANCELLED);
+                bookingRepository.save(booking);
+            }
+        }
+    }
+
+
 
 }

@@ -11,18 +11,18 @@ import java.util.stream.Collectors;
 public interface BlogToDTO {
 
 
-    default BlogDTO toDTO(Blog blog){
+    default BlogDTO toDTO(Blog blog) {
         return BlogDTO.builder()
                 .blogId(blog.getBlogId())
                 .title(blog.getTitle())
-                .description(blog.getDescription())
+                .hashtag(blog.getHashtag())
                 .content(blog.getContent())
                 .date(blog.getDate())
                 .parentId(blog.getParentId().getUser_id())
-                .fullName(blog.getParentId().getFullName())
                 .build();
     }
-    default List<BlogDTO> toDTOList(List<Blog> blogList){
+
+    default List<BlogDTO> toDTOList(List<Blog> blogList) {
         return blogList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 

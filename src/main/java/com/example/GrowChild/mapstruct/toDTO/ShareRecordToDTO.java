@@ -21,21 +21,21 @@ public interface ShareRecordToDTO {
 //        return shareRecordList.stream().map(this::toDTO).collect(Collectors.toList());
 //    }
 
-//    ShareRecordDTO toDTO(ShareRecord shareRecord);
+    //    ShareRecordDTO toDTO(ShareRecord shareRecord);
 //
 //    default List<ShareRecordDTO> toDTOList(List<ShareRecord> shareRecordList) {
 //        return shareRecordList.stream().map(this::toDTO).collect(Collectors.toList());
 //    }
-default ShareRecordDTO toDTO(ShareRecord shareRecord) {
-    return ShareRecordDTO.builder()
-            .shareRecordId(shareRecord.getShareRecordId())
-            .consulting(shareRecord.getConsulting().getConsultingId())
-            .healthRecord(shareRecord.getHealthRecord().getRecord_id())
-            .height(shareRecord.getHealthRecord().getHeight())
-            .weight(shareRecord.getHealthRecord().getWeight())
-            .bmi(shareRecord.getHealthRecord().getBmi())
-            .build();
-}
+    default ShareRecordDTO toDTO(ShareRecord shareRecord) {
+        return ShareRecordDTO.builder()
+                .shareRecordId(shareRecord.getShareRecordId())
+                .consulting(shareRecord.getConsulting().getConsultingId())
+                .healthRecord(shareRecord.getHealthRecord().getRecordId())
+                .height(shareRecord.getHealthRecord().getHeight())
+                .weight(shareRecord.getHealthRecord().getWeight())
+                .bmi(shareRecord.getHealthRecord().getBmi())
+                .build();
+    }
 
     default List<ShareRecordDTO> toDTOList(List<ShareRecord> shareRecordList) {
         return shareRecordList.stream().map(this::toDTO).collect(Collectors.toList());

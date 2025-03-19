@@ -16,15 +16,14 @@ public class ShareRecord {
     public long shareRecordId;
 
     @ManyToOne
-    @JoinColumn(name = "consulting_id",nullable = false)
+    @JoinColumn(name = "consulting_id", nullable = false)
     public Consulting consulting;
 
     @ManyToOne
-    @JoinColumn(name = "record_id",nullable = false)
+    @JoinColumn(name = "record_id", nullable = false)
     public HealthRecord healthRecord;
 
     public boolean isDelete = false;
 
-    
 
 }

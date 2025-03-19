@@ -10,34 +10,27 @@ import java.time.LocalDateTime;
 @Entity
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Blog {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long blogId;
+    public long commentId;
 
     @NotBlank
-    public String title;
-
-    @NotBlank
-    public String hashtag;
-
-    @NotBlank
-    public String content;
+    public String comment;
 
     public boolean isDelete = false;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id", nullable = false)
-    public User parentId;
+    @JoinColumn(name = "blog_id", nullable = false)
+    public Blog blogId;
 
-    private LocalDateTime date;
+    public LocalDateTime date;
 
     @PrePersist
     protected void onCreate() {
-        this.date = LocalDateTime.now(); // Gán thời gian khi tạo blog
+        this.date = LocalDateTime.now();
     }
-
 }

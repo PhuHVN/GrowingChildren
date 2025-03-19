@@ -1,9 +1,12 @@
 package com.example.GrowChild.dto;
 
 import com.example.GrowChild.entity.enumStatus.BookingStatus;
+import com.example.GrowChild.entity.response.Children;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -28,6 +31,13 @@ public class BookingDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime bookDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    LocalDate scheduleDate;
+
+    long childId;
+
+    String childName;
 
     String comment;
 

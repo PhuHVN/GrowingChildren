@@ -17,31 +17,30 @@ public class RoleAPI {
     RoleService roleService;
 
     @PostMapping("createRole")
-    public ResponseEntity createRole(@RequestBody RoleDTO role){
+    public ResponseEntity createRole(@RequestBody RoleDTO role) {
         RoleDTO newRole = roleService.createRole(role);
-        return new ResponseEntity<>(newRole,HttpStatus.CREATED);
+        return new ResponseEntity<>(newRole, HttpStatus.CREATED);
     }
 
     @GetMapping("getAll")
-    public List<RoleDTO> getRole(){
+    public List<RoleDTO> getRole() {
         return roleService.getAll();
     }
 
     @GetMapping("getRole/{roleId}")
-    public RoleDTO getRoleById(@PathVariable("roleId") long id){
+    public RoleDTO getRoleById(@PathVariable("roleId") long id) {
         return roleService.getRoleById(id);
     }
 
     @PutMapping("update/{roleId}")
-    public RoleDTO updateRole(@PathVariable("roleId") long id,@RequestBody RoleDTO roleDTO){
-        return roleService.updateRole(id,roleDTO);
+    public RoleDTO updateRole(@PathVariable("roleId") long id, @RequestBody RoleDTO roleDTO) {
+        return roleService.updateRole(id, roleDTO);
     }
 
     @DeleteMapping("delete/{roleId}")
-    public String deleteRole(@PathVariable("roleId") long id){
+    public String deleteRole(@PathVariable("roleId") long id) {
         return roleService.deleteRole(id);
     }
-
 
 
 }

@@ -34,6 +34,7 @@ public class UserService {
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     Map<String, User> storeUser = new HashMap<>(); //store User with key email
+    private final Map<String, OTP> otpStore = new HashMap<>();
 
     public UserService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -62,7 +63,7 @@ public class UserService {
         user.setPassword(hashPass.encode(user.getPassword()));
 
         if (user.getRole().getRoleName().equals("Parent")) {
-            user.setMembership(membershipService.getMembershipByType(MembershipType.DEFAULT));
+            user.setMembership(membershipService.getMembershipByType("Default"));
         }
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {
@@ -80,8 +81,6 @@ public class UserService {
 
         throw new RuntimeException("Invalid register !");
     }
-
-    private Map<String, OTP> otpStore = new HashMap<>();
 
     public void saveOTP(String email, String code) {
         LocalDateTime expirationTime = LocalDateTime.now().plusMinutes(5); //time now + 5min = expiration time
@@ -135,9 +134,10 @@ public class UserService {
     }
 
     public List<User> getUser_Admin() {
-       return userRepository.findAll();
+        return userRepository.findAll();
 
     }
+
     //getUserByID
     public UserDTO getUserById(String userID) {
         User user = getUser(userID);
@@ -151,7 +151,7 @@ public class UserService {
 
     public User getUser(String userID) {
         return userRepository.findById(userID)
-                .orElseThrow(() -> new RuntimeException("Parent not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     //update user by ID
@@ -174,6 +174,11 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
+    public void deleteUser_User(String userId ) {
+        User user = getUser(userId);
+        user.setDelete(true);
+        userRepository.save(user);
+    }
 
     //change password
     public boolean changePassword(String userId, String oldPassword, String newPassword, String confirmPassword) {
@@ -214,7 +219,34 @@ public class UserService {
         return userToDTO.toDTOList(users);
     }
 
+    public boolean resetPasswordEmailSender(String userId,String email) {
+        User user = getUser(userId);
+        if(user == null){
+            throw new IllegalArgumentException("User not found!");
+        }
+        if (user.getEmail() == null || user.getEmail().isEmpty() || !user.getEmail().equals(email)) {
+            throw new IllegalArgumentException("Email not found!");
+        }
+        String code = senderService.generateCode();
+        senderService.resetPasswordEmail(user.getEmail(), code);
+        saveOTP(user.getEmail(), code);
+        storeUser.put(user.getEmail(),user);
+        return true;
+    }
 
+    public boolean resetPassword(String userId,String email,String code, String newPassword, String confirmPassword){
+        if(!verifyOtp(email,code).equals("Authentication OTP successful ")){
+            throw new RuntimeException("OTP not match");
+        }
+        User user = getUser(userId);
+        if(!newPassword.equals(confirmPassword)){
+            throw new RuntimeException("New password and confirm password must same!");
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
+
+    }
 
 }
 

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface ConsultingToDTO {
 
-    default ConsultingDTO toDTO(Consulting consulting){
+    default ConsultingDTO toDTO(Consulting consulting) {
         return ConsultingDTO.builder()
                 .consultingId(consulting.getConsultingId())
                 .title(consulting.getTitle())
@@ -23,7 +23,7 @@ public interface ConsultingToDTO {
                 .build();
     }
 
-    default List<ConsultingDTO>  toDTOList(List<Consulting> consultingList){
+    default List<ConsultingDTO> toDTOList(List<Consulting> consultingList) {
         return consultingList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 }
