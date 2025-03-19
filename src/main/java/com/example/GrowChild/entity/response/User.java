@@ -44,10 +44,6 @@ public class User {
     @Nullable
     String phone;
 
-    @Min(value = 0, message = " rate must be greater 0")
-    @Max(value = 5, message = " rate must be lower 5")
-    int rate;
-
     @Column(nullable = true)
     String address;
 
@@ -69,17 +65,22 @@ public class User {
     @OneToMany(mappedBy = "blogId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     List<Blog> blog;
+
     @OneToMany(mappedBy = "bookId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     List<Booking> booking;
+
     @OneToMany(mappedBy = "scheduleId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     List<ScheduleDoctor> schedule;
+
     @ManyToOne
     @JoinColumn(name = "membership_id", nullable = true)
     @JsonIgnore
     Membership membership;
+
     @OneToMany(mappedBy = "feedbackId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<FeedBack> feedback;
 
     @Override

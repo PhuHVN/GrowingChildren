@@ -15,7 +15,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class VNPayService {
 
-    public String createOrder(int total, MembershipType type, String userId, String urlReturn) {
+    public String createOrder(int total, String type, String userId, String urlReturn) {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);

@@ -2,8 +2,6 @@ package com.example.GrowChild.api;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.response.Blog;
-import com.example.GrowChild.entity.response.HealthRecord;
-import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.service.BlogService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

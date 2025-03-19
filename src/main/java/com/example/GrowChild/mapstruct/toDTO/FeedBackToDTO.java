@@ -15,7 +15,9 @@ public interface FeedBackToDTO {
                 .rate(feedBack.getRate())
                 .comment(feedBack.getComment())
                 .parentId(feedBack.getParentId().getUser_id())
+                .fullNameParent(feedBack.getParentId().getFullName())
                 .doctorId(feedBack.getDoctorId().getUser_id())
+                .fullNameDoctor(feedBack.getDoctorId().getFullName())
                 .consultingId(feedBack.getConsultingId().getConsultingId())
                 .build();
     }
