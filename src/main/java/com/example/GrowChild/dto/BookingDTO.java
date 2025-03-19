@@ -41,6 +41,8 @@ public class BookingDTO {
 
     String comment;
 
+    boolean isBooking;
+
     BookingStatus status;
 
 }

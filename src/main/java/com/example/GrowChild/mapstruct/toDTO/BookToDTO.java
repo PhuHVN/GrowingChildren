@@ -23,6 +23,7 @@ public interface BookToDTO {
                 .childId(booking.getChildren().getChildrenId())
                 .childName(booking.getChildren().getChildrenName())
                 .comment(booking.getComment())
+                .isBooking(booking.getSchedule().isBooking())
                 .status(booking.getBookingStatus())
                 .build();
     }

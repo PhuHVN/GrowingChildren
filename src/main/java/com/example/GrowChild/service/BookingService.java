@@ -10,6 +10,7 @@ import com.example.GrowChild.entity.response.ScheduleDoctor;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BookToDTO;
 import com.example.GrowChild.repository.BookingRepository;
+import com.example.GrowChild.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class BookingService {
     UserService userService;
     @Autowired
     ScheduleService scheduleService;
+    @Autowired
+    ScheduleRepository scheduleRepository;
     @Autowired
     BookToDTO bookToDTO;
 
@@ -149,6 +152,7 @@ public class BookingService {
         if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
             throw new IllegalArgumentException("You only delete pending booking");
         }
+        scheduleBookingDone(booking.getSchedule().getScheduleId());
         booking.setBookingStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
         return "Delete Successful!";
@@ -171,6 +175,7 @@ public class BookingService {
     public void scheduleBookingDone(long scheduleId) {
         ScheduleDoctor doctor = scheduleService.getScheduleById(scheduleId);
         doctor.setBooking(false);
+        scheduleRepository.save(doctor);
     }
 
 
