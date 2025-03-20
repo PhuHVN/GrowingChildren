@@ -19,6 +19,18 @@ public class MembershipService {
         }
         return membership;
     }
+    public Membership createMembershipDefault() {
+        if(membershipRepository.findByType("Default") != null){
+            return membershipRepository.findByType("Default");
+        }
+        Membership membership = Membership.builder()
+                .type("Default")
+                .price(0)
+                .description("Basic membership")
+                .build();
+        membershipRepository.save(membership);
+        return membership;
+    }
 
     public List<Membership> getAll() {
         return membershipRepository.findAll();
