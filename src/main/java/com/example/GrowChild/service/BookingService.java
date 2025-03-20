@@ -62,6 +62,7 @@ public class BookingService {
                 .comment(bookingRequest.getComment())
                 .bookingStatus(BookingStatus.PENDING)
                 .children(children)
+                .isDelete(false)
                 .build();
 
         scheduleDoctor.setBooking(true);
@@ -74,7 +75,7 @@ public class BookingService {
     }
 
     public List<BookingDTO> getBookingsDTO() {
-        return bookToDTO.toDTOList(bookingRepository.findAll());
+        return bookToDTO.toDTOList(bookingRepository.findBookingByIsDeleteFalse());
     }
 
     public BookingDTO getBookingDTOById(long id) {
@@ -82,7 +83,11 @@ public class BookingService {
     }
 
     protected Booking getBookingById(long id) {
-        return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found!"));
+        Booking booking = bookingRepository.findBookingByIsDeleteFalseAndBookId(id);
+        if (booking == null) {
+            throw new RuntimeException("Booking not found!");
+        }
+        return booking;
     }
 
     public List<BookingDTO> getBookingDTOPendingByDoctorId(String doctorId) {
