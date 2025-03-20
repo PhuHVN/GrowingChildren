@@ -133,6 +133,12 @@ public class BookingService {
         return booking;
     }
 
+    public String deleteBooking_Soft(long id) {
+        Booking booking = getBookingById(id);
+        booking.setDelete(true);
+        bookingRepository.save(booking);
+        return "Delete Successful!";
+    }
 
     public String deleteBooking_Admin(long id) {
         Booking booking = getBookingById(id);

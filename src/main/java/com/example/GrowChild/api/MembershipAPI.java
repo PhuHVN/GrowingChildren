@@ -15,8 +15,8 @@ public class MembershipAPI {
     MembershipService membershipService;
 
     @PostMapping("createMembership")
-    public Membership createMembership(@RequestParam String type, @RequestParam double price) {
-        return membershipService.createPackage(type, price);
+    public Membership createMembership(@RequestBody Membership membership) {
+        return membershipService.createPackage(membership);
     }
 
     @GetMapping("getAllMembership")

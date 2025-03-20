@@ -86,6 +86,6 @@ public class HealthRecordAPI {
 
     @GetMapping("getGrowthStatusChange/childId/{childId}")
     public ResponseEntity<String> getChangeStatus(@PathVariable long childId,@RequestParam double bmiLastRecord, @RequestParam double bmiCurrentRecord){
-        return ResponseEntity.ok("Current BMI status: " + bmiCurrentRecord +", compared to last month: "+ bmiLastRecord +", and there are changes: "+healthRecordService.getChangeStatus(childId,bmiLastRecord,bmiCurrentRecord)+".");
+        return ResponseEntity.ok(healthRecordService.getChangeStatus(childId, bmiLastRecord, bmiCurrentRecord));
     }
 }

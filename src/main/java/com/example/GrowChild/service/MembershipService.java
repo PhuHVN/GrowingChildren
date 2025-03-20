@@ -28,10 +28,11 @@ public class MembershipService {
         return membershipRepository.findById(id).orElseThrow(() -> new RuntimeException("Membership not found!"));
     }
 
-    public Membership createPackage(String membershipType, double price) {
+    public Membership createPackage(Membership membershipRequest) {
         Membership membership = Membership.builder()
-                .type(membershipType)
-                .price(price)
+                .type(membershipRequest.getType())
+                .price(membershipRequest.getPrice())
+                .description(membershipRequest.getDescription())
                 .build();
         return membershipRepository.save(membership);
     }
