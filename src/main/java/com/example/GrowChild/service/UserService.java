@@ -63,7 +63,7 @@ public class UserService {
         user.setPassword(hashPass.encode(user.getPassword()));
 
         if (user.getRole().getRoleName().equals("Parent")) {
-            user.setMembership(membershipService.getMembershipByType("Default"));
+            user.setMembership(membershipService.createMembershipDefault());
         }
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {

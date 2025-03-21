@@ -11,6 +11,7 @@ import com.example.GrowChild.repository.FeedBackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -126,5 +127,31 @@ public class FeedBackService {
         existFeedBack.setDelete(true);
         feedBackRepository.save(existFeedBack);
         return "Delete Successfully!";
+    }
+
+    public int getRatingByDoctorId(String doctorId) {
+        User doctor = userService.getUser(doctorId);
+        if (doctor == null || !doctor.getRole().getRoleName().equals("Doctor")) {
+            throw new RuntimeException("Doctor not found with ID: " + doctorId);
+        }
+
+        List<FeedBack> feedBacks = feedBackRepository.findAll();
+        List<FeedBack> feedBacksList = new ArrayList<>();
+
+        for(FeedBack feedBack : feedBacks) {
+            if(feedBack.getDoctorId().getUser_id().equals(doctorId)) {
+                feedBacksList.add(feedBack);
+            }
+        }
+        int totalRate = 0;
+        for(FeedBack feedBack : feedBacksList) {
+            totalRate += feedBack.getRate();
+        }
+        if(feedBacksList.isEmpty()) {
+            return totalRate ;
+        }else{
+            totalRate = totalRate / feedBacksList.size();
+        }
+        return totalRate;
     }
 }

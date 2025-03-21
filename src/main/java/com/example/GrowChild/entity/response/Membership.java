@@ -21,5 +21,6 @@ public class Membership {
 
     double price;
 
+    String description;
 
 }

@@ -169,8 +169,10 @@ public class HealthRecordService {
         } else {
             result = "Significant Decrease";
         }
-        totalBmi = (totalBmi / -1.00);
-        return String.format("%s with %.2f", result, totalBmi);
+        if(totalBmi < 0){
+            totalBmi = (totalBmi / -1.00);
+        }
+        return  String.format("Current BMI status: %.2f, compared to last month: %.2f, and there are changes: %s with %.2f", bmiNowRecord, bmiLastRecord, result,totalBmi);
     }
 
 

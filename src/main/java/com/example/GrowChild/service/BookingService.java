@@ -10,6 +10,7 @@ import com.example.GrowChild.entity.response.ScheduleDoctor;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BookToDTO;
 import com.example.GrowChild.repository.BookingRepository;
+import com.example.GrowChild.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class BookingService {
     UserService userService;
     @Autowired
     ScheduleService scheduleService;
+    @Autowired
+    ScheduleRepository scheduleRepository;
     @Autowired
     BookToDTO bookToDTO;
 
@@ -59,6 +62,7 @@ public class BookingService {
                 .comment(bookingRequest.getComment())
                 .bookingStatus(BookingStatus.PENDING)
                 .children(children)
+                .isDelete(false)
                 .build();
 
         scheduleDoctor.setBooking(true);
@@ -71,7 +75,7 @@ public class BookingService {
     }
 
     public List<BookingDTO> getBookingsDTO() {
-        return bookToDTO.toDTOList(bookingRepository.findAll());
+        return bookToDTO.toDTOList(bookingRepository.findBookingByIsDeleteFalse());
     }
 
     public BookingDTO getBookingDTOById(long id) {
@@ -79,7 +83,11 @@ public class BookingService {
     }
 
     protected Booking getBookingById(long id) {
-        return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found!"));
+        Booking booking = bookingRepository.findBookingByIsDeleteFalseAndBookId(id);
+        if (booking == null) {
+            throw new RuntimeException("Booking not found!");
+        }
+        return booking;
     }
 
     public List<BookingDTO> getBookingDTOPendingByDoctorId(String doctorId) {
@@ -133,6 +141,12 @@ public class BookingService {
         return booking;
     }
 
+    public String deleteBooking_Soft(long id) {
+        Booking booking = getBookingById(id);
+        booking.setDelete(true);
+        bookingRepository.save(booking);
+        return "Delete Successful!";
+    }
 
     public String deleteBooking_Admin(long id) {
         Booking booking = getBookingById(id);
@@ -140,10 +154,24 @@ public class BookingService {
         return "Delete Successful!";
     }
 
-    public String CancelledBooking_User(long id, String parentId) {
+    public String cancelledBooking_User(long id, String parentId) {
         Booking booking = getBookingById(id);
 
         if (!booking.getParent().getUser_id().equals(parentId)) {
+            throw new IllegalArgumentException("You only delete by your own booking");
+        }
+        if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
+            throw new IllegalArgumentException("You only delete pending booking");
+        }
+        scheduleBookingDone(booking.getSchedule().getScheduleId());
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+        return "Delete Successful!";
+    }
+
+    public String cancelledBooking_Doctor(long id, String doctorId){
+        Booking booking = getBookingById(id);
+        if (!booking.getSchedule().getDoctor().getUser_id().equals(doctorId)) {
             throw new IllegalArgumentException("You only delete by your own booking");
         }
         if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
@@ -158,6 +186,7 @@ public class BookingService {
     public void scheduleBookingDone(long scheduleId) {
         ScheduleDoctor doctor = scheduleService.getScheduleById(scheduleId);
         doctor.setBooking(false);
+        scheduleRepository.save(doctor);
     }
 
 
