@@ -63,8 +63,12 @@ public class MembershipService {
         if(membership.getPrice() == 0){
             membership1.setPrice(membership1.getPrice());
         }
+        if(membership.getDescription() == null){
+            membership1.setDescription(membership1.getDescription());
+        }
         membership1.setType(membership.getType());
         membership1.setPrice(membership.getPrice());
+        membership1.setDescription(membership.getDescription());
         return membershipRepository.save(membership1);
     }
 
