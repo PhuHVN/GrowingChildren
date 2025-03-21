@@ -19,6 +19,7 @@ public interface BlogToDTO {
                 .content(blog.getContent())
                 .date(blog.getDate())
                 .parentId(blog.getParentId().getUser_id())
+                .status(blog.getStatus())
                 .build();
     }
 

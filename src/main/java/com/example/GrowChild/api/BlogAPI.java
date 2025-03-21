@@ -70,4 +70,58 @@ public class BlogAPI {
     public String deleteBlogByAdmin(@RequestParam long blog_id) {
         return blogService.deleteBlog_Admin(blog_id);
     }
+
+    @GetMapping("/user/{userId}/completed")
+    public ResponseEntity<List<BlogDTO>> getCompletedBlogsByUser(@PathVariable String userId) {
+        List<BlogDTO> blogs = blogService.getBlogByUser(userId);
+        return ResponseEntity.ok(blogs);
+    }
+    
+    @PutMapping("/approve/{blogId}")
+    public ResponseEntity<String> approveBlog(
+            @PathVariable Long blogId,
+            @RequestParam String adminId) {
+
+        if (blogId == null || adminId == null || adminId.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Blog ID and Admin ID must be provided");
+        }
+
+        String response = blogService.approveBlog(blogId, adminId);
+        return ResponseEntity.ok(response);
+    }
+    @PutMapping("/check/{blogId}")
+    public ResponseEntity<String> checkBlog(
+            @PathVariable Long blogId,
+            @RequestParam String parentId) {
+
+        if (blogId == null || parentId == null || parentId.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Blog ID and Admin ID must be provided");
+        }
+
+        String response = blogService.checkBlog(blogId, parentId);
+        return ResponseEntity.ok(response);
+    }
+
+
+
+    @PutMapping("/reject")
+    public ResponseEntity<String> rejectBlog(
+            @RequestParam(required = true) Long blogId,
+            @RequestParam(required = true) String adminId) {
+        try {
+            // Kiểm tra đầu vào có null hoặc rỗng không
+            if (blogId == null || adminId == null || adminId.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Blog ID and Admin ID must be provided");
+            }
+
+            String response = blogService.rejectBlog(blogId, adminId);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
+
 }
