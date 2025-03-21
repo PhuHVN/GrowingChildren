@@ -48,6 +48,12 @@ public class BlogAPI {
         return blogService.getBlogDTOById(blog_id);
     }
 
+    @GetMapping("getBlogsByHashTag")
+    public ResponseEntity<List<BlogDTO>> getBlogsByHashTag(@RequestParam String hashtag) {
+        List<BlogDTO> blogs = blogService.getBlogByHashTag(hashtag);
+        return new ResponseEntity<>(blogs, HttpStatus.OK);
+    }
+
     @PutMapping("updateBlog")
     public BlogDTO updateBlogById(@RequestParam long blog_id,
                                   @RequestParam String parentId,

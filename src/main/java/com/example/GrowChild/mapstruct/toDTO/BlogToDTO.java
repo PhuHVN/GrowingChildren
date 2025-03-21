@@ -15,7 +15,7 @@ public interface BlogToDTO {
         return BlogDTO.builder()
                 .blogId(blog.getBlogId())
                 .title(blog.getTitle())
-                .description(blog.getDescription())
+                .hashtag(blog.getHashtag())
                 .content(blog.getContent())
                 .date(blog.getDate())
                 .parentId(blog.getParentId().getUser_id())

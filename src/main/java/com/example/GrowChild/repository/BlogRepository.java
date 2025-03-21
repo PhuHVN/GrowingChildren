@@ -11,5 +11,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     List<Blog> findByParentIdAndIsDeleteFalse(User parent);
 
+    List<Blog> findByHashtagContainingAndIsDeleteFalse(String hashtag);
+
     Blog findBlogByIsDeleteFalseAndBlogId(Long BlogId);
 }

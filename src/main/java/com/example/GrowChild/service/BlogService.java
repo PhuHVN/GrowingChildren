@@ -2,11 +2,9 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.entity.response.Blog;
-import com.example.GrowChild.entity.response.HealthRecord;
 import com.example.GrowChild.entity.response.User;
 import com.example.GrowChild.mapstruct.toDTO.BlogToDTO;
 import com.example.GrowChild.repository.BlogRepository;
-import org.hibernate.annotations.Parent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +24,8 @@ public class BlogService {
     BlogToDTO blogToDTO;
 
 
-    public Blog createBlog(Blog blog, String parent_id) {
-        User parent = userService.getUser(parent_id);
+    public Blog createBlog(Blog blog, String user_id) {
+        User parent = userService.getUser(user_id);
         if (parent == null || !parent.getRole().getRoleName().equals("Parent")) { // find parent
             throw new RuntimeException("Parent not found");
         }
@@ -36,7 +34,7 @@ public class BlogService {
                 .blogId(blog.getBlogId())
                 .title(blog.getTitle())
                 .content(blog.getContent())
-                .description(blog.getDescription())
+                .hashtag(blog.getHashtag())
                 .date(LocalDateTime.now())
                 .build();
 
@@ -56,6 +54,7 @@ public class BlogService {
     public List<Blog> getAllBlog_Admin() {
         return blogRepository.findAll();
     }
+
     public List<BlogDTO> getBlogByUserId(String userId) {
         User user = userService.getUser(userId);
         if (user == null || !user.getRole().getRoleName().equals("Parent")) {
@@ -73,6 +72,12 @@ public class BlogService {
         return blogToDTO.toDTO(existBlog);
     }
 
+    public List<BlogDTO> getBlogByHashTag(String hashtag) {
+        List<Blog> blogs = blogRepository.findByHashtagContainingAndIsDeleteFalse(hashtag);
+        return blogToDTO.toDTOList(blogs);
+    }
+
+
     private Blog getBlogByIsDeleteFalseAndBlogID(long blog_id) {
         return blogRepository.findBlogByIsDeleteFalseAndBlogId(blog_id);
     }
@@ -88,7 +93,7 @@ public class BlogService {
         existBlog = Blog.builder()
                 .blogId(existBlog.getBlogId())
                 .title(blog.getTitle())
-                .description(blog.getDescription())
+                .hashtag(blog.getHashtag())
                 .content(blog.getContent())
                 .parentId(existBlog.getParentId())
                 .date(LocalDateTime.now())
