@@ -1,6 +1,8 @@
 package com.example.GrowChild.entity.response;
 
 
+import com.example.GrowChild.entity.enumStatus.BlogStatus;
+import com.example.GrowChild.entity.enumStatus.BookingStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -40,4 +42,6 @@ public class Blog {
         this.date = LocalDateTime.now(); // Gán thời gian khi tạo blog
     }
 
+    @Enumerated(EnumType.STRING)
+    private BlogStatus status;
 }
