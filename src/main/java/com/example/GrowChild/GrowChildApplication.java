@@ -12,5 +12,4 @@ public class GrowChildApplication {
         SpringApplication.run(GrowChildApplication.class, args);
         System.out.println("Running");
     }
-
 }

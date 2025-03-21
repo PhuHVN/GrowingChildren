@@ -19,6 +19,18 @@ public class MembershipService {
         }
         return membership;
     }
+    public Membership createMembershipDefault() {
+        if(membershipRepository.findByType("Default") != null){
+            return membershipRepository.findByType("Default");
+        }
+        Membership membership = Membership.builder()
+                .type("Default")
+                .price(0)
+                .description("Basic membership")
+                .build();
+        membershipRepository.save(membership);
+        return membership;
+    }
 
     public List<Membership> getAll() {
         return membershipRepository.findAll();
@@ -28,10 +40,11 @@ public class MembershipService {
         return membershipRepository.findById(id).orElseThrow(() -> new RuntimeException("Membership not found!"));
     }
 
-    public Membership createPackage(String membershipType, double price) {
+    public Membership createPackage(Membership membershipRequest) {
         Membership membership = Membership.builder()
-                .type(membershipType)
-                .price(price)
+                .type(membershipRequest.getType())
+                .price(membershipRequest.getPrice())
+                .description(membershipRequest.getDescription())
                 .build();
         return membershipRepository.save(membership);
     }

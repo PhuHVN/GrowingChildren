@@ -51,6 +51,8 @@ public class User {
 
     boolean isDelete = false; // 0 active - 1 delete
 
+
+
     @ManyToOne
     @JoinColumn(name = "roleId")
     @JsonBackReference()
