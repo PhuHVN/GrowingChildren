@@ -37,6 +37,11 @@ public class BlogAPI {
         return blogService.getAll();
     }
 
+    @GetMapping("getAllBlogCompleted")
+    public List<BlogDTO> getAllBlogCompleted() {
+        return blogService.getAllBlogCompleted();
+    }
+
     @GetMapping("getBlogsByUserId/{userId}")
     public ResponseEntity<List<BlogDTO>> getBlogsByUserId(@PathVariable String userId) {
         List<BlogDTO> blogs = blogService.getBlogByUserId(userId);
