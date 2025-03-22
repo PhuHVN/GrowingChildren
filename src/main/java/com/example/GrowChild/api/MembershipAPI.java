@@ -34,7 +34,7 @@ public class MembershipAPI {
     }
 
     @DeleteMapping("deleteMembership")
-    public String delete(@RequestParam String type) {
-        return membershipService.deletePackage(type);
+    public String delete(@RequestParam long id) {
+        return membershipService.deletePackage(id);
     }
 }
