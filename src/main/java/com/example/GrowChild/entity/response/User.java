@@ -38,6 +38,7 @@ public class User {
     @Pattern(regexp = "^[A-Za-z]+( [A-Za-z]+)*$", message = "Input must be range a - z")
     String fullName;
 
+
     @Column(nullable = true)
     String gender;
 
