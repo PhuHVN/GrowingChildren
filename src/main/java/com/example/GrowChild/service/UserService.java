@@ -1,7 +1,7 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.enumStatus.MembershipType;
+import com.example.GrowChild.entity.response.Membership;
 import com.example.GrowChild.entity.response.OTP;
 import com.example.GrowChild.entity.response.Role;
 import com.example.GrowChild.entity.response.User;
@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ public class UserService {
     UserToDTO userToDTO;
     @Autowired
     MembershipService membershipService;
+
 
 
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -246,6 +248,17 @@ public class UserService {
         userRepository.save(user);
         return true;
 
+    }
+
+    public List<User> getUserByMembershipType(String type){
+        Membership membership = membershipService.getMembershipByType(type);
+        List<User> userArrayList = new ArrayList<>();
+        for(User user : userRepository.findAll()){
+            if(user.getMembership().getMembershipId().equals(membership.getMembershipId())){
+                userArrayList.add(user);
+            }
+        }
+        return userArrayList;
     }
 
 }

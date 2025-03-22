@@ -2,6 +2,7 @@ package com.example.GrowChild.service;
 
 import com.example.GrowChild.entity.response.Membership;
 import com.example.GrowChild.repository.MembershipRepository;
+import com.example.GrowChild.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,10 @@ import java.util.List;
 public class MembershipService {
     @Autowired
     MembershipRepository membershipRepository;
+    @Autowired
+    UserService userService;
+    @Autowired
+    UserRepository userRepository;
 
     public Membership getMembershipByType(String type) {
         Membership membership = membershipRepository.findByType(type);
@@ -49,8 +54,17 @@ public class MembershipService {
         return membershipRepository.save(membership);
     }
 
-    public String deletePackage(String type) {
-        Membership membership = getMembershipByType(type);
+
+
+    public String deletePackage(long id) {
+        Membership membership = getMembershipById(id);
+        Membership membershipDefault = membershipRepository.findByType("Default");
+
+        userService.getUserByMembershipType(membership.getType()).forEach(user -> {
+            user.setMembership(membershipDefault);
+            userRepository.save(user);
+        });
+
         membershipRepository.delete(membership);
         return "Delete Successful!";
     }

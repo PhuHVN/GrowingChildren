@@ -25,6 +25,12 @@ public class ConsultingDTO {
 
     private long childId;
 
+    private String nameParent;
+
+    private String nameDoctor;
+
+    private String nameChild;
+
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") // Format thời gian hiển thị
     private LocalDateTime date;
 }
