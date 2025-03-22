@@ -117,7 +117,32 @@ public class BlogService {
         // Lấy thông tin Parent
         User parent = userService.getUser(parentId);
         if (parent == null || !parent.getRole().getRoleName().equals("Parent")) {
-            throw new RuntimeException("Only parents can report blogs");
+            throw new RuntimeException("Parents can report blogs");
+        }
+
+        // Lấy thông tin Blog
+        Blog existBlog = getBlogById(blogId);
+        if (existBlog == null) {
+            throw new RuntimeException("Blog not found");
+        }
+
+        // Kiểm tra trạng thái Blog có phải COMPLETED không
+        if (!BlogStatus.COMPLETED.equals(existBlog.getStatus())) {
+            throw new RuntimeException("Only completed blogs can be reported");
+        }
+
+        // Cập nhật trạng thái Blog thành PENDING
+        existBlog.setStatus(BlogStatus.PENDING);
+        blogRepository.save(existBlog);
+
+        return "Blog reported successfully and is now pending review!";
+    }
+
+    public String checkBlogByAdmin(long blogId, String adminId) {
+        // Lấy thông tin Parent
+        User parent = userService.getUser(adminId);
+        if (parent == null || !parent.getRole().getRoleName().equals("Admin")) {
+            throw new RuntimeException(" Admin can report blogs");
         }
 
         // Lấy thông tin Blog
