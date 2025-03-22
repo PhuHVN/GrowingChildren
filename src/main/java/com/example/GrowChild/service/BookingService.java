@@ -163,8 +163,9 @@ public class BookingService {
         if(!booking.getBookingStatus().equals(BookingStatus.PENDING)){
             throw new IllegalArgumentException("You only delete pending booking");
         }
-        scheduleBookingDone(booking.getSchedule().getScheduleId());
+        setBookingFalseByScheduleId(booking.getSchedule().getScheduleId());
         booking.setBookingStatus(BookingStatus.CANCELLED);
+
         bookingRepository.save(booking);
         return "Delete Successful!";
     }
@@ -178,15 +179,16 @@ public class BookingService {
             throw new IllegalArgumentException("You only delete pending booking");
         }
         booking.setBookingStatus(BookingStatus.CANCELLED);
+        setBookingFalseByScheduleId(booking.getSchedule().getScheduleId());
         bookingRepository.save(booking);
         return "Delete Successful!";
     }
 
     //set schedule booking false for scheduleId
-    public void scheduleBookingDone(long scheduleId) {
-        ScheduleDoctor doctor = scheduleService.getScheduleById(scheduleId);
-        doctor.setBooking(false);
-        scheduleRepository.save(doctor);
+    public void setBookingFalseByScheduleId(long scheduleId) {
+        ScheduleDoctor scheduleWork = scheduleService.getScheduleById(scheduleId);
+        scheduleWork.setBooking(false);
+        scheduleRepository.save(scheduleWork);
     }
 
 
