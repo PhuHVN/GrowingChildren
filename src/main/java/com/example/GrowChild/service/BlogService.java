@@ -145,6 +145,11 @@ public class BlogService {
         return blogRepository.findAll();
     }
 
+    public List<BlogDTO> getAllBlogCompleted() {
+        List<Blog> blogs = blogRepository.findByStatus(BlogStatus.COMPLETED);
+        return blogToDTO.toDTOList(blogs);
+    }
+
     public List<BlogDTO> getBlogByUserId(String userId) {
         User user = userService.getUser(userId);
         if (user == null || !user.getRole().getRoleName().equals("Parent")) {
