@@ -12,10 +12,7 @@ import java.util.List;
 public class MembershipService {
     @Autowired
     MembershipRepository membershipRepository;
-    @Autowired
-    UserService userService;
-    @Autowired
-    UserRepository userRepository;
+
 
     public Membership getMembershipByType(String type) {
         Membership membership = membershipRepository.findByType(type);
@@ -57,15 +54,8 @@ public class MembershipService {
 
 
     public String deletePackage(long id) {
-        Membership membership = getMembershipById(id);
-        Membership membershipDefault = membershipRepository.findByType("Default");
 
-        userService.getUserByMembershipType(membership.getType()).forEach(user -> {
-            user.setMembership(membershipDefault);
-            userRepository.save(user);
-        });
 
-        membershipRepository.delete(membership);
         return "Delete Successful!";
     }
 

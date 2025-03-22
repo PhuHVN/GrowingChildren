@@ -94,7 +94,7 @@ public class BookingAPI {
 
     @PutMapping("bookingDone")
     public String bookingDone(@RequestParam long scheduleId) {
-        bookingService.scheduleBookingDone(scheduleId);
+        bookingService.setBookingFalseByScheduleId(scheduleId);
         return "Success";
     }
 
