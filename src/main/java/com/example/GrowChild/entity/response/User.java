@@ -35,7 +35,7 @@ public class User {
     String email;
 
     @NotBlank(message = "Name is not blank!")
-    @Pattern(regexp = "([A-Z a-z])\\w+", message = "Input must be range a - z")
+    @Pattern(regexp = "^[A-Za-z]+( [A-Za-z]+)*$", message = "Input must be range a - z")
     String fullName;
 
     @Column(nullable = true)
