@@ -1,6 +1,6 @@
 package com.example.GrowChild.entity.enumStatus;
 
-public enum BlogStatus {
+public enum CommentStatus {
     PENDING,    // Waiting confirm
     CANCELLED,  // Delete
     COMPLETED  // Complete
