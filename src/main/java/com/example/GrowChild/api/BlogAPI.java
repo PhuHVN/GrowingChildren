@@ -37,6 +37,11 @@ public class BlogAPI {
         return blogService.getAll();
     }
 
+    @GetMapping("getAllBlogCompleted")
+    public List<BlogDTO> getAllBlogCompleted() {
+        return blogService.getAllBlogCompleted();
+    }
+
     @GetMapping("getBlogsByUserId/{userId}")
     public ResponseEntity<List<BlogDTO>> getBlogsByUserId(@PathVariable String userId) {
         List<BlogDTO> blogs = blogService.getBlogByUserId(userId);
@@ -95,10 +100,23 @@ public class BlogAPI {
             @RequestParam String parentId) {
 
         if (blogId == null || parentId == null || parentId.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Blog ID and Admin ID must be provided");
+            return ResponseEntity.badRequest().body("Blog ID and Parent ID must be provided");
         }
 
         String response = blogService.checkBlog(blogId, parentId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/checkByAdmin/{blogId}")
+    public ResponseEntity<String> checkBlogByAdmin(
+            @PathVariable Long blogId,
+            @RequestParam String adminId) {
+
+        if (blogId == null || adminId == null || adminId.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("Blog ID and Admin ID must be provided");
+        }
+
+        String response = blogService.checkBlogByAdmin(blogId, adminId);
         return ResponseEntity.ok(response);
     }
 
