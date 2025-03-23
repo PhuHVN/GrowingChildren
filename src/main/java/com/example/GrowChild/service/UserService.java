@@ -213,12 +213,12 @@ public class UserService {
 
     //Get User by RoleID
     public List<UserDTO> getUserByRole(long role_id) {
-        List<User> users = userRepository.findByRole_RoleId(role_id);
+        List<User> users = userRepository.findByRole_RoleIdAndIsDeleteFalse(role_id);
         return userToDTO.toDTOList(users);
     }
 
     public List<UserDTO> getUserByRoleName(String roleName) {
-        List<User> users = userRepository.findByRole_RoleName(roleName);
+        List<User> users = userRepository.findByRole_RoleNameAndIsDeleteFalse(roleName);
         return userToDTO.toDTOList(users);
     }
 
