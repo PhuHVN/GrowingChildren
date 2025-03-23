@@ -18,6 +18,7 @@ public class AuthenticationAPI {
 
     @PostMapping("login")
     public ResponseEntity login(@Valid @RequestBody LoginRequest loginRequest) {
+
         try {
             UserDTO user;
             if (loginRequest.getUsernameOrEmail().contains("@")) { //check is email?
@@ -25,7 +26,7 @@ public class AuthenticationAPI {
             } else {
                 user = userService.loginByUsername(loginRequest.getUsernameOrEmail(), loginRequest.getPassword());
             }
-            if (user == null) {
+            if (user == null || user.isDelete()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username/email or password ");
             }
             return ResponseEntity.ok(user);

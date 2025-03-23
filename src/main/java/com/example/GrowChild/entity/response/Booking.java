@@ -42,5 +42,5 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     BookingStatus bookingStatus;
 
-
+    boolean isDelete;
 }

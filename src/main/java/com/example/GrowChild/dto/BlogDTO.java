@@ -1,6 +1,7 @@
 package com.example.GrowChild.dto;
 
 
+import com.example.GrowChild.entity.enumStatus.BlogStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
@@ -20,8 +21,12 @@ public class BlogDTO {
 
     private String content;
 
+    private String fullName;
+
     private String parentId;
 
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss") // Format thời gian hiển thị
     private LocalDateTime date;
+
+    private BlogStatus status;
 }

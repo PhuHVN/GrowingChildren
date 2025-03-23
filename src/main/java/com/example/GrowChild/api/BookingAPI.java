@@ -74,11 +74,17 @@ public class BookingAPI {
         return bookingService.deleteBooking_Admin(bookId);
     }
 
+    @DeleteMapping("delete-soft")
+    public String deleteSoft(@RequestParam long bookId) {
+        return bookingService.deleteBooking_Soft(bookId);
+    }
+
 
     @DeleteMapping("cancelledBooking-user")
     public String delete_user(@RequestParam long bookId, @RequestParam String parentId) {
         return bookingService.cancelledBooking_User(bookId, parentId);
     }
+
 
     @DeleteMapping("cancelledBooking-doctor")
     public String cancel_doctor(@RequestParam long bookId, @RequestParam String doctorId) {
@@ -88,7 +94,7 @@ public class BookingAPI {
 
     @PutMapping("bookingDone")
     public String bookingDone(@RequestParam long scheduleId) {
-        bookingService.scheduleBookingDone(scheduleId);
+        bookingService.setBookingFalseByScheduleId(scheduleId);
         return "Success";
     }
 

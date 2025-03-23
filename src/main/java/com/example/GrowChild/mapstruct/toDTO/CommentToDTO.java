@@ -19,6 +19,9 @@ public interface CommentToDTO {
                 .comment(comment.getComment())
                 .date(comment.getDate())
                 .blogId(comment.getBlogId().getBlogId())
+                .fullName(comment.getParentId().getFullName())
+                .parentId(comment.getParentId().getUser_id())
+                .status(comment.getStatus())
                 .build();
     }
 

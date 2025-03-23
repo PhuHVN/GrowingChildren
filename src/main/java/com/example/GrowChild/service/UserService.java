@@ -1,7 +1,7 @@
 package com.example.GrowChild.service;
 
 import com.example.GrowChild.dto.UserDTO;
-import com.example.GrowChild.entity.enumStatus.MembershipType;
+import com.example.GrowChild.entity.response.Membership;
 import com.example.GrowChild.entity.response.OTP;
 import com.example.GrowChild.entity.response.Role;
 import com.example.GrowChild.entity.response.User;
@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,28 +43,32 @@ public class UserService {
 
     //Register
     public User register(User user, long role_id) {
-        if (userRepository.findByUsername(user.getUsername()) != null) {
+
+        if (user.getUsername() == null && user.getEmail() == null) {
+            throw new IllegalArgumentException("Must provide at least one: username or email");
+        }
+
+        if (user.getUsername() != null && userRepository.findByUsername(user.getUsername()) != null) {
             throw new IllegalArgumentException("Username: " + user.getUsername() + " is exist!");
         }
+
         if (user.getEmail() != null && userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email: " + user.getEmail() + " is exist!");
         }
 
         user.setDelete(false);
-
         //check role exist
         Role role = roleService.getRoleExisted(role_id);
         if (role == null) {
             throw new RuntimeException("Role not found");
         }
         user.setRole(role);
-
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.getPassword()));
 
         if (user.getRole().getRoleName().equals("Parent")) {
-            user.setMembership(membershipService.getMembershipByType("Default"));
+            user.setMembership(membershipService.createMembershipDefault());
         }
         // username field not null
         if (user.getUsername() != null && !user.getUsername().isEmpty()) {
@@ -174,7 +179,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public void deleteUser_User(String userId ) {
+    public void deleteUser_User(String userId) {
         User user = getUser(userId);
         user.setDelete(true);
         userRepository.save(user);
@@ -210,18 +215,18 @@ public class UserService {
 
     //Get User by RoleID
     public List<UserDTO> getUserByRole(long role_id) {
-        List<User> users = userRepository.findByRole_RoleId(role_id);
+        List<User> users = userRepository.findByRole_RoleIdAndIsDeleteFalse(role_id);
         return userToDTO.toDTOList(users);
     }
 
     public List<UserDTO> getUserByRoleName(String roleName) {
-        List<User> users = userRepository.findByRole_RoleName(roleName);
+        List<User> users = userRepository.findByRole_RoleNameAndIsDeleteFalse(roleName);
         return userToDTO.toDTOList(users);
     }
 
-    public boolean resetPasswordEmailSender(String userId,String email) {
+    public boolean resetPasswordEmailSender(String userId, String email) {
         User user = getUser(userId);
-        if(user == null){
+        if (user == null) {
             throw new IllegalArgumentException("User not found!");
         }
         if (user.getEmail() == null || user.getEmail().isEmpty() || !user.getEmail().equals(email)) {
@@ -230,16 +235,16 @@ public class UserService {
         String code = senderService.generateCode();
         senderService.resetPasswordEmail(user.getEmail(), code);
         saveOTP(user.getEmail(), code);
-        storeUser.put(user.getEmail(),user);
+        storeUser.put(user.getEmail(), user);
         return true;
     }
 
-    public boolean resetPassword(String userId,String email,String code, String newPassword, String confirmPassword){
-        if(!verifyOtp(email,code).equals("Authentication OTP successful ")){
+    public boolean resetPassword(String userId, String email, String code, String newPassword, String confirmPassword) {
+        if (!verifyOtp(email, code).equals("Authentication OTP successful ")) {
             throw new RuntimeException("OTP not match");
         }
         User user = getUser(userId);
-        if(!newPassword.equals(confirmPassword)){
+        if (!newPassword.equals(confirmPassword)) {
             throw new RuntimeException("New password and confirm password must same!");
         }
         user.setPassword(bCryptPasswordEncoder.encode(newPassword));
@@ -248,5 +253,20 @@ public class UserService {
 
     }
 
+    public List<User> getUserByMembershipType(String type) {
+        Membership membership = membershipService.getMembershipByType(type);
+        List<User> userArrayList = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            if (user.getMembership().getMembershipId().equals(membership.getMembershipId())) {
+                userArrayList.add(user);
+            }
+        }
+        return userArrayList;
+    }
+
+    public List<UserDTO> getUserIsDeleteFalse() {
+        List<User> users = userRepository.findByIsDeleteFalse();
+        return userToDTO.toDTOList(users);
+    }
 }
 

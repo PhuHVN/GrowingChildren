@@ -104,4 +104,14 @@ public class UserAPI {
     public String verifyOtp(@RequestParam String email, @RequestParam String enterCode) {
         return userService.verifyOtp(email, enterCode);
     }
+
+    @GetMapping("getUsersByMembership/")
+    public List<User> getUsersByMembership(@RequestParam String membership) {
+        return userService.getUserByMembershipType(membership);
+    }
+
+    @GetMapping("getUserIsDeleteFalse")
+    public List<UserDTO> getUserIsDeleteFalse() {
+        return userService.getUserIsDeleteFalse();
+    }
 }

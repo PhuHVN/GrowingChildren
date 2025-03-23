@@ -35,8 +35,9 @@ public class User {
     String email;
 
     @NotBlank(message = "Name is not blank!")
-    @Pattern(regexp = "([A-Z a-z])\\w+", message = "Input must be range a - z")
+    @Pattern(regexp = "^[A-Za-z]+( [A-Za-z]+)*$", message = "Input must be range a - z")
     String fullName;
+
 
     @Column(nullable = true)
     String gender;
@@ -50,6 +51,8 @@ public class User {
     LocalDateTime createAt = LocalDateTime.now();
 
     boolean isDelete = false; // 0 active - 1 delete
+
+
 
     @ManyToOne
     @JoinColumn(name = "roleId")

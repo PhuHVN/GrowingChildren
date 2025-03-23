@@ -15,8 +15,8 @@ public class MembershipAPI {
     MembershipService membershipService;
 
     @PostMapping("createMembership")
-    public Membership createMembership(@RequestParam String type, @RequestParam double price) {
-        return membershipService.createPackage(type, price);
+    public Membership createMembership(@RequestBody Membership membership) {
+        return membershipService.createPackage(membership);
     }
 
     @GetMapping("getAllMembership")
@@ -34,7 +34,7 @@ public class MembershipAPI {
     }
 
     @DeleteMapping("deleteMembership")
-    public String delete(@RequestParam String type) {
-        return membershipService.deletePackage(type);
+    public String delete(@RequestParam long id) {
+        return membershipService.deletePackage(id);
     }
 }
