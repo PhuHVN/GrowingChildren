@@ -11,6 +11,7 @@ import com.example.GrowChild.repository.HealthRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,12 @@ public class HealthRecordService {
         Children child = childrenService.getChildrenByIsDeleteFalseAndChildrenId(childId);
         if (child == null) {
             throw new RuntimeException("Children not found");
+        }
+        if(healthRecordRequest.getHeight_m() == 0 || healthRecordRequest.getWeight_kg() == 0){
+            throw new RuntimeException("Height or Weight cannot be 0");
+        }
+        if(healthRecordRequest.getDate().isAfter(LocalDate.now())){
+            throw new RuntimeException("Date must be in the past");
         }
 
         HealthRecord record = HealthRecord.builder()

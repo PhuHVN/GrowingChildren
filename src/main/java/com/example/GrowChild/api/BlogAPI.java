@@ -70,6 +70,10 @@ public class BlogAPI {
     public String deleteBlog(@RequestParam long blog_id, @RequestParam String parentId) {
         return blogService.deleteBlog_User(blog_id, parentId );
     }
+    @DeleteMapping("deleteBlogSoft")
+    public String deleteBlogSft(@RequestParam long blog_id) {
+        return blogService.deleteBlog_Soft(blog_id );
+    }
 
     @DeleteMapping("deleteBlogByAdmin")
     public String deleteBlogByAdmin(@RequestParam long blog_id) {

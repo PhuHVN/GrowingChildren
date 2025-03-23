@@ -251,6 +251,13 @@ public class BlogService {
         return "Delete Successful!";
     }
 
+    public String deleteBlog_Soft(long blogId) {
+        Blog existBlog  = getBlogById(blogId);
+        existBlog.setDelete(true);
+        blogRepository.save(existBlog);
+        return "Delete Successful!";
+    }
+
     public Blog getBlogById(long blog_id) {
         return blogRepository.findById(blog_id).orElseThrow(() -> new RuntimeException("Blog not found!"));
     }
