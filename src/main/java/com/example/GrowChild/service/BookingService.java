@@ -167,7 +167,7 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.CANCELLED);
 
         bookingRepository.save(booking);
-        return "Delete Successful!";
+        return "Cancelled Successful!";
     }
 
     public String cancelledBooking_Doctor(long id, String doctorId){
@@ -181,7 +181,7 @@ public class BookingService {
         booking.setBookingStatus(BookingStatus.CANCELLED);
         setBookingFalseByScheduleId(booking.getSchedule().getScheduleId());
         bookingRepository.save(booking);
-        return "Delete Successful!";
+        return "Cancelled Successful!";
     }
 
     //set schedule booking false for scheduleId
