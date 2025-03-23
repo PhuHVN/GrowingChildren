@@ -1,5 +1,6 @@
 package com.example.GrowChild.service;
 
+import com.example.GrowChild.dto.BlogDTO;
 import com.example.GrowChild.dto.CommentDTO;
 import com.example.GrowChild.entity.enumStatus.CommentStatus;
 import com.example.GrowChild.entity.response.*;
@@ -83,8 +84,13 @@ public class CommentService {
         return "Delete Successful!";
     }
 
+    public CommentDTO getCommentById(long comment_id) {
+        Comment comment = commentRepository.findById(comment_id)
+                .orElseThrow(() -> new RuntimeException("Comment not found!"));
+        return commentToDTO.toDTO(comment);
+    }
 
-    public Comment getCommentById(long comment_id) {
+    public Comment getCommentByCommentId(long comment_id) {
         return commentRepository.findById(comment_id).orElseThrow(() -> new RuntimeException("Comment not found!"));
     }
 
@@ -114,7 +120,7 @@ public class CommentService {
     }
 
     public String deleteCommentByAdmin(long commentId) {
-        Comment existComment  = getCommentById(commentId);
+        Comment existComment  = getCommentByCommentId(commentId);
         commentRepository.delete(existComment);
         return "Delete Successful!";
     }
