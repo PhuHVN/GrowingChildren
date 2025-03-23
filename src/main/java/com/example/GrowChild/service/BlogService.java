@@ -225,6 +225,7 @@ public class BlogService {
                 .hashtag(blog.getHashtag())
                 .content(blog.getContent())
                 .parentId(existBlog.getParentId())
+                .status(BlogStatus.COMPLETED)
                 .date(LocalDateTime.now())
                 .isDelete(blog.isDelete())
                 .build();
