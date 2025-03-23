@@ -49,7 +49,11 @@ public class CommentAPI {
     public ResponseEntity<List<CommentDTO>> getAllComments() {
         return ResponseEntity.ok(commentService.getAllComments());
     }
-
+    @GetMapping("getCommentById")
+    public ResponseEntity<CommentDTO> getCommentById(@RequestParam long comment_id) {
+        CommentDTO commentDTO = commentService.getCommentById(comment_id);
+        return ResponseEntity.ok(commentDTO);
+    }
     @DeleteMapping("deleteByAdmin")
     public ResponseEntity<String> deleteCommentByAdmin(@RequestParam long commentId) {
         return ResponseEntity.ok(commentService.deleteCommentByAdmin(commentId));
