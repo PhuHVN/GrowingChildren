@@ -34,6 +34,7 @@ public class ScheduleService {
         if(schedule.getScheduleDate().isBefore(LocalDate.now())){
             throw new IllegalArgumentException("Schedule date must be in the future!");
         }
+
         ScheduleDoctor scheduleDoctor = ScheduleDoctor.builder()
                 .scheduleWork(schedule.getScheduleWork())
                 .doctor(doctor)
