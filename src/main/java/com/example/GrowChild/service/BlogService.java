@@ -226,6 +226,7 @@ public class BlogService {
                 .content(blog.getContent())
                 .parentId(existBlog.getParentId())
                 .date(LocalDateTime.now())
+                .isDelete(blog.isDelete())
                 .build();
 
 
