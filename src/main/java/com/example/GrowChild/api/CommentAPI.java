@@ -28,8 +28,8 @@ public class CommentAPI {
     }
 
     @GetMapping("getCommentByBlogId")
-    public ResponseEntity<List<CommentDTO>> getCommentByBlogId(@RequestParam long blogId, @RequestParam String parentId) {
-        List<CommentDTO> comments = commentService.getCommentByBlogId(blogId, parentId);
+    public ResponseEntity<List<CommentDTO>> getCommentsByBlogId(@RequestParam long blogId) {
+        List<CommentDTO> comments = commentService.getCommentByBlogId(blogId);
         return ResponseEntity.ok(comments);
     }
 

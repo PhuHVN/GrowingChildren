@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Comment findCommentByIsDeleteFalseAndCommentId(Long CommentId);
+    List<Comment> findByBlogIdAndStatus(Blog blog, CommentStatus status);
 
     List<Comment> findByBlogIdAndParentIdAndStatus(Blog blogId, User parentId, CommentStatus status);
 

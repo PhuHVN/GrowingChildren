@@ -52,23 +52,34 @@ public class CommentService {
 
         return commentRepository.save(newComment);
     }
-
-    public List<CommentDTO> getCommentByBlogId(long blogId, String parentId) {
-        User parent = userService.getUser(parentId);
-        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) {
-            throw new RuntimeException("Only parents can view comments");
-        }
-
+    public List<CommentDTO> getCommentByBlogId(long blogId) {
         Blog blog = blogService.getBlogById(blogId);
         if (blog == null) {
             throw new RuntimeException("Blog not found");
         }
 
-        List<Comment> comments = commentRepository.findByBlogIdAndParentIdAndStatus(blog, parent, CommentStatus.COMPLETED);
+        List<Comment> comments = commentRepository.findByBlogIdAndStatus(blog, CommentStatus.COMPLETED);
         return comments.stream()
                 .map(commentToDTO::toDTO)
                 .collect(Collectors.toList());
     }
+
+//    public List<CommentDTO> getCommentByBlogId(long blogId, String parentId) {
+//        User parent = userService.getUser(parentId);
+//        if (parent == null || !parent.getRole().getRoleName().equals("Parent")) {
+//            throw new RuntimeException("Only parents can view comments");
+//        }
+//
+//        Blog blog = blogService.getBlogById(blogId);
+//        if (blog == null) {
+//            throw new RuntimeException("Blog not found");
+//        }
+//
+//        List<Comment> comments = commentRepository.findByBlogIdAndParentIdAndStatus(blog, parent, CommentStatus.COMPLETED);
+//        return comments.stream()
+//                .map(commentToDTO::toDTO)
+//                .collect(Collectors.toList());
+//    }
     private Comment getCommentByIsDeleteFalseAndCommentID(long comment_id) {
         return commentRepository.findCommentByIsDeleteFalseAndCommentId(comment_id);
     }
