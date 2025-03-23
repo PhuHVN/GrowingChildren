@@ -261,5 +261,9 @@ public class UserService {
         return userArrayList;
     }
 
+    public List<UserDTO> getUserIsDeleteFalse(){
+        List<User> users = userRepository.findByIsDeleteFalse();
+        return userToDTO.toDTOList(users);
+    }
 }
 

@@ -109,4 +109,9 @@ public class UserAPI {
     public List<User> getUsersByMembership(@RequestParam String membership) {
         return userService.getUserByMembershipType(membership);
     }
+
+    @GetMapping("getUserIsDeleteFalse")
+    public List<UserDTO> getUserIsDeleteFalse() {
+        return userService.getUserIsDeleteFalse();
+    }
 }
