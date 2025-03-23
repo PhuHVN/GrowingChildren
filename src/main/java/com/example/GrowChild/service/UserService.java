@@ -51,6 +51,7 @@ public class UserService {
             throw new IllegalArgumentException("Email: " + user.getEmail() + " is exist!");
         }
 
+
         user.setDelete(false);
 
         //check role exist
