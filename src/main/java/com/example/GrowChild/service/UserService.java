@@ -50,17 +50,13 @@ public class UserService {
         if (user.getEmail() != null && userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email: " + user.getEmail() + " is exist!");
         }
-
-
         user.setDelete(false);
-
         //check role exist
         Role role = roleService.getRoleExisted(role_id);
         if (role == null) {
             throw new RuntimeException("Role not found");
         }
         user.setRole(role);
-
         //hash password
         PasswordEncoder hashPass = new BCryptPasswordEncoder(10); //password hash with hard level 10
         user.setPassword(hashPass.encode(user.getPassword()));
